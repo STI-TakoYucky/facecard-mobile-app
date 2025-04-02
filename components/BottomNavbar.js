@@ -8,7 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 export default function BottomNavbar({activeTab, setActiveTab }) {
     
   return (
-    <View className="bg-primary-100 p-5 flex flex-row justify-between fixed bottom-0 w-full">
+    <View className="bg-primary-100 p-5 flex flex-row justify-between absolute bottom-0 w-full">
 
     <TouchableOpacity onPress={() => setActiveTab("Home")}>
       <View className="flex items-center">
@@ -24,12 +24,15 @@ export default function BottomNavbar({activeTab, setActiveTab }) {
         </View>
       </TouchableOpacity>
       
-
-      <View className="flex items-center relative w-[3rem]">
-        <View className="bg-white rounded-full h-[84px] p-3 absolute bottom-7">
-            <AntDesign name="pluscircle" size={60} color={"#2D3B75"} />
+      
+        <View className="flex items-center w-[3rem]">
+          <View className="bg-white rounded-full h-[84px] p-3 absolute bottom-4">
+          <TouchableOpacity>
+              <AntDesign name="pluscircle" size={60} color={"#2D3B75"} />
+          </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      
 
       <TouchableOpacity onPress={() => setActiveTab("Routines")}>
         <View className="flex items-center">
