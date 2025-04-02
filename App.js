@@ -39,7 +39,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="w-full text-dark-900">
+    <SafeAreaView className="w-full text-dark-900 flex-1 bg-white">
       <Header></Header>
       {renderView()}
       <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab}></BottomNavbar>
