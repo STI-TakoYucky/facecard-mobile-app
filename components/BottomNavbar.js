@@ -8,10 +8,10 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 export default function BottomNavbar({activeTab, setActiveTab }) {
     
   return (
-    <View className="bg-primary-100 p-5 flex flex-row justify-between">
+    <View className="bg-primary-100 flex p-5 flex-row relative justify-between items-center">
 
     <TouchableOpacity onPress={() => setActiveTab("Home")}>
-      <View className="flex items-center">
+      <View className="flex items-center mr-6">
         <FontAwesome6 name="house-chimney" size={20} color={activeTab === "Home" ? "#2D3B75" : "#DF9595"}/>
         <Text className="text-sm">Home</Text>
       </View>
@@ -25,8 +25,8 @@ export default function BottomNavbar({activeTab, setActiveTab }) {
       </TouchableOpacity>
       
       
-        <View className="flex items-center mx-[2rem]">
-          <View className="bg-white rounded-full h-[82px] p-3 absolute bottom-4">
+        <View className="flex items-center relative w-[6.5rem]">
+          <View className="bg-white rounded-full h-[81px] p-3 absolute -bottom-1">
           <TouchableOpacity>
               <AntDesign name="pluscircle" size={60} color={"#2D3B75"} />
           </TouchableOpacity>

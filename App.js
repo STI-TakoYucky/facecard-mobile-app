@@ -3,12 +3,12 @@ import { SafeAreaView} from 'react-native';
 import { useState } from 'react';
 
 import Header from './components/Header';
-import Home from './components/HomeView'
+import Home from './components/Tabs/HomeView'
 import "./global.css"
 import BottomNavbar from './components/BottomNavbar';
-import SkincareListView from './components/SkincareListView';
-import RoutinesView from './components/RoutinesView';
-import FaceDiaryView from './components/FaceDiaryView';
+import SkincareListView from './components/Tabs/SkincareListView';
+import RoutinesView from './components/Tabs/RoutinesView';
+import FaceDiaryView from './components/Tabs/FaceDiaryView';
 
 export default function App() {
 
@@ -39,7 +39,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="w-full text-dark-900 flex-1 bg-white">
+    <SafeAreaView className="w-full !text-dark-900 flex-1 bg-white">
       <Header></Header>
       {renderView()}
       <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab}></BottomNavbar>
