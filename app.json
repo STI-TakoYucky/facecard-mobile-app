@@ -13,14 +13,33 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.luckyestrada.facecard",
+      "infoPlist": {
+        "UIBackgroundModes": ["fetch", "location", "remote-notification"]
+      },
+      "notification": {
+        "iosDisplayInForeground": true
+      }
     },
     "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION", 
+        "ACCESS_COARSE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.luckyestrada.facecard"
+      "package": "com.luckyestrada.facecard",
+      "config": {
+        "googleMaps": {
+          "apiKey": "FAKE-KEY-123"
+        }
+      },
+      "notification": {
+        "color": "#000000"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png",
