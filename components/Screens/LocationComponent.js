@@ -16,8 +16,8 @@ export default function LocationComponent() {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
       }),
     });
 
@@ -94,7 +94,7 @@ export default function LocationComponent() {
     };
 
 
-  const LOCATION_RADIUS_METERS = 50; // Distance threshold in meters
+  const LOCATION_RADIUS_METERS = 20; // Distance threshold in meters
 
   // Haversine formula to calculate distance between two lat/lng points
   const getDistanceInMeters = (coord1, coord2) => {
@@ -160,6 +160,7 @@ export default function LocationComponent() {
           content: {
             title: 'Location Calibrated 📍',
             body: 'We will alert you if you leave this area.',
+            sound: true
           },
           trigger: null, // Send immediately
         });
@@ -204,7 +205,7 @@ export default function LocationComponent() {
           Be reminded to apply sunscreen whenever you leave your home!
         </Text>
         <Image
-          source={require('../../assets/map-image.png')}
+          source={require('../../assets/assets_mapimage.png')}
           className="rounded-lg w-full h-[23rem] object-fill"
         />
         <Pressable
