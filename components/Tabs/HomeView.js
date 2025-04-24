@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, Pressable, Modal } from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import StreaksComponent from "../StreaksComponent";
 import UserProductContainer from "../UserProductContainer";
@@ -8,101 +8,142 @@ import SkincareChecklist from "../Screens/SkincareChecklist";
 import EditChecklist from "../Screens/EditChecklist";
 
 export default function Home() {
-  const [markedDates, setMarkedDates] = useState({
-    "2025-04-28": {
-      isMarked: true,
-      dots: [
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-      ],
-    },
-    "2025-04-29": {
-      isMarked: true,
-      dots: [
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-        { key: "vacation", color: "#8A9A5B", selectedDotColor: "blue" },
-      ],
-    },
-  });
 
+  
   const [isChecklistActive, setChecklistActive] = useState(false);
   const [isEditChecklistActive, setEditChecklist] = useState(false);
+  const [selectedDate, setSelectedDate] = useState();
 
-  const renderDay = (day) => {
-    return (
-      <View>
-        <Text className="text-base text-dark-900">{day.day}</Text>
-      </View>
-    );
-  };
 
-  const HandleDayClick = (date, isMarked) => {
+  const routines = [
+    {
+      name: "Cleanser",
+      frequency: "daily",
+      dayOfWeek: null,
+      startDate: "2025-04-24"
+    },
+    {
+      name: "Moisturizer",
+      frequency: "weekly",
+      dayOfWeek: 1,
+      startDate: "2025-04-24"
+    },
+    {
+      name: "Exfoliate",
+      frequency: "weekly",
+      dayOfWeek: 3,
+      startDate: "2025-04-24"
+    },
+    {
+      name: "Serum",
+      frequency: "weekly",
+      dayOfWeek: 5,
+      startDate: "2025-04-24"
+    }
+  ];
+  
 
+  const [markedDates, setMarkedDates] = useState({});
+
+  const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
+      setSelectedDate(date);
       setEditChecklist(true)
       return
     }
 
+    setSelectedDate(date);
     setChecklistActive(true);
-    setMarkedDates((prev) => ({
-      ...prev,
-      [date]: { isMarked: true },
-    }));
   };
+
+  const getScheduleColor = (schedule) => {
+    switch (schedule) {
+      case "Cleanser":
+        return `bg-markers-cleanser`
+      case "Moisturizer":
+        return `bg-markers-moisturizer`
+      case "Exfoliate":
+        return `bg-markers-exfoliate`
+      case "Serum":
+        return `bg-markers-serum`
+      default:
+        break;
+    }
+  }
 
   return (
     <ScrollView className={`p-5 text-dark-900`}>
 
-      <SkincareChecklist setChecklistActive={setChecklistActive} isChecklistActive={isChecklistActive}></SkincareChecklist>
-      <EditChecklist setEditChecklist={setEditChecklist} isEditChecklistActive={isEditChecklistActive}></EditChecklist>
+      <SkincareChecklist 
+      setChecklistActive={setChecklistActive} 
+      isChecklistActive={isChecklistActive} 
+      setMarkedDates={setMarkedDates}
+      selectedDate={selectedDate}
+      markedDates={markedDates}
+      ></SkincareChecklist>
+
+      <EditChecklist 
+      setEditChecklist={setEditChecklist} 
+      isEditChecklistActive={isEditChecklistActive}
+      setMarkedDates={setMarkedDates}
+      selectedDate={selectedDate}
+      markedDates={markedDates}
+      ></EditChecklist>
 
       <Calendar
         markingType={"custom"}
         markedDates={markedDates}
+        hideExtraDays={true}
+        enableSwipeMonths={true}
         dayComponent={({ date, state }) => {
-          const dayData = markedDates[date?.dateString] || {};
-          const dots = dayData.dots || [];
-          const isMarked = dayData.isMarked;
+          const isMarked = !!markedDates[date?.dateString]
+          const jsDate = new Date(date.dateString);
+          const day = jsDate.getDay();;
 
           return (
             <Pressable
-              onPress={() => HandleDayClick(date?.dateString, isMarked)}
-              disabled={state === "disabled" ? true : false}
-            >
+            key={date}
+              onPress={() => {HandleDayClick(date?.dateString, isMarked)}}
+              disabled={state === "disabled" ? true : false}>
               <View
                 className={`h-[3rem] w-[3rem] flex items-center justify-center ${
                   isMarked ? "bg-dark-800" : ""
                 } ${
                   state === "disabled" ? "" : "border-dark-800 border-[3px]"
-                } rounded-full`}
-              >
+                } rounded-full`}>
                 <Text
                   className={`
                   text-base
                   font-bold
                   ${state === "disabled" ? "text-gray-300" : "text-dark-800"}
-                  ${isMarked && "text-white"}`}
-                >
+                  ${isMarked && "text-white"}`}>
                   {date?.day}
                 </Text>
               </View>
               <View className="flex items-center justify-center min-h-2 mt-2 flex-row gap-1">
-                {dots.map((dot, index) => {
-                  return (
-                    <View
-                      className={`w-2 h-2 rounded full`}
+
+                { routines.map((routine, index) => {
+                  const startDate = routine.startDate;
+                  const currentDate = date?.dateString.split("T")[0];
+                  const isStartDateBefore = new Date(startDate) <= new Date(currentDate);
+
+                  if(routine.dayOfWeek == day && isStartDateBefore) {
+                    return (<View
+                      className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
                       index={index}
-                      style={{ backgroundColor: dot.color }}
-                    ></View>
-                  );
-                })}
+                    ></View>)
+                  } else if (routine.frequency == "daily" && isStartDateBefore) {
+                    return (<View
+                      return className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
+                      index={index}
+                    ></View>)
+                  }
+                }) }
+
               </View>
             </Pressable>
           );}}/>
+
       <View className="flex flex-row items-center justify-between mt-5">
         <View className="flex flex-row justify-center items-center gap-1">
           <View className="h-3 w-3 bg-markers-cleanser rounded-full"></View>
