@@ -1,62 +1,60 @@
 import { View, Text, Pressable, Modal, Alert } from 'react-native';
 import React, { useEffect, useReducer } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addDate } from '../../state/markedDatesSlice/markedDatesSlice';
 
 export default function EditChecklist({
   setEditChecklist,
   isEditChecklistActive,
-  setMarkedDates,
-  selectedDate,
-  markedDates
+  selectedDate
 }) {
-  const skincareProducts = ["Cleanser", "Moisturizer", "Exfoliate", "Serum"];
 
-  function reducer(state, action) {
-    if (action.type === "RESET") {
-      return action.payload;
-    }
+const dispatchMarkedDates = useDispatch();
+// Get the marked dates from the global state
+const markedDate = useSelector((state) => state.markedDates[selectedDate]);
+const skincareProducts = ["Cleanser", "Moisturizer", "Exfoliate", "Serum"];
 
-    if (!skincareProducts.includes(action.type)) {
-      throw new Error("Unknown action.");
-    }
+const initialState = skincareProducts.reduce((acc, product) => {
+  acc[product] = false;
+  return acc;
+}, {});
 
-    return {
-      ...state,
-      [action.type]: !state[action.type],
-    };
+function reducer(state, action) {
+  if (action.type === "RESET") {
+    return action.payload;
   }
 
-  // Initialize reducer with empty values (will be replaced on mount)
-  const [state, dispatch] = useReducer(reducer, {
-    Cleanser: false,
-    Moisturizer: false,
-    Exfoliate: false,
-    Serum: false
-  });
+  if (!skincareProducts.includes(action.type)) {
+    throw new Error("Unknown action.");
+  }
 
-  // When selectedDate or markedDates change, reset reducer state
-  useEffect(() => {
-    const routines = markedDates?.[selectedDate]?.routines || {};
-    const initial = skincareProducts.reduce((acc, item) => {
-      acc[item] = routines[item] || false;
-      return acc;
-    }, {});
-    dispatch({ type: "RESET", payload: initial });
-  }, [selectedDate, markedDates]);
-
-  const skincareProductCheckboxHandler = (product) => {
-    dispatch({ type: product });
+  return {
+    ...state,
+    [action.type]: !state[action.type],
   };
+}
+
+// Initialize the reducer with the marked date routines or fallback to initialState
+const [state, dispatch] = useReducer(reducer, markedDate?.routines || initialState);
 
   const handleConfirm = () => {
-    
-    setMarkedDates((prev) => ({
-      ...prev,
-      [selectedDate]: {
-        routines: { ...state },
-      },
-    }));
+    dispatchMarkedDates(addDate({ date: selectedDate,
+        routines: {
+          "Cleanser": state["Cleanser"],
+          "Moisturizer": state["Moisturizer"],
+          "Exfoliate": state["Exfoliate"],
+          "Serum": state["Serum"],
+        }}))
     setEditChecklist(false);
   };
+
+  useEffect(() => {
+  if (markedDate?.routines) {
+    dispatch({ type: "RESET", payload: markedDate.routines });
+  } else {
+    dispatch({ type: "RESET", payload: initialState });
+  }
+}, [markedDate, selectedDate]);
 
   return (
     <Modal
@@ -73,7 +71,7 @@ export default function EditChecklist({
             </Text>
             <View className="my-2 gap-[1.5rem]">
               {skincareProducts.map((product, index) => (
-                <Pressable key={index} onPress={() => skincareProductCheckboxHandler(product)}>
+                <Pressable key={index} onPress={() => dispatch({ type: product })}>
                   <View className="flex flex-row items-center gap-2">
                     <View
                       className={`w-[2rem] h-[2rem] border-dark-800 ${

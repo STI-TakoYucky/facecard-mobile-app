@@ -1,49 +1,27 @@
-import { View, Text, ScrollView, Pressable, Alert } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import StreaksComponent from "../StreaksComponent";
 import UserProductContainer from "../UserProductContainer";
 import SkincareChecklist from "../Screens/SkincareChecklist";
 import EditChecklist from "../Screens/EditChecklist";
+import { useSelector } from "react-redux";
 
 export default function Home() {
 
-  
+
+  const markedDates = useSelector((state) => state.markedDates);
+  const routineSchedules = useSelector((state) => state.routineSchedules) || []
   const [isChecklistActive, setChecklistActive] = useState(false);
   const [isEditChecklistActive, setEditChecklist] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
 
 
-  const routines = [
-    {
-      name: "Cleanser",
-      frequency: "daily",
-      dayOfWeek: null,
-      startDate: "2025-04-24"
-    },
-    {
-      name: "Moisturizer",
-      frequency: "weekly",
-      dayOfWeek: 1,
-      startDate: "2025-04-24"
-    },
-    {
-      name: "Exfoliate",
-      frequency: "weekly",
-      dayOfWeek: 3,
-      startDate: "2025-04-24"
-    },
-    {
-      name: "Serum",
-      frequency: "weekly",
-      dayOfWeek: 5,
-      startDate: "2025-04-24"
-    }
-  ];
-  
+  useEffect(() => {
+    alert(JSON.stringify(routineSchedules), null, 2)
+  })
 
-  const [markedDates, setMarkedDates] = useState({});
+    
 
   const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
@@ -72,22 +50,18 @@ export default function Home() {
   }
 
   return (
-    <ScrollView className={`p-5 text-dark-900`}>
-
+    <ScrollView className={`p-5 text-dark-900`} showsVerticalScrollIndicator={false}>
+      <View className="pb-[8rem]">
       <SkincareChecklist 
       setChecklistActive={setChecklistActive} 
       isChecklistActive={isChecklistActive} 
-      setMarkedDates={setMarkedDates}
       selectedDate={selectedDate}
-      markedDates={markedDates}
       ></SkincareChecklist>
 
       <EditChecklist 
       setEditChecklist={setEditChecklist} 
       isEditChecklistActive={isEditChecklistActive}
-      setMarkedDates={setMarkedDates}
       selectedDate={selectedDate}
-      markedDates={markedDates}
       ></EditChecklist>
 
       <Calendar
@@ -122,7 +96,7 @@ export default function Home() {
               </View>
               <View className="flex items-center justify-center min-h-2 mt-2 flex-row gap-1">
 
-                { routines.map((routine, index) => {
+                { routineSchedules.map((routine, index) => {
                   const startDate = routine.startDate;
                   const currentDate = date?.dateString.split("T")[0];
                   const isStartDateBefore = new Date(startDate) <= new Date(currentDate);
@@ -130,12 +104,12 @@ export default function Home() {
                   if(routine.dayOfWeek == day && isStartDateBefore) {
                     return (<View
                       className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
-                      index={index}
+                      key={index}
                     ></View>)
-                  } else if (routine.frequency == "daily" && isStartDateBefore) {
+                  } else if (routine.dayOfWeek == "daily" && isStartDateBefore) {
                     return (<View
                       return className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
-                      index={index}
+                      key={index}
                     ></View>)
                   }
                 }) }
@@ -144,31 +118,23 @@ export default function Home() {
             </Pressable>
           );}}/>
 
+
       <View className="flex flex-row items-center justify-between mt-5">
-        <View className="flex flex-row justify-center items-center gap-1">
-          <View className="h-3 w-3 bg-markers-cleanser rounded-full"></View>
-          <Text className="flex items-center gap-2 text-base">Cleanser</Text>
-        </View>
-
-        <View className="flex flex-row justify-center items-center gap-1">
-          <View className="h-3 w-3 bg-markers-moisturizer rounded-full"></View>
-          <Text className="flex items-center gap-2 text-base">Moisturizer</Text>
-        </View>
-
-        <View className="flex flex-row justify-center items-center gap-1">
-          <View className="h-3 w-3 bg-markers-exfoliate rounded-full"></View>
-          <Text className="flex items-center gap-2 text-base">Exfoliate</Text>
-        </View>
-
-        <View className="flex flex-row justify-center items-center gap-1">
-          <View className="h-3 w-3 bg-markers-serum rounded-full"></View>
-          <Text className="flex items-center gap-2 text-base">Serum</Text>
-        </View>
+      {
+          routineSchedules.map((routine, index) => {
+              return (
+                <View className="flex flex-row justify-center items-center gap-1" key={index}>
+                  <View className={`h-3 w-3 rounded-full ${getScheduleColor(routine.name)}`}></View>
+                  <Text className="flex items-center gap-2 text-base">{routine.name}</Text>
+                </View>
+              )
+            })
+          }
       </View>
 
       <UserProductContainer></UserProductContainer>
-
       <StreaksComponent></StreaksComponent>
+      </View>
     </ScrollView>
   );
 }
