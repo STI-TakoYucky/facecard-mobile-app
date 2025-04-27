@@ -8,6 +8,7 @@ import AddSchedule from '../Screens/AddSchedule.js'
 export default function RoutinesView() {
 
   const [isAddSchedule, setAddSchedule] = useState(false);
+  const [selectedMarker, setSelectedMarker] = useState();
 
   const dispatch = useDispatch();
   // Get the routineScheds from the global state
@@ -19,6 +20,7 @@ export default function RoutinesView() {
       <AddSchedule
         isAddSchedule={isAddSchedule}
         setAddSchedule={setAddSchedule}
+        selectedMarker={selectedMarker}
       ></AddSchedule>
 
       <View className="mb-[8rem]">
@@ -33,8 +35,8 @@ export default function RoutinesView() {
               {routine.schedules.map((schedule, index) => {
                 return (
                   <View style={{backgroundColor: 'white',elevation: 5}} className="rounded-lg py-5 px-4 flex flex-row justify-between items-center" key={index}>
-                    <Text className="text-dark-800 text-base font-bold">{schedule.time}</Text>
                     <Text className="text-dark-800  text-base">{schedule.dayOfWeek}</Text>
+                    <Text className="text-dark-800 text-base font-bold">{schedule.time}</Text>
                     <TouchableOpacity onPress={() => {alert("edit")}}>
                       <Feather name="edit" size={20} color="#2D3B75" />
                     </TouchableOpacity>
@@ -42,12 +44,12 @@ export default function RoutinesView() {
                 )
               })}
 
-              <TouchableOpacity onPress={() => setAddSchedule(true)}>
+              {routine.schedules.length <= 0 &&<TouchableOpacity onPress={() => {setAddSchedule(true); setSelectedMarker(routine.name)}}>
                 <View className="bg-gray-200 rounded-lg py-5 px-4 flex flex-row justify-between items-center">
                   <Text className="text-gray-500 text-base">Add Marker</Text>
                   <AntDesign name="plus" size={24} color="#6b7280" />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity>}
             </View>
           )
         })}

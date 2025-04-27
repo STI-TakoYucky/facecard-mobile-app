@@ -1,29 +1,55 @@
 import { View, Text, Modal, Pressable, Platform } from "react-native";
 import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import DropDownPicker from 'react-native-element-dropdown';
+import DropDownPicker from "react-native-dropdown-picker";
+import { useDispatch } from 'react-redux';
+import { setSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
+import { generateUniqueId } from "../../utils/GenerateUniqueID";
 
-export default function AddSchedule({ isAddSchedule, setAddSchedule }) {
-  DropDownPicker.displayName = 'DropDownPicker';
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Option 1", value: "option1" },
-    { label: "Option 2", value: "option2" },
-    { label: "Option 3", value: "option3" },
+export default function AddSchedule({ isAddSchedule, setAddSchedule, selectedMarker }) {
+
+  const dispatch = useDispatch();
+
+  //constants and flags
+  const [open, setOpen] = useState(false);
+  const [showTimeBtn, setShowTimeBtn] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [dropdownBoxItem, setdropdownBoxItem] = useState([
+    { label: "Daily", value: "Daily" },
+    { label: "Sunday", value: 0 },
+    { label: "Monday", value: 1 },
+    { label: "Tuesday", value: 2 },
+    { label: "Wednesday", value: 3 },
+    { label: "Thursday", value: 4 },
+    { label: "Friday", value: 5 },
+    { label: "Saturday", value: 6 },
   ]);
 
-  const [time, setTime] = useState(new Date());
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const formattedTime = new Date(time).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+  //values for data
+  const id = generateUniqueId();
+  const [time, setTime] = useState([new Date()]);
+  const [dropDownBoxValue, setDropdownBoxValue] = useState("Daily");
+  const formattedTime = time.map((item) => 
+    new Date(item).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+  )
 
   const onChange = (event, selectedTime) => {
     const currentTime = selectedTime || time;
-    setShowTimePicker(Platform.OS === "ios"); // On Android, hide after picking
+    setShowTimePicker(Platform.OS === "ios");
     setTime(currentTime);
+  };
+
+  const handleConfirm = () => {
+    const payload = {
+      id: id,
+      dayOfWeek: dropDownBoxValue,
+      time: formattedTime,
+    }
+    dispatch(setSchedules({name: selectedMarker, schedules: payload}))
   };
 
   return (
@@ -40,31 +66,68 @@ export default function AddSchedule({ isAddSchedule, setAddSchedule }) {
               Cleanser
             </Text>
             <View className="my-5 flex gap-3">
-              <View className="my-2 gap-[1.5rem]">
-                <DropDownPicker
-                  style={{
-                    width: 200,
-                    height: 50,
-                    borderColor: "#000",
-                    borderWidth: 1,
-                    borderRadius: 10,
-                  }}
-                  placeholder="Select an item"
-                  data={items}
-                  value={selectedItem}
-                  onChange={(item) => setSelectedItem(item.value)}
-                />
-              </View>
+              <View className="my-2 gap-[2rem]">
+                <View className="gap-5 h-[12rem]">
+                  <View>
+                    <Text className="text-dark-800 mb-2">Select a Frequency</Text>
+                    <DropDownPicker
+                      style={{
+                        borderColor: "#2D3B75", 
+                        color: "#2D3B75",
+                      }}
+                      textStyle={{
+                        color: "#2D3B75", 
+                      }}
+                      dropDownContainerStyle={{
+                        borderColor: "#2D3B75",
+                        height:166
+                      }}
+                      listItemLabelStyle={{
+                        color: "#2D3B75", 
+                      }}
+                      selectedItemLabelStyle={{
+                        color: "#2D3B75", 
+                        fontWeight: "bold",
+                      }}
+                      selectedItemContainerStyle={{
+                        backgroundColor: "#E3E7F6", 
+                      }}
+                      placeholderStyle={{
+                        color: "#2D3B75", 
+                      }}
+                      open={open}
+                      value={dropDownBoxValue}
+                      items={dropdownBoxItem}
+                      setOpen={setOpen}
+                      setValue={setDropdownBoxValue} // Corrected this line
+                      setItems={setdropdownBoxItem}
+                    />
+                  </View>
 
-              <View className="flex flex-row items-center gap-2">
-                <Pressable onPress={() => setShowTimePicker(true)}>
-                  <Text className="bg-dark-800 text-white text-base py-2 px-4 rounded-md">
-                    Set Time
-                  </Text>
-                </Pressable>
-                <Text className="text-lg text-dark-900 bg-gray-200 py-[.4rem] px-3 rounded-md">
-                  {formattedTime}
-                </Text>
+                  <Pressable onPress={() => showTimeBtn ? setShowTimeBtn(false) : setShowTimeBtn(true)}>
+                    <View className="flex flex-row dropdownBoxItem-center gap-2">
+                      <View
+                        className={`w-[2rem] h-[2rem] border-dark-800 ${showTimeBtn && 'bg-dark-800'} border-[3px] rounded-full`}
+                      ></View>
+                      <Text className="text-dark-800 text-base">
+                        Receive a notification?
+                      </Text>
+                    </View>
+                  </Pressable>
+
+                  {
+                    showTimeBtn && (
+                      <View className="flex flex-row dropdownBoxItem-center gap-2">
+                        <Pressable onPress={() => setShowTimePicker(true)}>
+                          <Text className="text-lg text-dark-900 bg-[#E3E7F6] py-[.4rem] px-3 rounded-md">
+                            {formattedTime}
+                          </Text>
+                        </Pressable>
+                      </View>
+                    )
+                  }
+
+                </View>
               </View>
 
               {showTimePicker && (
@@ -78,13 +141,14 @@ export default function AddSchedule({ isAddSchedule, setAddSchedule }) {
               )}
             </View>
           </View>
+
           <View className="flex flex-row gap-2 justify-end mt-3">
-            <Pressable onPress={() => setAddSchedule(false)}>
+            <Pressable onPress={() => alert(dropDownBoxValue+ "time" + formattedTime + id)}>
               <Text className="bg-white border border-dark-800 rounded-md px-4 py-[.49rem] shadow-sm">
                 Cancel
               </Text>
             </Pressable>
-            <Pressable>
+            <Pressable onPress={() => handleConfirm()}>
               <Text className="bg-dark-800 text-white text-base py-2 px-4 rounded-md">
                 Confirm
               </Text>

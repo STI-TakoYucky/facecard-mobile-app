@@ -1,44 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const routineSchedulesSlice = createSlice({
-  name: 'routineSchedules',
+  name: "routineSchedules",
   initialState: [
     {
       name: "Cleanser",
-      schedules: [
-      {
-        id: 1,
-        dayOfWeek: "daily",
-        time: "9:00AM"
-      },
-      {
-        id: 2,
-        dayOfWeek: 1,
-        time: "9:00PM"
-      }
-    ],
+      schedules: [],
       startDate: "2025-04-24",
     },
     {
       name: "Moisturizer",
-      schedules: [
-      {
-        dayOfWeek: 2,
-        time: "9:00AM"
-      },
-      {
-        dayOfWeek: 3,
-        time: "9:00PM"
-      }
-    ],
+      schedules: [],
+      startDate: "2025-04-24",
+    },
+    {
+      name: "Exfoliate",
+      schedules: [],
+      startDate: "2025-04-24",
+    },
+    {
+      name: "Serum",
+      schedules: [],
       startDate: "2025-04-24",
     },
   ],
   reducers: {
     setSchedules: (state, action) => {
-        
-      },
-  }
+      const { name, schedules } = action.payload
+
+      const existingRoutine = state.find(item => item.name === name);
+
+      existingRoutine.schedules.push(schedules);
+    },
+  },
 });
 
 export const { setSchedules } = routineSchedulesSlice.actions;

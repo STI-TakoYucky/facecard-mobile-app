@@ -17,11 +17,10 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState();
 
 
-  useEffect(() => {
-    alert(JSON.stringify(routineSchedules), null, 2)
-  })
+  // useEffect(() => {
+  //   alert(JSON.stringify(routineSchedules), null, 2)
+  // })
 
-    
 
   const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
@@ -101,17 +100,20 @@ export default function Home() {
                   const currentDate = date?.dateString.split("T")[0];
                   const isStartDateBefore = new Date(startDate) <= new Date(currentDate);
 
-                  if(routine.dayOfWeek == day && isStartDateBefore) {
-                    return (<View
-                      className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
-                      key={index}
-                    ></View>)
-                  } else if (routine.dayOfWeek == "daily" && isStartDateBefore) {
-                    return (<View
-                      return className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
-                      key={index}
-                    ></View>)
-                  }
+                  return(routine.schedules.map((sched, index) => {
+                    if(sched.dayOfWeek == day && isStartDateBefore) {
+                      return (<View
+                        className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
+                        key={index}
+                      ></View>)
+                    } else if (sched.dayOfWeek  == "Daily" && isStartDateBefore) {
+                      return (<View
+                        return className={`w-2 h-2 rounded-full ${getScheduleColor(routine.name)}`}
+                        key={index}
+                      ></View>)
+                    }
+                  }))
+
                 }) }
 
               </View>
