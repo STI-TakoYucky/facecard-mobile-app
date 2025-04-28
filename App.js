@@ -9,6 +9,8 @@ import SkincareListView from './components/Tabs/SkincareListView';
 import RoutinesView from './components/Tabs/RoutinesView';
 import FaceDiaryView from './components/Tabs/FaceDiaryView';
 import LocationComponent from './components/Screens/LocationComponent';
+import {Provider} from 'react-redux'
+import store from './state/store.js'
 
 export default function App() {
 
@@ -37,10 +39,12 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="w-full !text-dark-900 flex-1 bg-white">
-      <Header setActiveTab={setActiveTab}></Header>
-      {renderView()}
-      <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab}></BottomNavbar>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView className="w-full !text-dark-900 flex-1 bg-white">
+        <Header setActiveTab={setActiveTab}></Header>
+        {renderView()}
+        <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab}></BottomNavbar>
+      </SafeAreaView>
+    </Provider>
   );
 }

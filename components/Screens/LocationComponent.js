@@ -199,7 +199,7 @@ export default function LocationComponent() {
 
   return (
     <ScrollView className="p-5">
-      <View className="flex gap-5 mt-2">
+      <View className="flex gap-5">
         <Text className="text-3xl font-bold text-dark-800">Apply your sunscreen!</Text>
         <Text className="text-dark-800 text-base">
           Be reminded to apply sunscreen whenever you leave your home!

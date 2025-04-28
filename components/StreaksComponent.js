@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function StreaksComponent() {
   return (
-    <View className="items-center justify-center mt-10 mb-[8rem]">
+    <View className="items-center justify-center mt-10 ">
         <View className=" w-[7rem] h-[7rem] rounded-full bg-dark-800 flex items-center justify-center">
             <Text className=" text-white font-bold text-[3rem]">1</Text>    
         </View>    
