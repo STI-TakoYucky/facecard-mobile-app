@@ -2,26 +2,19 @@ import { View, Text, Modal, Pressable, Platform, TouchableWithoutFeedback } from
 import React, { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 import { generateUniqueId } from "../../utils/GenerateUniqueID";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker,}) {
+export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker}) {
 
-  //reset values on input data every render
-  useEffect(() => {
-    setTimeGroup([])
-    setDropdownBoxValue("Daily")
-  }, [isAddSchedule])
-
+  const schedulesData = useSelector(state => state.routineSchedules)
+  const selectedSchedule = schedulesData.find((sched) => sched.name === selectedMarker) || []
   const dispatch = useDispatch();
 
-  //constants and flags
-  const [open, setOpen] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [dropdownBoxItem, setdropdownBoxItem] = useState([
+  const defaultDropdownItems = [
     { label: "Daily", value: "Daily" },
     { label: "Every Sunday", value: 0 },
     { label: "Every Monday", value: 1 },
@@ -30,12 +23,28 @@ export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker
     { label: "Every Thursday", value: 4 },
     { label: "Every Friday", value: 5 },
     { label: "Every Saturday", value: 6 },
-  ]);
+  ];
+
+  //constants and flags
+  const [open, setOpen] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [dropdownBoxItem, setdropdownBoxItem] = useState(defaultDropdownItems);
+
+    //reset values on input data every render
+    useEffect(() => {
+      setTimeGroup([])
+      const filteredItems = defaultDropdownItems.filter(item =>
+        !selectedSchedule.schedules?.some(sched => sched.dayOfWeek === item.value) &&
+        !(item.value === "Daily" && selectedSchedule.schedules?.length > 0)
+      );
+      setdropdownBoxItem(filteredItems);
+      setDropdownBoxValue(filteredItems[0]?.value ?? null);
+    }, [isAddSchedule])
 
   //values for data to be passed for the global state
   const id = generateUniqueId();
   const [timeGroup, setTimeGroup] = useState([]);
-  const [dropDownBoxValue, setDropdownBoxValue] = useState("Daily");
+  const [dropDownBoxValue, setDropdownBoxValue] = useState();
   const [currentIndex, setCurrentIndex] = useState();
 
   const onChange = (event, selectedTime) => {
