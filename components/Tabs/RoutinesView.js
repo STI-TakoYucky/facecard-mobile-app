@@ -28,11 +28,18 @@ export default function RoutinesView() {
 
       <View className="gap-8 mt-7">
         {routineData.map((routine, index) => {
+
+          let dailyFlag = false;
+
           return (
             <View className="flex flex-col justify-center gap-2" key={index}>
               <Text className="text-dark-800 font-bold text-xl mb-2">{routine.name}</Text>
 
               {routine.schedules.map((schedule, index) => {
+                if (schedule.dayOfWeek === "Daily") {
+                  dailyFlag = true;  // ✅ update the flag if we detect "Daily"
+                }
+
                 return (
                   <View style={{backgroundColor: 'white',elevation: 5}} className="rounded-lg py-5 px-4 flex flex-row justify-between items-center" key={index}>
                     <Text className="text-dark-800  text-base">{schedule.dayOfWeek}</Text>
@@ -44,12 +51,16 @@ export default function RoutinesView() {
                 )
               })}
 
-              {routine.schedules.length <= 0 &&<TouchableOpacity onPress={() => {setAddSchedule(true); setSelectedMarker(routine.name)}}>
-                <View className="bg-gray-200 rounded-lg py-5 px-4 flex flex-row justify-between items-center">
-                  <Text className="text-gray-500 text-base">Add Marker</Text>
-                  <AntDesign name="plus" size={24} color="#6b7280" />
-                </View>
-              </TouchableOpacity>}
+              {routine.schedules.length < 4 && !dailyFlag &&
+                (
+                  <TouchableOpacity onPress={() => {setAddSchedule(true); setSelectedMarker(routine.name)}}>
+                    <View className="bg-gray-200 rounded-lg py-5 px-4 flex flex-row justify-between items-center">
+                      <Text className="text-gray-500 text-base">Add Marker</Text>
+                      <AntDesign name="plus" size={24} color="#6b7280" />
+                    </View>
+                  </TouchableOpacity>
+                )
+              }
             </View>
           )
         })}
