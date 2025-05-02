@@ -11,10 +11,12 @@ import FaceDiaryView from './components/Tabs/FaceDiaryView';
 import LocationComponent from './components/Screens/LocationComponent';
 import {Provider} from 'react-redux'
 import store from './state/store.js'
+import AuthenticationForm from './components/Screens/AuthenticationForm.js'
 
 export default function App() {
 
   const [activeTab, setActiveTab] = useState("Home");
+  const [isLoggedIn, setLoggedIn] = useState(false);
   
   const renderView = () => {
     switch (activeTab) {
@@ -41,9 +43,15 @@ export default function App() {
   return (
     <Provider store={store}>
       <SafeAreaView className="w-full !text-dark-900 flex-1 bg-white">
-        <Header setActiveTab={setActiveTab}></Header>
-        {renderView()}
-        <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab}></BottomNavbar>
+        {isLoggedIn ? (
+          <>
+            <Header setActiveTab={setActiveTab} />
+            {renderView()}
+            <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
+          </>
+        ) : (
+          <AuthenticationForm setLoggedIn={setLoggedIn} />
+        )}
       </SafeAreaView>
     </Provider>
   );
