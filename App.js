@@ -1,5 +1,5 @@
 
-import { SafeAreaView} from 'react-native';
+import { SafeAreaView, View, ActivityIndicator, Text} from 'react-native';
 import { useState } from 'react';
 import Header from './components/Header';
 import Home from './components/Tabs/HomeView'
@@ -12,11 +12,23 @@ import LocationComponent from './components/Screens/LocationComponent';
 import {Provider} from 'react-redux'
 import store from './state/store.js'
 import AuthenticationForm from './components/Screens/AuthenticationForm.js'
+import { useSelector } from 'react-redux';
+import PreloaderComponent from './components/PreloaderComponent.js';
 
 export default function App() {
+  return (
+    <Provider store={store}>
+      <AppContent/>
+    </Provider>
+  )
+}
+
+function AppContent() {
 
   const [activeTab, setActiveTab] = useState("Home");
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const preloaderFlag = useSelector((state) => state.preloader);
+  
   
   const renderView = () => {
     switch (activeTab) {
@@ -41,8 +53,14 @@ export default function App() {
   }
 
   return (
-    <Provider store={store}>
       <SafeAreaView className="w-full !text-dark-900 flex-1 bg-white">
+        {
+          preloaderFlag?.toggle &&
+          (
+            <PreloaderComponent></PreloaderComponent>
+          )
+        }
+        
         {isLoggedIn ? (
           <>
             <Header setActiveTab={setActiveTab} />
@@ -53,6 +71,5 @@ export default function App() {
           <AuthenticationForm setLoggedIn={setLoggedIn} />
         )}
       </SafeAreaView>
-    </Provider>
   );
 }
