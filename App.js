@@ -1,6 +1,6 @@
 
 import { SafeAreaView, View, ActivityIndicator, Text} from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import Home from './components/Tabs/HomeView'
 import "./global.css"
@@ -14,6 +14,7 @@ import store from './state/store.js'
 import AuthenticationForm from './components/Screens/AuthenticationForm.js'
 import { useSelector } from 'react-redux';
 import PreloaderComponent from './components/PreloaderComponent.js';
+import axios from 'axios';
 
 export default function App() {
   return (
