@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { togglePreloader } from "../state/PreloaderSlice/PreloaderSlice";
 
 export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
+  
 
   const dispatch = useDispatch();
 
@@ -131,7 +132,7 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
           </View>
 
           <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
+            onPress={() => getUser()}
             className="bg-dark-800 py-3 rounded-lg mt-2"
           >
             <Text className="text-white text-center font-bold">Register</Text>
