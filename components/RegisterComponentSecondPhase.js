@@ -80,7 +80,7 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
                 const day = String(date.getDate()).padStart(2, '0');
                 const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
                 const year = date.getFullYear();
-                const formattedDate = `${day}/${month}/${year}`;
+                const formattedDate = `${month}/${day}/${year}`;
                 onChange(formattedDate);
                 setDatePickerVisibility(false)
             }}
@@ -104,7 +104,7 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
         <Text className="text-dark-800 text-center font-bold">Back</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleSubmit(onSubmit)} className="flex-1 bg-dark-800 py-3 rounded-lg mt-2">
-        <Text className="text-white text-center font-bold">Register</Text>
+        <Text className="text-white text-center font-bold">Confirm</Text>
       </TouchableOpacity>
     </View>
   </View>

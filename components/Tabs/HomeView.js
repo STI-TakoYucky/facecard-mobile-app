@@ -16,12 +16,6 @@ export default function Home() {
   const [isEditChecklistActive, setEditChecklist] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
 
-
-  // useEffect(() => {
-  //   alert(JSON.stringify(routineSchedules), null, 2)
-  // })
-
-
   const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
       setSelectedDate(date);

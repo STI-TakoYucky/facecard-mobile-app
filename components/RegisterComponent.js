@@ -1,12 +1,19 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import RegisterComponentSecondPhase from "./RegisterComponentSecondPhase";
 import { useDispatch } from "react-redux";
 import { togglePreloader } from "../state/PreloaderSlice/PreloaderSlice";
+import { signUp } from "../firebase/db";
+import Toast from "react-native-toast-message";
 
-export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
-  
+
+
+export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsRegister}) {
+
+  const [isPasswordVisible, setPasswordVisible] = useState(true);
+  const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -20,27 +27,47 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
       birthdate: "",
     },
   });
-
+  
   const password = watch("password");
 
-  const onSubmit = (data) => {
+  const onSubmit = async () => {
+    const emailValue = getValues("email").trim();
+    const passwordValue = getValues("password").trim()
+    const firstName = getValues("firstName").trim()
+    const lastName = getValues("lastName").trim()
+    const confirmPasswordValue = getValues("confirmPassword").trim()
+    const birthdate = getValues("birthdate").trim()
+
     if(isSecondPhase) {
-      console.log(data);
-      alert("Registered successfully!");
+
+          const { success } = await signUp(emailValue,passwordValue, firstName, lastName, birthdate)
+          if (success) {
+            Toast.show({
+              type: 'success',
+              position: 'top',
+              text1: 'Registered Successfully!',
+            });
+            dispatch(togglePreloader({message: "Registered Successfully!"}))
+            setSecondPhase(false)
+            setIsRegister(false)
+          } else {
+            Toast.show({
+              type: 'error',
+              position: 'top',
+              text1: 'Oh no!',
+              text2: "Current email is already in use.",
+            });
+          }
+
     } else {
       dispatch(togglePreloader({message: "Before we register your account, we would like to ask you some additional questions."}))
-      const emailValue = getValues("email");
-      const passwordValue = getValues("password")
-      const confirmPasswordValue = getValues("confirmPassword")
 
       setTimeout(() => {
-        setValue("email", "")
-        setValue("password", "")
-        setValue("confirmPassword", "")
+        setValue("email", null)
+        setValue("password", null)
+        setValue("confirmPassword", null)
         setSecondPhase(true)
       }, 500);
-
-
 
       setTimeout(() => {
         setValue("email", emailValue)
@@ -58,7 +85,13 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
           <View className="mb-8 relative">
             <Controller
               control={control}
-              rules={{ required: "Email is required" }}
+              rules={{ 
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Please enter a valid email address"
+                } 
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
@@ -83,19 +116,28 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
           <View className="mb-8 relative">
             <Controller
               control={control}
-              rules={{ required: "Password is required" }}
+              rules={{ 
+                required: "Password is required",
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*[!#$%\-_@.])(?=.*\d)[A-Za-z\d!#$%\-_@.]{8,}$/,
+                  message: "Invalid password"
+                } 
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
-                  placeholder="Password"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  secureTextEntry
-                />
+                  <TextInput
+                    className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
+                    placeholder="Password"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    secureTextEntry={isPasswordVisible}
+                    />
               )}
               name="password"
             />
+              <TouchableOpacity onPress={() => {setPasswordVisible(prev => !prev)}}>
+                  <AntDesign className="absolute right-0 bottom-[-.3rem] p-5 z-50" name="eyeo" size={24} color="#2D3B75" />
+              </TouchableOpacity>
             {errors.password && (
               <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
                 {errors.password.message}
@@ -119,11 +161,15 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  secureTextEntry
+                  secureTextEntry={isConfirmPasswordVisible}
                 />
               )}
               name="confirmPassword"
             />
+
+              <TouchableOpacity onPress={() => {setConfirmPasswordVisible(prev => !prev)}}>
+                  <AntDesign className="absolute right-0 bottom-[-.3rem] p-5 z-50" name="eyeo" size={24} color="#2D3B75" />
+              </TouchableOpacity>
             {errors.confirmPassword && (
               <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
                 {errors.confirmPassword.message}
@@ -132,11 +178,12 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase}) {
           </View>
 
           <TouchableOpacity
-            onPress={() => getUser()}
+            onPress={handleSubmit(onSubmit)}
             className="bg-dark-800 py-3 rounded-lg mt-2"
           >
             <Text className="text-white text-center font-bold">Register</Text>
           </TouchableOpacity>
+
         </>
       ) : (
        <RegisterComponentSecondPhase control={control} errors={errors} handleSubmit={handleSubmit} onSubmit={onSubmit} setSecondPhase={setSecondPhase}></RegisterComponentSecondPhase>

@@ -1,5 +1,5 @@
 
-import { SafeAreaView, View, ActivityIndicator, Text} from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import Home from './components/Tabs/HomeView'
@@ -14,7 +14,8 @@ import store from './state/store.js'
 import AuthenticationForm from './components/Screens/AuthenticationForm.js'
 import { useSelector } from 'react-redux';
 import PreloaderComponent from './components/PreloaderComponent.js';
-import axios from 'axios';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './components/ToastConfig.js';
 
 export default function App() {
   return (
@@ -71,6 +72,7 @@ function AppContent() {
         ) : (
           <AuthenticationForm setLoggedIn={setLoggedIn} />
         )}
+         <Toast config={toastConfig}/>
       </SafeAreaView>
   );
 }
