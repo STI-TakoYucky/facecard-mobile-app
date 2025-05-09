@@ -1,5 +1,6 @@
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import Toast from 'react-native-toast-message';
 
 export default function LoginComponent({setLoggedIn}) {
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -11,7 +12,11 @@ export default function LoginComponent({setLoggedIn}) {
 
   const onSubmit = (data) => {
     console.log(data);
-    alert('Logged in successfully!');
+    Toast.show({
+        type: 'success',
+        position: 'top',
+        text1: 'Registered Successfully!',
+      });
     setLoggedIn(true)
   };
 
