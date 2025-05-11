@@ -63,12 +63,7 @@ function AppContent() {
           
           {isLoggedIn ? (
             <>
-              {isDrawerActive && (
-                <TouchableWithoutFeedback onPress={() => setDrawerActive(prev => !prev)}>
-                  <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
-                </TouchableWithoutFeedback>
-              )}
-            { isDrawerActive && <DrawerComponent></DrawerComponent> }
+            { isDrawerActive && <DrawerComponent setDrawerActive={setDrawerActive} setLoggedIn={setLoggedIn}></DrawerComponent> }
               <Header setActiveTab={setActiveTab} setDrawerActive={setDrawerActive}/>
               {renderView()}
               <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
