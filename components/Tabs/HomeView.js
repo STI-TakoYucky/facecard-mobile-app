@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import StreaksComponent from "../StreaksComponent";
@@ -62,13 +62,18 @@ export default function Home() {
         markedDates={markedDates}
         hideExtraDays={true}
         enableSwipeMonths={true}
+        theme={{
+          textMonthFontSize: 16,
+          monthTextColor: '#2D3B75', // <--- change color of month/year
+          arrowColor: '#2D3B75', // optional
+        }}
         dayComponent={({ date, state }) => {
           const isMarked = !!markedDates[date?.dateString]
           const jsDate = new Date(date.dateString);
           const day = jsDate.getDay();;
 
           return (
-            <Pressable
+            <TouchableOpacity
             key={date}
               onPress={() => {HandleDayClick(date?.dateString, isMarked)}}
               disabled={state === "disabled" ? true : false}>
@@ -111,7 +116,7 @@ export default function Home() {
                 }) }
 
               </View>
-            </Pressable>
+            </TouchableOpacity>
           );}}/>
 
 

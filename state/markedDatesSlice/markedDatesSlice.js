@@ -6,7 +6,11 @@ const markedDatesSlice = createSlice({
   reducers: {
     addDate: (state, action) => {
         const { date, routines } = action.payload;
-        state[date] = {
+
+        if (routines.Cleanser == false && routines.Moisturizer == false && routines.Exfoliate == false && routines.Serum == false) {
+          delete state[date];
+        } else {
+          state[date] = {
             routines: {
                 Cleanser: routines.Cleanser || false,
                 Moisturizer: routines.Moisturizer || false,
@@ -14,6 +18,7 @@ const markedDatesSlice = createSlice({
                 Serum: routines.Serum || false
               }
           };
+        }
       },
   }
 });
