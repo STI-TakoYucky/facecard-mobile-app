@@ -1,5 +1,5 @@
 import { doc, setDoc } from 'firebase/firestore';
-import { db, createUserWithEmailAndPassword, auth } from '../firebase/firebase'; 
+import { db, createUserWithEmailAndPassword, signInWithEmailAndPassword, auth } from '../firebase/firebase'; 
 import { getFormattedDate } from '../utils/GetFormattedDate';
 
 
@@ -47,4 +47,15 @@ export async function signUp(email, password, firstName, lastName, birthdate) {
     } catch (error) {
       return { success: false }
     }
+  }
+
+  export async function signIn(email, password) {
+      try {
+        await signInWithEmailAndPassword (auth, email, password);
+        return { success: true };
+      } catch (error) {
+        console.log(error);
+        return { success: false, message: error.message, code: error.code };
+        
+      }
   }
