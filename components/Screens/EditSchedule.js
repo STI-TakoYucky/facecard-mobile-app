@@ -8,11 +8,14 @@ import { generateUniqueId } from "../../utils/GenerateUniqueID";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export default function AddSchedule({isEditSchedule,setEditSchedule,selectedMarker}) {
+export default function EditSchedule({isEditSchedule,setEditSchedule,selectedMarker, scheduleID}) {
 
   const schedulesData = useSelector(state => state.routineSchedules)
   const selectedSchedule = schedulesData.find((sched) => sched.name === selectedMarker) || []
+  const selectedScheduleByID = selectedSchedule.schedules.find((sched) => sched.id === scheduleID);
   const dispatch = useDispatch();
+
+  alert(JSON.stringify(selectedScheduleByID))
 
   const defaultDropdownItems = [
     { label: "Daily", value: "Daily" },
@@ -32,17 +35,18 @@ export default function AddSchedule({isEditSchedule,setEditSchedule,selectedMark
 
     //reset values on input data every render
     useEffect(() => {
-      setTimeGroup([])
+
+      setTimeGroup(selectedScheduleByID.time)
       const filteredItems = defaultDropdownItems.filter(item =>
         !selectedSchedule.schedules?.some(sched => sched.dayOfWeek === item.value) &&
         !(item.value === "Daily" && selectedSchedule.schedules?.length > 0)
       );
+      setDropdownBoxValue(selectedScheduleByID.dayOfWeek)
       setdropdownBoxItem(filteredItems);
-      setDropdownBoxValue(filteredItems[0]?.value ?? null);
+      
     }, [isEditSchedule])
 
   //values for data to be passed for the global state
-  const id = generateUniqueId();
   const [timeGroup, setTimeGroup] = useState([]);
   const [dropDownBoxValue, setDropdownBoxValue] = useState();
   const [currentIndex, setCurrentIndex] = useState();
@@ -83,7 +87,7 @@ export default function AddSchedule({isEditSchedule,setEditSchedule,selectedMark
 
   const handleConfirm = () => {
     const payload = {
-      id: id,
+      id: scheduleID,
       dayOfWeek: dropDownBoxValue,
       time: timeGroup,
     };
@@ -103,7 +107,7 @@ export default function AddSchedule({isEditSchedule,setEditSchedule,selectedMark
         <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] h-[29rem] shadow-xl justify-between" >
           <View>
             <Text className="text-2xl font-semibold text-dark-800">
-              Cleanser
+              {selectedMarker}
             </Text>
             <View className="my-5 flex gap-3">
               <View className="my-2 gap-[2rem]">

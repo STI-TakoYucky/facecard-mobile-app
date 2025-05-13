@@ -28,9 +28,15 @@ const routineSchedulesSlice = createSlice({
     setSchedules: (state, action) => {
       const { name, schedules } = action.payload
 
-      const existingRoutine = state.find(item => item.name === name);
+      const selectedRoutine = state.find(item => item.name === name);
+      const existingRoutine = selectedRoutine.schedules.findIndex(item => item.id === schedules.id);
 
-      existingRoutine.schedules.push(schedules);
+      if(existingRoutine !== -1) {
+         selectedRoutine.schedules[existingRoutine] = schedules;
+         return;
+      }
+
+      selectedRoutine.schedules.push(schedules);
     },
   },
 });

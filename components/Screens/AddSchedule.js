@@ -103,7 +103,7 @@ export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker
         <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] h-[29rem] shadow-xl justify-between" >
           <View>
             <Text className="text-2xl font-semibold text-dark-800">
-              Cleanser
+              {selectedMarker}
             </Text>
             <View className="my-5 flex gap-3">
               <View className="my-2 gap-[2rem]">

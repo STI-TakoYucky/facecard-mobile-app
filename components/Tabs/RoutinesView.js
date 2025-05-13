@@ -13,6 +13,7 @@ export default function RoutinesView() {
   const [isAddSchedule, setAddSchedule] = useState(false);
   const [isEditSchedule, setEditSchedule] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState();
+  const [scheduleID, setScheduleID] = useState();
 
   const dispatch = useDispatch();
   // Get the routineScheds from the global state
@@ -45,17 +46,23 @@ export default function RoutinesView() {
   return (
     <ScrollView className="p-5" showsVerticalScrollIndicator={false}>
 
-      <AddSchedule
+      {
+        isAddSchedule &&
+        <AddSchedule
         isAddSchedule={isAddSchedule}
         setAddSchedule={setAddSchedule}
         selectedMarker={selectedMarker}
-      ></AddSchedule>
+      ></AddSchedule>}
 
-      <EditSchedule
-        isEditSchedule={isEditSchedule}
-        setEditSchedule={setEditSchedule}
-        selectedMarker={selectedMarker}
-      ></EditSchedule>
+      {
+        isEditSchedule && 
+        <EditSchedule
+          isEditSchedule={isEditSchedule}
+          setEditSchedule={setEditSchedule}
+          selectedMarker={selectedMarker}
+          scheduleID={scheduleID}
+        ></EditSchedule>
+      }
 
       <View className="mb-[8rem]">
       <Text className="text-dark-800 font-bold text-3xl">Setup your routines with ease!</Text>
@@ -69,29 +76,43 @@ export default function RoutinesView() {
             <View className="flex flex-col justify-center gap-2" key={index}>
               <Text className="text-dark-800 font-bold text-xl mb-2">{routine.name}</Text>
 
-              {routine.schedules.map((schedule, index) => {
+              {routine.schedules.map((schedule) => {
                 if (schedule.dayOfWeek === "Daily") {
                   dailyFlag = true;  // ✅ update the flag if we detect "Daily"
                 }
 
                 return (
-                  <View style={{backgroundColor: 'white',elevation: 5}} className="rounded-lg py-5 px-4 flex flex-row justify-between items-center" key={index}>
-                    <Text className="text-dark-800 text-base"><FontAwesome5 name="calendar-day" size={18} color="#2D3B75" />  <Text>{getDay(schedule.dayOfWeek)}</Text></Text>
-                    <Text className="text-dark-800 text-base font-bold">
-                      {schedule.time.length > 0 ? 
-                      <View className="flex flex-row gap-2">
-                        <MaterialCommunityIcons name="bell-ring" size={20} color="#2D3B75" /> 
-                        <Text className="text-dark-800">Notifications On</Text>
-                      </View> :
-                      <View className="flex flex-row gap-2">
-                        <MaterialCommunityIcons name="bell-off" size={20} color="#2D3B75" /> 
-                        <Text className="text-dark-800">Notifications Off</Text>
-                      </View> 
-                      }</Text>
-                    <TouchableOpacity onPress={() => {setEditSchedule(true); setSelectedMarker(routine.name)}}>
+                  <View
+                    style={{ backgroundColor: 'white', elevation: 5 }}
+                    className="rounded-lg py-5 px-4 flex flex-row justify-between items-center"
+                    key={schedule.id}
+                  >
+                    <Text className="text-dark-800 text-base">
+                      <FontAwesome5 name="calendar-day" size={18} color="#2D3B75" /> {getDay(schedule.dayOfWeek)}
+                    </Text>
+
+                    <View className="flex flex-row gap-2 items-center">
+                      <MaterialCommunityIcons
+                        name={schedule.time.length > 0 ? 'bell-ring' : 'bell-off'}
+                        size={20}
+                        color="#2D3B75"
+                      />
+                      <Text className="text-dark-800 text-base font-bold">
+                        {schedule.time.length > 0 ? 'Notifications On' : 'Notifications Off'}
+                      </Text>
+                    </View>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        setEditSchedule(true);
+                        setSelectedMarker(routine.name);
+                        setScheduleID(schedule.id); // ✅ now works
+                      }}
+                    >
                       <Feather name="edit" size={20} color="#2D3B75" />
                     </TouchableOpacity>
                   </View>
+
                 )
               })}
 
