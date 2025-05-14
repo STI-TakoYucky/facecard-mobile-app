@@ -19,7 +19,7 @@
     "@reduxjs/toolkit": "^2.7.0",
     "axios": "^1.9.0",
     "camelcase": "^6.3.0",
-    "expo": "~52.0.41",
+    "expo": "^53.0.9",
     "expo-constants": "~17.0.8",
     "expo-dev-client": "~5.0.15",
     "expo-device": "~7.0.3",

@@ -1,6 +1,6 @@
 
-import { SafeAreaView } from 'react-native';
-import { useEffect, useState } from 'react';
+import { SafeAreaView, TouchableWithoutFeedback, View } from 'react-native';
+import { useEffect, useState, useRef } from 'react';
 import Header from './components/Header';
 import Home from './components/Tabs/HomeView'
 import "./global.css"
@@ -16,8 +16,10 @@ import { useSelector } from 'react-redux';
 import PreloaderComponent from './components/PreloaderComponent.js';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './components/ToastConfig.js';
+import DrawerComponent from './components/DrawerComponent.js';
 
 export default function App() {
+
   return (
     <Provider store={store}>
       <AppContent/>
@@ -30,7 +32,7 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState("Home");
   const [isLoggedIn, setLoggedIn] = useState(false);
   const preloaderFlag = useSelector((state) => state.preloader);
-  
+  const [isDrawerActive, setDrawerActive] = useState(false);
   
   const renderView = () => {
     switch (activeTab) {
@@ -55,24 +57,21 @@ function AppContent() {
   }
 
   return (
-      <SafeAreaView className="w-full !text-dark-900 flex-1 bg-white">
-        {
-          preloaderFlag?.toggle &&
-          (
-            <PreloaderComponent></PreloaderComponent>
-          )
-        }
-        
-        {isLoggedIn ? (
-          <>
-            <Header setActiveTab={setActiveTab} />
-            {renderView()}
-            <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
-          </>
-        ) : (
-          <AuthenticationForm setLoggedIn={setLoggedIn} />
-        )}
-         <Toast config={toastConfig}/>
+      <SafeAreaView className="w-full relative !text-dark-900 flex-1 bg-white">
+
+          { preloaderFlag?.toggle && (<PreloaderComponent></PreloaderComponent>) } 
+          
+          {isLoggedIn ? (
+            <>
+            { isDrawerActive && <DrawerComponent setDrawerActive={setDrawerActive} setLoggedIn={setLoggedIn}></DrawerComponent> }
+              <Header setActiveTab={setActiveTab} setDrawerActive={setDrawerActive}/>
+              {renderView()}
+              <BottomNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
+            </>
+          ) : ( <AuthenticationForm setLoggedIn={setLoggedIn} /> )}
+
+            <Toast config={toastConfig}/>
+
       </SafeAreaView>
   );
 }

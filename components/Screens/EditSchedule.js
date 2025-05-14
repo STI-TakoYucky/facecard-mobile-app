@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch, useSelector } from "react-redux";
-import { setSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
+import { deleteSchedule, setSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 import { generateUniqueId } from "../../utils/GenerateUniqueID";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker}) {
+export default function EditSchedule({isEditSchedule,setEditSchedule,selectedMarker, scheduleID}) {
 
   const schedulesData = useSelector(state => state.routineSchedules)
   const selectedSchedule = schedulesData.find((sched) => sched.name === selectedMarker) || []
+  const selectedScheduleByID = selectedSchedule.schedules.find((sched) => sched.id === scheduleID);
   const dispatch = useDispatch();
 
   const defaultDropdownItems = [
@@ -32,17 +33,18 @@ export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker
 
     //reset values on input data every render
     useEffect(() => {
-      setTimeGroup([])
+
+      setTimeGroup(selectedScheduleByID.time)
       const filteredItems = defaultDropdownItems.filter(item =>
         !selectedSchedule.schedules?.some(sched => sched.dayOfWeek === item.value) &&
         !(item.value === "Daily" && selectedSchedule.schedules?.length > 0)
       );
+      setDropdownBoxValue(selectedScheduleByID.dayOfWeek)
       setdropdownBoxItem(filteredItems);
-      setDropdownBoxValue(filteredItems[0]?.value ?? null);
-    }, [isAddSchedule])
+      
+    }, [isEditSchedule])
 
   //values for data to be passed for the global state
-  const id = generateUniqueId();
   const [timeGroup, setTimeGroup] = useState([]);
   const [dropDownBoxValue, setDropdownBoxValue] = useState();
   const [currentIndex, setCurrentIndex] = useState();
@@ -83,27 +85,32 @@ export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker
 
   const handleConfirm = () => {
     const payload = {
-      id: id,
+      id: scheduleID,
       dayOfWeek: dropDownBoxValue,
       time: timeGroup,
     };
     dispatch(setSchedules({ name: selectedMarker, schedules: payload }));
-    setAddSchedule(false);
+    setEditSchedule(false);
   };
+
+  const handleDelete = () => {
+    dispatch(deleteSchedule({ name: selectedMarker, scheduleID: scheduleID }));
+    setEditSchedule(false);
+  }
 
   return (
     <Modal
       transparent
       animationType="fade"
-      visible={isAddSchedule}
-      onRequestClose={() => setAddSchedule(false)}
+      visible={isEditSchedule}
+      onRequestClose={() => setEditSchedule(false)}
     >
       <TouchableWithoutFeedback onPress={() => setOpen(false)}>
       <View className="flex-1 bg-black/40 justify-center items-center">
         <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] h-[29rem] shadow-xl justify-between" >
           <View>
             <Text className="text-2xl font-semibold text-dark-800">
-              {selectedMarker}
+              Edit {selectedMarker}
             </Text>
             <View className="my-5 flex gap-3">
               <View className="my-2 gap-[2rem]">
@@ -208,7 +215,12 @@ export default function AddSchedule({isAddSchedule,setAddSchedule,selectedMarker
           </View>
 
           <View className="flex flex-row gap-2 justify-end">
-            <Pressable onPress={() => setAddSchedule(false)}>
+            <Pressable onPress={() => handleDelete()} className="items-start">
+              <Text className="bg-red-400 border border-red-400 rounded-md px-4 py-[.49rem] shadow-sm">
+                Delete
+              </Text>
+            </Pressable>
+            <Pressable onPress={() => setEditSchedule(false)}>
               <Text className="bg-white border border-dark-800 rounded-md px-4 py-[.49rem] shadow-sm">
                 Cancel
               </Text>
