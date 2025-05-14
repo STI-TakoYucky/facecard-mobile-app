@@ -38,8 +38,19 @@ const routineSchedulesSlice = createSlice({
 
       selectedRoutine.schedules.push(schedules);
     },
+    deleteSchedule: (state, action) => {
+      const { name, scheduleID } = action.payload;
+
+      // Find the routine based on its name
+      const selectedRoutine = state.find(item => item.name === name);
+
+      if (selectedRoutine) {
+        // Filter out the schedule with the matching id
+        selectedRoutine.schedules = selectedRoutine.schedules.filter(schedule => schedule.id !== scheduleID);
+      }
+    },
   },
 });
 
-export const { setSchedules } = routineSchedulesSlice.actions;
+export const { setSchedules, deleteSchedule  } = routineSchedulesSlice.actions;
 export default routineSchedulesSlice.reducer;

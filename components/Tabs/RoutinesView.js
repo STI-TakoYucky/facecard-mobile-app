@@ -77,6 +77,7 @@ export default function RoutinesView() {
               <Text className="text-dark-800 font-bold text-xl mb-2">{routine.name}</Text>
 
               {routine.schedules.map((schedule) => {
+
                 if (schedule.dayOfWeek === "Daily") {
                   dailyFlag = true;  // ✅ update the flag if we detect "Daily"
                 }

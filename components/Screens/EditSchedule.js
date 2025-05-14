@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch, useSelector } from "react-redux";
-import { setSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
+import { deleteSchedule, setSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 import { generateUniqueId } from "../../utils/GenerateUniqueID";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -14,8 +14,6 @@ export default function EditSchedule({isEditSchedule,setEditSchedule,selectedMar
   const selectedSchedule = schedulesData.find((sched) => sched.name === selectedMarker) || []
   const selectedScheduleByID = selectedSchedule.schedules.find((sched) => sched.id === scheduleID);
   const dispatch = useDispatch();
-
-  alert(JSON.stringify(selectedScheduleByID))
 
   const defaultDropdownItems = [
     { label: "Daily", value: "Daily" },
@@ -95,6 +93,11 @@ export default function EditSchedule({isEditSchedule,setEditSchedule,selectedMar
     setEditSchedule(false);
   };
 
+  const handleDelete = () => {
+    dispatch(deleteSchedule({ name: selectedMarker, scheduleID: scheduleID }));
+    setEditSchedule(false);
+  }
+
   return (
     <Modal
       transparent
@@ -107,7 +110,7 @@ export default function EditSchedule({isEditSchedule,setEditSchedule,selectedMar
         <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] h-[29rem] shadow-xl justify-between" >
           <View>
             <Text className="text-2xl font-semibold text-dark-800">
-              {selectedMarker}
+              Edit {selectedMarker}
             </Text>
             <View className="my-5 flex gap-3">
               <View className="my-2 gap-[2rem]">
@@ -212,6 +215,11 @@ export default function EditSchedule({isEditSchedule,setEditSchedule,selectedMar
           </View>
 
           <View className="flex flex-row gap-2 justify-end">
+            <Pressable onPress={() => handleDelete()} className="items-start">
+              <Text className="bg-red-400 border border-red-400 rounded-md px-4 py-[.49rem] shadow-sm">
+                Delete
+              </Text>
+            </Pressable>
             <Pressable onPress={() => setEditSchedule(false)}>
               <Text className="bg-white border border-dark-800 rounded-md px-4 py-[.49rem] shadow-sm">
                 Cancel
