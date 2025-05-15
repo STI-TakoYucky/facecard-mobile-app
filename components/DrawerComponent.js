@@ -4,8 +4,12 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function DrawerComponent({ setDrawerActive, setLoggedIn }) {
+export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiveTab }) {
+
+  const dispatch = useDispatch();
+  const userData = useSelector(state => state.userData);
   const slideAnim = useRef(new Animated.Value(250)).current; // Starts off-screen
 
   const slideIn = () => {
@@ -29,9 +33,15 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn }) {
   };
 
   useEffect(() => {
-
     slideIn()
   }, [])
+
+  const handleLogout = () => {
+    setLoggedIn(prev => !prev); 
+    setDrawerActive(prev => !prev); 
+    dispatch({ type: 'user/logout' });
+    setActiveTab("Home")
+  }
 
 
   return (
@@ -49,23 +59,23 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn }) {
             source={require('../assets/profile.png')}
             className="max-w-[2rem] max-h-[2rem] rounded-full"
           />
-          <Text className="font-bold text-dark-800 text-2xl">Lucky Estrada</Text>
+          <Text className="font-bold text-dark-800 text-2xl">{userData.firstName + " " + userData.lastName}</Text>
         </View>
 
         <View className="flex gap-8 mt-10">
-          <TouchableOpacity className="flex flex-row gap-2 justify-start">
-            <MaterialIcons name="person" size={24} color="#2D3B75" className="min-w-7"/>
+          <TouchableOpacity className="flex flex-row gap-2 justify-start" onPress={() => setActiveTab("Profile")}>
+            <MaterialIcons name="person" size={24} color="#2D3B75" className="min-w-8"/>
             <Text className="text-dark-800 text-lg">Profile</Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="flex justify-start flex-row gap-2 items-center">
-            <FontAwesome6 name="user-doctor" size={19} color="#2D3B75" className="min-w-7"/>
+            <FontAwesome6 name="user-doctor" size={19} color="#2D3B75" className="min-w-7 ml-[.2rem]"/>
             <Text className="text-dark-800 text-lg">Derma Chat</Text>
             <FontAwesome5 name="crown" size={16} color="#f2c611" />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => {setLoggedIn(prev => !prev); setDrawerActive(prev => !prev)}} className="justify-start flex flex-row gap-2">
-            <MaterialCommunityIcons name="logout" size={24} color="#2D3B75" className="min-w-7"/>
+          <TouchableOpacity onPress={() => {handleLogout()}} className="justify-start flex flex-row gap-2">
+            <MaterialCommunityIcons name="logout" size={24} color="#2D3B75" className="min-w-8"/>
             <Text className="text-dark-800 text-lg">Logout</Text>
           </TouchableOpacity>
         </View>

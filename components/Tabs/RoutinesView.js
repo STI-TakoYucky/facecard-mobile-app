@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import AddSchedule from '../Screens/AddSchedule.js'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import EditSchedule from '../Screens/EditSchedule.js'
+import { updateUserSchedules } from '../../state/userDataSlice/userDataSlice.js';
 
 export default function RoutinesView() {
 
@@ -18,6 +19,10 @@ export default function RoutinesView() {
   const dispatch = useDispatch();
   // Get the routineScheds from the global state
   const routineData = useSelector((state) => state.routineSchedules);
+
+    useEffect(() => {
+    dispatch(updateUserSchedules(routineData))
+  }, [routineData]);
 
   const getDay = (day) => {
     switch (day) {
@@ -88,14 +93,17 @@ export default function RoutinesView() {
                     className="rounded-lg py-5 px-4 flex flex-row justify-between items-center"
                     key={schedule.id}
                   >
-                    <Text className="text-dark-800 text-base">
-                      <FontAwesome5 name="calendar-day" size={18} color="#2D3B75" /> {getDay(schedule.dayOfWeek)}
-                    </Text>
+                    <View className="flex items-center flex-row gap-2">
+                      <FontAwesome5 name="calendar-day" size={15} color="#2D3B75" /> 
+                       <Text className="text-dark-800 text-base">
+                        {getDay(schedule.dayOfWeek)}
+                      </Text>
+                    </View>
 
                     <View className="flex flex-row gap-2 items-center">
                       <MaterialCommunityIcons
                         name={schedule.time.length > 0 ? 'bell-ring' : 'bell-off'}
-                        size={20}
+                        size={18}
                         color="#2D3B75"
                       />
                       <Text className="text-dark-800 text-base font-bold">

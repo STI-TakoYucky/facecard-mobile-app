@@ -1,9 +1,19 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from '../firebase/firebase';
 import { useForm, Controller } from 'react-hook-form';
 import Toast from 'react-native-toast-message';
 import { signIn } from '../firebase/db';
+import { useDispatch, useSelector } from 'react-redux';
+import { storeUser } from '../state/userDataSlice/userDataSlice';
+import { initDates } from '../state/markedDatesSlice/markedDatesSlice';
+import { useEffect, useState } from 'react';
+import { togglePreloader } from '../state/PreloaderSlice/PreloaderSlice';
 
-export default function LoginComponent({setLoggedIn}) {
+export default function LoginComponent({ setLoggedIn }) {
+
+  const dispatch = useDispatch();
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: '',
@@ -32,16 +42,18 @@ export default function LoginComponent({setLoggedIn}) {
         text1: 'Login failed.',
         text2: errorMessage,     
       });
-      setLoggedIn(false);
-      } 
-      else {  
-        console.log(data);
-        Toast.show({
-            type: 'success',
-            position: 'top',
-            text1: 'Registered Successfully!',
-          });
-        setLoggedIn(true);
+      } else {  
+        Keyboard.dismiss()
+        dispatch(togglePreloader({message: "Login Successful!"}))
+        const docRef = doc(db, "users", result.userID);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          dispatch(storeUser(docSnap.data()))
+          setLoggedIn(true);
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("No such document!");
+        }
       }
     }
 

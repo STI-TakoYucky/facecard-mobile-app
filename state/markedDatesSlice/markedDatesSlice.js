@@ -20,8 +20,12 @@ const markedDatesSlice = createSlice({
           };
         }
       },
+    initDates: (state, action) => {
+      const data = action.payload;
+      return {...data}
+    }
   }
 });
 
-export const { addDate } = markedDatesSlice.actions;
+export const { addDate, initDates } = markedDatesSlice.actions;
 export default markedDatesSlice.reducer;
