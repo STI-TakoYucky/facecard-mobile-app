@@ -5,16 +5,25 @@ import StreaksComponent from "../StreaksComponent";
 import UserProductContainer from "../UserProductContainer";
 import SkincareChecklist from "../Screens/SkincareChecklist";
 import EditChecklist from "../Screens/EditChecklist";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { initDates } from "../../state/markedDatesSlice/markedDatesSlice";
+import { initRoutineSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 
 export default function Home() {
 
-
+  const dispatch = useDispatch()
+  const userData = useSelector(state => state.userData) 
   const markedDates = useSelector((state) => state.markedDates);
   const routineSchedules = useSelector((state) => state.routineSchedules) || []
   const [isChecklistActive, setChecklistActive] = useState(false);
   const [isEditChecklistActive, setEditChecklist] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
+
+  useEffect(() => {
+    //initialize dates from the database
+    dispatch(initDates(userData.markedDates))
+    dispatch(initRoutineSchedules(userData.routineSchedules))
+  }, [])
 
   const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
