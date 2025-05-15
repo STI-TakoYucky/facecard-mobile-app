@@ -1,11 +1,10 @@
 import React from "react";
 import { StyleSheet, View, Text } from 'react-native';
+import SearchBar from '../SkincareListView/SearchBar';
 
 export default function FaceDiaryHeader() {
   return (
-    <View style={styles.header}>
-      <Text>Face Journal</Text>
-    </View>
+    <SearchBar></SearchBar>
   );
 }
 
