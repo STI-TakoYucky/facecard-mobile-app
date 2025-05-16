@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function EntryModal(props) {
 
@@ -15,17 +16,17 @@ export default function EntryModal(props) {
       alert('Camera permission is required!');
       return;
     }
-
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       quality: 1,
     });
-
+    
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
       console.log('Taken image:', result.assets[0]);
     }
+    
   };
 
 // OPENS GALLERY
@@ -68,7 +69,19 @@ const openGallery = async () => {
             size={22} 
             color='#162041' />
         </TouchableOpacity>
-        <TouchableOpacity onPress={props.onClose}>
+        <TouchableOpacity onPress={() => {
+          if (!props.onSubmit) {
+            console.warn("onSubmit prop is missing!");
+            return;
+          }
+          props.onSubmit({
+            date: currentDate,
+            imageUri,
+            text,
+          });
+          setText('');
+          setImageUri(null);
+        }}>
           <MaterialIcons 
           name="done" 
           size={22} 
@@ -79,10 +92,10 @@ const openGallery = async () => {
       {/* DATE */}
       <Text style={styles.date}>{currentDate}</Text>
 
-      {/* IMAGE */}
-      <View style={styles.container}>
+      {/* IMAGE VIEW */}
+      <View style={styles.imageView}>
         <Pressable onPress={openCamera}>
-          <View style={styles.image}>
+          <View style={styles.imageContainer}>
             {!imageUri ? 
             (
               <AntDesign name="camerao" size={24} color="black" />
@@ -90,12 +103,27 @@ const openGallery = async () => {
             (
               <Image
               source={{ uri: imageUri }}
-              style={styles.image}
+              style={styles.imageContent}
               resizeMode="cover"
               />
               )}   
             </View>
           </Pressable>
+
+          {/* HAS AN IMAGE, SHOWS REPLACE AND REMOVE BUTTON */}
+            {imageUri && (
+            <View style={styles.imageActions}>
+              <TouchableOpacity onPress={openCamera}>
+                <MaterialCommunityIcons name="camera-retake" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={removeImage}>
+                <AntDesign name="delete" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            )}
+        </View>
+
+        {/* DESCRIPTION */}
         <View style={styles.description}>
           <TextInput 
             style={styles.texts}
@@ -105,22 +133,20 @@ const openGallery = async () => {
             onChangeText={setText}
           />
         </View>
-      </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{
-    alignItems: 'center',
-    justifyContent: 'center',
+  imageView:{
+    alignSelf: 'center'
   },
   header:{
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 13,
   },
-  image: {
+  imageContainer: {
     backgroundColor: '#eee',
     alignItems: 'center',
     justifyContent: 'center',
@@ -128,19 +154,20 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 25,
     marginVertical: 15,
+
     elevation: 15,
-    overflow: 'hidden', 
   },
   imageContent: {
     width: '100%',
     height: '100%',
     borderRadius: 25,
   },
-    description:{
-      backgroundColor: '#eee',
-      width: '350',
-      marginTop: 15,
-      borderRadius: 10
+  description:{
+    alignSelf: 'center',
+    backgroundColor: '#eee',
+    width: '350',
+    marginTop: 15,
+    borderRadius: 10
   },
   texts:{
     color: 'black'
@@ -149,5 +176,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 16,
     fontWeight: 'bold'
-  }
+  },
+  imageActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
 });
