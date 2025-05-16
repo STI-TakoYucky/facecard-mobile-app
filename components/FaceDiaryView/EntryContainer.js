@@ -13,21 +13,21 @@ export default function EntryContainer() {
   };
 
   return (
-    <View className="p-5, items-center">
-          <View style={styles.container}>
-            <TouchableOpacity onPress={handleOpenModal}>
-              <Feather 
-                name="plus" 
-                size={25} 
-                color="black"
-                />
-            </TouchableOpacity>
-          </View>
-
-          <EntryModal
-          visible={modalVisible}
-          onClose={() => isModalVisible(false)}
+    <View>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleOpenModal}>
+          <Feather 
+            name="plus" 
+            size={25} 
+            color="#162041"
           />
+        </TouchableOpacity>
+      </View>
+
+      <EntryModal
+        visible={modalVisible}
+        onClose={() => isModalVisible(false)}
+      />
         
     </View>
   );
@@ -35,14 +35,17 @@ export default function EntryContainer() {
 
 const styles = StyleSheet.create({
   container:{
-    backgroundColor: 'white',
-    width: 350,
-    height: 300,
-    alignItems:'center',
+    position: 'absolute',
+    top: 580,
+    right: 150,
+    alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#eee',
+    width: 60,
+    height: 60,
     marginTop: 10,
-    borderRadius: 10,
-
+    borderRadius: 30,
+    
     elevation: 10,
-  }
+  },
 });
