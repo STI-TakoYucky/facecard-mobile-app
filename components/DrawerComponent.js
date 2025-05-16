@@ -55,10 +55,14 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiv
       {/* This is the drawer itself */}
       <Animated.View style={{ elevation: 500, position:"relative",transform: [{ translateX: slideAnim }] }} className="px-7 py-10 h-full w-[16rem] bg-white">
         <View className="flex flex-row gap-2">
-          <Image
-            source={require('../assets/profile.png')}
-            className="max-w-[2rem] max-h-[2rem] rounded-full"
-          />
+           <Image source={{uri: userData.profilePicture || "https://i.ibb.co/hv8xrgQ/default-profile-picture.png"}} 
+              style={{
+            width: 30,
+            height: 30,
+            borderRadius: 50,
+            objectFit: "cover"
+          }}
+          ></Image>
           <Text className="font-bold text-dark-800 text-2xl">{userData.firstName + " " + userData.lastName}</Text>
         </View>
 
