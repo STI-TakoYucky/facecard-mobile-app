@@ -13,11 +13,15 @@ export async function signUp(email, password, firstName, lastName, birthdate) {
 
       //add user to the user collection along with the initial data
       await setDoc(doc(db, "users", userCredential.user.uid), {
-        name: firstName + " " + lastName,
+        uid: userCredential.user.uid,
+        firstName: firstName,
+        lastName: lastName,
         birthday: birthdate,
         markedDates: {},
         profilePicture: "",
         savedProducts: [],
+        streak: 0,
+        isPremiumAcc: false,
         routineSchedules: [
           {
             name: "Cleanser",
@@ -51,8 +55,8 @@ export async function signUp(email, password, firstName, lastName, birthdate) {
 
   export async function signIn(email, password) {
       try {
-        await signInWithEmailAndPassword (auth, email, password);
-        return { success: true };
+        const userCredential = await signInWithEmailAndPassword (auth, email, password);
+        return { success: true, userID: userCredential.user.uid };
       } catch (error) {
         console.log(error);
         return { success: false, message: error.message, code: error.code };

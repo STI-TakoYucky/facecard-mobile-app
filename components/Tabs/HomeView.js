@@ -1,20 +1,29 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import StreaksComponent from "../StreaksComponent";
 import UserProductContainer from "../UserProductContainer";
 import SkincareChecklist from "../Screens/SkincareChecklist";
 import EditChecklist from "../Screens/EditChecklist";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { initDates } from "../../state/markedDatesSlice/markedDatesSlice";
+import { initRoutineSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 
 export default function Home() {
 
-
+  const dispatch = useDispatch()
+  const userData = useSelector(state => state.userData) 
   const markedDates = useSelector((state) => state.markedDates);
   const routineSchedules = useSelector((state) => state.routineSchedules) || []
   const [isChecklistActive, setChecklistActive] = useState(false);
   const [isEditChecklistActive, setEditChecklist] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
+
+  useEffect(() => {
+    //initialize dates from the database
+    dispatch(initDates(userData.markedDates))
+    dispatch(initRoutineSchedules(userData.routineSchedules))
+  }, [])
 
   const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
@@ -62,13 +71,18 @@ export default function Home() {
         markedDates={markedDates}
         hideExtraDays={true}
         enableSwipeMonths={true}
+        theme={{
+          textMonthFontSize: 16,
+          monthTextColor: '#2D3B75', // <--- change color of month/year
+          arrowColor: '#2D3B75', // optional
+        }}
         dayComponent={({ date, state }) => {
           const isMarked = !!markedDates[date?.dateString]
           const jsDate = new Date(date.dateString);
           const day = jsDate.getDay();;
 
           return (
-            <Pressable
+            <TouchableOpacity
             key={date}
               onPress={() => {HandleDayClick(date?.dateString, isMarked)}}
               disabled={state === "disabled" ? true : false}>
@@ -111,7 +125,7 @@ export default function Home() {
                 }) }
 
               </View>
-            </Pressable>
+            </TouchableOpacity>
           );}}/>
 
 

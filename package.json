@@ -10,9 +10,13 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
+<<<<<<< HEAD
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/checkbox": "^0.5.17",
     "@react-native-community/datetimepicker": "^8.2.0",
+=======
+    "@react-native-community/datetimepicker": "8.2.0",
+>>>>>>> 9a378c7ad02d249934fbd28809b249dabc64e43a
     "@react-native-masked-view/masked-view": "^0.3.2",
     "@react-navigation/elements": "^2.4.1",
     "@react-navigation/native": "^7.1.6",
@@ -33,7 +37,7 @@
     "nativewind": "^4.1.23",
     "react": "18.3.1",
     "react-hook-form": "^7.56.1",
-    "react-native": "0.76.7",
+    "react-native": "0.76.9",
     "react-native-calendars": "^1.126.0",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "~2.20.2",
@@ -48,11 +52,19 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.13",
     "react-redux": "^9.2.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "expo-image-picker": "~16.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@react-native-community/cli": "^18.0.0"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
+  }
 }

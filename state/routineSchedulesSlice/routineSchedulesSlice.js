@@ -28,12 +28,32 @@ const routineSchedulesSlice = createSlice({
     setSchedules: (state, action) => {
       const { name, schedules } = action.payload
 
-      const existingRoutine = state.find(item => item.name === name);
+      const selectedRoutine = state.find(item => item.name === name);
+      const existingRoutine = selectedRoutine.schedules.findIndex(item => item.id === schedules.id);
 
-      existingRoutine.schedules.push(schedules);
+      if(existingRoutine !== -1) {
+         selectedRoutine.schedules[existingRoutine] = schedules;
+         return;
+      }
+
+      selectedRoutine.schedules.push(schedules);
     },
+    deleteSchedule: (state, action) => {
+      const { name, scheduleID } = action.payload;
+
+      // Find the routine based on its name
+      const selectedRoutine = state.find(item => item.name === name);
+
+      if (selectedRoutine) {
+        // Filter out the schedule with the matching id
+        selectedRoutine.schedules = selectedRoutine.schedules.filter(schedule => schedule.id !== scheduleID);
+      }
+    },
+    initRoutineSchedules: (state, action ) => {
+      return action.payload
+    }
   },
 });
 
-export const { setSchedules } = routineSchedulesSlice.actions;
+export const { setSchedules, deleteSchedule, initRoutineSchedules  } = routineSchedulesSlice.actions;
 export default routineSchedulesSlice.reducer;

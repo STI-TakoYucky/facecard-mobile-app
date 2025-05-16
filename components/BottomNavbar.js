@@ -3,7 +3,6 @@ import React from 'react'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import SkincareBottle from '../assets/skincare-bottle.svg'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function BottomNavbar({activeTab, setActiveTab }) {
     
@@ -11,7 +10,7 @@ export default function BottomNavbar({activeTab, setActiveTab }) {
     <View className="bg-primary-100 flex p-5 flex-row relative justify-between items-center">
 
     <TouchableOpacity onPress={() => setActiveTab("Home")}>
-      <View className="flex items-center mr-6">
+      <View className="flex items-center">
         <FontAwesome6 name="house-chimney" size={20} color={activeTab === "Home" ? "#2D3B75" : "#DF9595"}/>
         <Text className="text-sm">Home</Text>
       </View>
@@ -23,16 +22,13 @@ export default function BottomNavbar({activeTab, setActiveTab }) {
             <Text className="text-sm">Skincare</Text>
         </View>
       </TouchableOpacity>
-      
-      
-        <View className="flex items-center relative w-[6.5rem]">
-          <View className="bg-white rounded-full h-[81px] p-3 absolute -bottom-1">
-          <TouchableOpacity>
-              <AntDesign name="pluscircle" size={60} color={"#2D3B75"} />
-          </TouchableOpacity>
-          </View>
+
+      <TouchableOpacity onPress={() => setActiveTab("Map")}>
+        <View className="flex items-center">
+            <FontAwesome6 name="location-pin" size={23} color={activeTab === "Map" ? "#2D3B75" : "#DF9595"}/>
+            <Text className="text-sm -mt-1">Location</Text>
         </View>
-      
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={() => setActiveTab("Routines")}>
         <View className="flex items-center">

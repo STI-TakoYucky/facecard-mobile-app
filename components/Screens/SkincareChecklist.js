@@ -1,13 +1,19 @@
 import { View, Text, Pressable, Modal } from 'react-native'
 import React, {useReducer, useEffect} from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addDate } from '../../state/markedDatesSlice/markedDatesSlice';
+import { updateMainMarkedDates } from '../../state/userDataSlice/userDataSlice';
 
 
 export default function SkincareChecklist({setChecklistActive, isChecklistActive, selectedDate}) {
 
   const dispatchMarkedDates = useDispatch();
+  const markedDates = useSelector(state => state.markedDates)
     
+  useEffect(() => {
+      dispatchMarkedDates(updateMainMarkedDates(markedDates))
+  }, [markedDates])
+
   //used for the map function
   const skincareProducts =[
     "Cleanser",
