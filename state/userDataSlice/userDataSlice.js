@@ -37,12 +37,18 @@ const userDataSlice = createSlice({
         const schedules = action.payload
         state.routineSchedules = schedules
        },
+       updateUserInfo: (state, action) => {
+        const {firstName, lastName, birthdate } = action.payload
+        state.firstName = firstName
+        state.lastName = lastName
+        state.birthday = birthdate
+       },
+       updateProfilePicture: (state, action) => {
+        state.profilePicture = action.payload
+       }
     }
 
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture } = userDataSlice.actions;
 export default userDataSlice.reducer;
-
-// whole document sample
-//{"birthday": "05/14/2025", "isPremiumAcc": false, "markedDates": {}, "name": "Test Account", "profilePicture": "", "routineSchedules": [[Object], [Object], [Object], [Object]], "savedProducts": [], "streak": 0}

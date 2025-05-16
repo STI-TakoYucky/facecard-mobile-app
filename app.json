@@ -17,9 +17,6 @@
       "bundleIdentifier": "com.luckyestrada.facecard",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "location", "remote-notification"]
-      },
-      "notification": {
-        "iosDisplayInForeground": true
       }
     },
     "android": {
@@ -36,9 +33,6 @@
         "googleMaps": {
           "apiKey": "FAKE-KEY-123"
         }
-      },
-      "notification": {
-        "color": "#000000"
       }
     },
     "web": {
