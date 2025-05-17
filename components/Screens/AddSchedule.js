@@ -55,7 +55,6 @@ export default function AddSchedule({
   }, [isAddSchedule]);
 
   //values for data to be passed for the global state
-  const id = generateUniqueId();
   const [timeGroup, setTimeGroup] = useState([]);
   const [dropDownBoxValue, setDropdownBoxValue] = useState();
   const [currentIndex, setCurrentIndex] = useState();
@@ -96,7 +95,7 @@ export default function AddSchedule({
 
   const handleConfirm = () => {
     const payload = {
-      id: id,
+      id: generateUniqueId(),
       dayOfWeek: dropDownBoxValue,
       time: timeGroup,
     };

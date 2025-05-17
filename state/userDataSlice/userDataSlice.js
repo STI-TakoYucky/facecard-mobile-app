@@ -45,10 +45,17 @@ const userDataSlice = createSlice({
        },
        updateProfilePicture: (state, action) => {
         state.profilePicture = action.payload
+       },
+       setUserLocation: (state, action) => {
+        const data = action.payload
+        state.location = {
+          coordinates: data.location,
+          isScheduled: data.schedule
+        }
        }
     }
 
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation } = userDataSlice.actions;
 export default userDataSlice.reducer;

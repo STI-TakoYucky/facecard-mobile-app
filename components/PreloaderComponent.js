@@ -1,4 +1,4 @@
-import { View, Text, Animated, ActivityIndicator } from 'react-native'
+import { View, Text, Animated, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { togglePreloader } from '../state/PreloaderSlice/PreloaderSlice';
@@ -38,10 +38,30 @@ export default function PreloaderComponent() {
 
   return (
     <Animated.View style={{
-        opacity: fadeAnim
+        opacity: fadeAnim,
     }} className="absolute bg-white top-0 left-0 right-0 bottom-0 justify-center items-center z-50">
         <ActivityIndicator size="large" color="#dddddd" />
         <Text className="text-dark-800 text-lg text-center px-5 mt-5">{preloaderData?.message}</Text>
+
+        <View className="absolute">
+            <Image source={require('../assets/3d-skincare-bottle-free-png.png')}
+            className="absolute bottom-[-27rem] left-[-19rem]"
+            style={{
+                width: 200,
+                height: 200
+            }}
+            ></Image>
+
+            <Image source={require('../assets/vecteezy_3d-skincare-bottle_19470925.png')}
+            className="absolute top-[-27rem] right-[-18rem]"
+            style={{
+                width: 170,
+                height: 170
+            }}
+            ></Image>
+
+            <View className="absolute bg-accent left-[2rem] bottom-[-32rem] w-[-9rem] h-[19rem] rounded-full"></View>
+        </View>
     </Animated.View>
   )
 }
