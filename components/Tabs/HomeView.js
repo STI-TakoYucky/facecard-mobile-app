@@ -142,8 +142,6 @@ export default function Home() {
           }
       </View>
 
-      <UserProductContainer></UserProductContainer>
-      <StreaksComponent></StreaksComponent>
       </View>
     </ScrollView>
   );
