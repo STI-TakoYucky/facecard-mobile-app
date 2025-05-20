@@ -52,10 +52,14 @@ const userDataSlice = createSlice({
           coordinates: data.location,
           isScheduled: data.schedule
         }
+       },
+       setUserPremiumAcc: (state, action) => {
+        const data = action.payload
+        state.isPremiumAcc = data;
        }
     }
 
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc } = userDataSlice.actions;
 export default userDataSlice.reducer;
