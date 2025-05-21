@@ -1,9 +1,13 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import Entypo from '@expo/vector-icons/Entypo';
 
 export default function EntryCard({ entry }) {
+
+  const [editEntry, setEdit] = useState(false);
+
   return (
-    <View>
+    <View style={styles.wrapper}>
       <Text className="mt-5 text-xl font-bold">{entry.date}</Text>
       <View style={styles.card}>
         {entry.imageUri && (
@@ -13,23 +17,50 @@ export default function EntryCard({ entry }) {
             resizeMode="cover"
           />
         )}
-        <Text style={styles.text}>{entry.text}</Text>
+
+        <View style={styles.textContainer}>
+          <Text style={styles.mainText}>{entry.title}</Text>
+          <Text style={styles.subText}>{entry.mainText}</Text>
+        </View>
+
+        <TouchableOpacity style={styles.iconButton}>
+          <Entypo 
+            name="dots-three-horizontal" 
+            size={18} 
+            color="black" 
+            onPress={() => setEdit(prev => !prev)}/>
+        </TouchableOpacity>
+
+        {editEntry && (
+          <View style={styles.popupMenu}>
+            <TouchableOpacity>
+              <Text style={styles.popupText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.popupText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    position: 'relative',
+  },
   card: {
     flexDirection: 'row',
     backgroundColor: '#eee',
     width: 370,
-    maxHeight: 200,
     alignSelf: 'center',
     marginTop: 3,
     borderRadius: 8,
     padding: 10,
-    elevation: 10
+    elevation: 10,
+    position: 'relative',
   },
   image: {
     width: 100,
@@ -37,8 +68,42 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 10
   },
-  text: {
+  textContainer: {
     flex: 1,
-    alignSelf: 'center'
+    justifyContent: 'space-around',
+    paddingRight: 30 // space for the icon
   },
+  mainText: {
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  subText: {
+    fontSize: 14,
+    color: '#333'
+  },
+  iconButton: {
+    position: 'absolute',
+    top: 5,
+    right: 10,
+    padding: 3,
+    zIndex: 1
+  },
+  popupMenu: {
+    position: 'absolute',
+    top: 35,
+    right: 10,
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    padding: 6,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  popupText: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    fontSize: 14,
+    color: '#333',
+  }
 });

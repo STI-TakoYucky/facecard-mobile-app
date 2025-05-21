@@ -18,8 +18,10 @@ export default function SearchBar() {
         /> 
       </TouchableOpacity>
       <TextInput 
+        value={search}
         style={styles.searchBar} 
         placeholder="Search..."
+        onChangeText={setSearch}
       />
       <TouchableOpacity style={styles.menuIcon}>
         <Entypo 

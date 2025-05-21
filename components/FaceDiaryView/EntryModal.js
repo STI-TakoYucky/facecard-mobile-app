@@ -39,6 +39,7 @@ const openGallery = async () => {
 
   const result = await ImagePicker.launchImageLibraryAsync();
   if (!result.canceled) {
+    setImageUri(result.assets[0].uri);
     console.log('Photo selected:', result.assets[0]);
   }
 };
@@ -49,7 +50,8 @@ const openGallery = async () => {
     year: 'numeric'
   });
 
-  const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
+  const [mainText, setText] = useState('');
   const [imageUri, setImageUri] = useState(null);
 
   const removeImage = () => {
@@ -77,8 +79,10 @@ const openGallery = async () => {
           props.onSubmit({
             date: currentDate,
             imageUri,
-            text,
+            title,
+            mainText,
           });
+          setTitle('');
           setText('');
           setImageUri(null);
         }}>
@@ -94,7 +98,7 @@ const openGallery = async () => {
 
       {/* IMAGE VIEW */}
       <View style={styles.imageView}>
-        <Pressable onPress={openCamera}>
+        <Pressable onPress={openGallery}>
           <View style={styles.imageContainer}>
             {!imageUri ? 
             (
@@ -124,14 +128,27 @@ const openGallery = async () => {
         </View>
 
         {/* DESCRIPTION */}
-        <View style={styles.description}>
-          <TextInput 
+        <View style={styles.description} className="mt-6">
+          <View className="p-2">
+            <TextInput
             style={styles.texts}
             multiline={true}
+            numberOfLines={5}
+            placeholder="Title"
+            value={title}
+            onChangeText={setTitle}
+          />
+          </View>
+        </View>
+        <View style={styles.description} className="mt-3">
+          <View className="p-2 h-72">
+            <TextInput 
+            multiline={true}
             placeholder="Write your thoughts..."
-            value={text}
+            value={mainText}
             onChangeText={setText}
           />
+          </View>
         </View>
     </Modal>
   );
@@ -166,11 +183,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#eee',
     width: '350',
-    marginTop: 15,
-    borderRadius: 10
+    borderRadius: 10,
+
+    elevation: 10
   },
   texts:{
-    color: 'black'
+    fontWeight: 'bold',
+    fontSize: 17
   },
   date:{
     alignSelf: 'center',
