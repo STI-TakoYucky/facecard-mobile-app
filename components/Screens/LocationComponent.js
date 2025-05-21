@@ -3,68 +3,18 @@ import React, { useEffect, useState, useRef } from 'react';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserLocation } from '../../state/userDataSlice/userDataSlice';
 
 export default function LocationComponent() {
-  const [location, setLocation] = useState();
   const [initialLocation, setInitialLocation] = useState(null);
-  const [hasLeftLocation, setHasLeftLocation] = useState(false);
   const [calibrateBtnFocused, setCalibrateBtnFocused] = useState(false);
+  const [hasSentNotification, setHasSentNotification] = useState(false);
   const locationSubscriptionRef = useRef(null);
+  const dispatch = useDispatch();
+  const userData = useSelector(state => state.userData);
 
-  useEffect(() => {
-    // Set notification handler for when app is foregrounded
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: true,
-      }),
-    });
-
-    // Set Android notification channel
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-  }, []);
-
-  // const sendNotification = async () => {
-  //   if (!Device.isDevice) {
-  //     Alert.alert('Error', 'Must use a physical device for notifications');
-  //     return;
-  //   }
-
-  //   const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  //   let finalStatus = existingStatus;
-
-  //   if (existingStatus !== 'granted') {
-  //     const { status } = await Notifications.requestPermissionsAsync();
-  //     finalStatus = status;
-  //   }
-
-  //   if (finalStatus !== 'granted') {
-  //     Alert.alert('Permission Denied', 'Please enable notifications in settings');
-  //     return;
-  //   }
-
-  //   // Schedule local notification
-  //   await Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: 'Hello from Expo 👋',
-  //       body: 'This is a local notification on Android.',
-  //       sound: true,
-  //     },
-  //     trigger: { seconds: 3 }, // show after 3 seconds
-  //   });
-
-  // };
-
-    const sendNotification = async () => {
-
+  const sendNotification = async () => {
       if(!Device.isDevice) {
         Alert.alert("Error", 'Must use a physical device for notifications.')
         return;
@@ -86,21 +36,18 @@ export default function LocationComponent() {
       // Send a test notification
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: 'Test Notification',
-          body: 'This is a test notification.',
+          title: 'Sunscreen Alert',
+          body: 'Going outside? Make sure to apply sunscreen!',
         },
         trigger: { seconds: 1 }, // Trigger after 1 second
       });
     };
 
+  const LOCATION_RADIUS_METERS = 2;
 
-  const LOCATION_RADIUS_METERS = 20; // Distance threshold in meters
-
-  // Haversine formula to calculate distance between two lat/lng points
   const getDistanceInMeters = (coord1, coord2) => {
     const toRad = (value) => (value * Math.PI) / 180;
-
-    const R = 6371000; // Earth radius in meters
+    const R = 6371000;
     const dLat = toRad(coord2.latitude - coord1.latitude);
     const dLon = toRad(coord2.longitude - coord1.longitude);
     const lat1 = toRad(coord1.latitude);
@@ -115,7 +62,6 @@ export default function LocationComponent() {
     return R * c;
   };
 
-  // Function to fetch the current location of the user
   async function fetchCurrentLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -124,35 +70,31 @@ export default function LocationComponent() {
     }
 
     let currentLocation = await Location.getCurrentPositionAsync({});
-    setLocation(currentLocation.coords);
     return currentLocation.coords;
   }
 
-  // Function to calibrate location (set initial location)
   async function calibrateLocation() {
     const coords = await fetchCurrentLocation();
     if (coords) {
-      setInitialLocation(coords); // Store the initial location as calibrated location
-  
-      // Remove previous subscription if it exists
+      setInitialLocation(coords);
+
       if (locationSubscriptionRef.current) {
         const sub = await locationSubscriptionRef.current;
         sub.remove();
         locationSubscriptionRef.current = null;
       }
-  
-      // Show a local notification after calibrating the location
+
       if (Device.isDevice) {
-        const { status:existingStatus } = await Notifications.getPermissionsAsync();
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
 
         if (existingStatus !== 'granted') {
-          const {status} = await Notifications.requestPermissionsAsync();
+          const { status } = await Notifications.requestPermissionsAsync();
           finalStatus = status;
         }
-        
-        if(finalStatus !== "granted") {
-          Alert.alert("Permission Denied", "Please enable notifications in the settings.")
+
+        if (finalStatus !== 'granted') {
+          Alert.alert('Permission Denied', 'Please enable notifications in the settings.');
           return;
         }
 
@@ -162,40 +104,87 @@ export default function LocationComponent() {
             body: 'We will alert you if you leave this area.',
             sound: true
           },
-          trigger: null, // Send immediately
+          trigger: null,
         });
+
+        dispatch(setUserLocation({ location: coords, schedule: null }));
       }
-  
-      // Start tracking location
-      const subscription = await Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          timeInterval: 5000, // 5 seconds
-          distanceInterval: 1, // 1 meter
-        },
-        (newLocation) => {
-          const distance = getDistanceInMeters(coords, newLocation.coords);
-          const hasLeft = distance > LOCATION_RADIUS_METERS;
-
-          if (hasLeft && !hasLeftLocation) {
-            Alert.alert('Notice', 'You have left your calibrated location!');
-          }
-
-          setHasLeftLocation(hasLeft); // Update whether the user has left the calibrated location
-        }
-      );
-  
-      locationSubscriptionRef.current = Promise.resolve(subscription);
     }
   }
 
   useEffect(() => {
+    // Setup notification handler
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+
+    // Setup Android notification channel
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userData?.location?.coordinates) {
+      setInitialLocation(userData.location.coordinates);
+    }
+  }, [userData.location.coordinates]);
+
+  useEffect(() => {
+    if (!initialLocation) return;
+
+    const startTracking = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.warn('Permission to access location was denied');
+        return;
+      }
+
+      if (locationSubscriptionRef.current) {
+        const sub = await locationSubscriptionRef.current;
+        sub.remove();
+      }
+
+      const subscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 5000,
+          distanceInterval: 1,
+        },
+        (newLocation) => {
+          const distance = getDistanceInMeters(initialLocation, newLocation.coords);
+          const hasLeft = distance > LOCATION_RADIUS_METERS;
+
+         if (hasLeft && !hasSentNotification) {
+            sendNotification();
+            setHasSentNotification(true); // ✅ Only send once per exit
+          } else if (!hasLeft) {
+            setHasSentNotification(false); // ✅ Reset when they return
+          }
+
+        }
+      );
+
+      locationSubscriptionRef.current = Promise.resolve(subscription);
+    };
+
+    startTracking();
+
     return () => {
       if (locationSubscriptionRef.current) {
         locationSubscriptionRef.current.then(sub => sub.remove());
       }
     };
-  }, []);
+  }, [initialLocation]);
 
   return (
     <ScrollView className="p-5">
@@ -219,12 +208,6 @@ export default function LocationComponent() {
             Calibrate Location
           </Text>
         </Pressable>
-
-        {hasLeftLocation && (
-          <Text className="text-red-500 font-bold text-center">
-            You have left your calibrated location!
-          </Text>
-        )}
       </View>
     </ScrollView>
   );

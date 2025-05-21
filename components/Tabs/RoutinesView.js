@@ -8,6 +8,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import EditSchedule from '../Screens/EditSchedule.js'
 import { updateUserSchedules } from '../../state/userDataSlice/userDataSlice.js';
+import notifee, { TimestampTrigger, TriggerType, RepeatFrequency, AndroidImportance } from '@notifee/react-native';
+
+
 
 export default function RoutinesView() {
 
@@ -17,11 +20,93 @@ export default function RoutinesView() {
   const [scheduleID, setScheduleID] = useState();
 
   const dispatch = useDispatch();
-  // Get the routineScheds from the global state
   const routineData = useSelector((state) => state.routineSchedules);
 
-    useEffect(() => {
-    dispatch(updateUserSchedules(routineData))
+  useEffect(() => {
+    dispatch(updateUserSchedules(routineData));
+  }, [routineData]);
+
+  function parseTime12h(time12h) {
+  const [time, modifier] = time12h.split(' ');
+  let [hours, minutes] = time.split(':').map(Number);
+
+  if (modifier === 'PM' && hours !== 12) {
+    hours += 12;
+  }
+  if (modifier === 'AM' && hours === 12) {
+    hours = 0;
+  }
+
+  return { hours, minutes };
+}
+
+async function scheduleNotifications(routineData) {
+  await notifee.requestPermission();
+
+  for (const routine of routineData) {
+    for (const schedule of routine.schedules) {
+      for (const timeStr of schedule.time) {
+        const { hours, minutes } = parseTime12h(timeStr);
+        const dayOfWeek = schedule.dayOfWeek;
+        const now = new Date();
+
+        let triggerDate = new Date(now);
+
+        if (dayOfWeek !== 'Daily') {
+          const today = now.getDay();
+          const targetDay = Number(dayOfWeek);
+          const diff = (targetDay + 7 - today) % 7;
+          triggerDate.setDate(now.getDate() + diff);
+        }
+
+        triggerDate.setHours(hours);
+        triggerDate.setMinutes(minutes);
+        triggerDate.setSeconds(0);
+        triggerDate.setMilliseconds(0);
+
+        if (triggerDate <= now) {
+          triggerDate.setDate(triggerDate.getDate() + 7);
+        }
+
+        const trigger = {
+          type: TriggerType.TIMESTAMP,
+          timestamp: triggerDate.getTime(),
+          repeatFrequency:
+            dayOfWeek === 'Daily' ? RepeatFrequency.DAILY : RepeatFrequency.WEEKLY,
+        };
+
+        await notifee.createTriggerNotification(
+          {
+            title: `${routine.name} Reminder`,
+            body:  `Time to do your ${routine.name}!` ,
+            android: {
+              channelId: 'default',
+              importance: AndroidImportance.HIGH,
+            },
+          },
+          trigger
+        );
+      }
+    }
+  }
+}
+
+
+  useEffect(() => {
+    if (routineData.length > 0) {
+      (async () => {
+        await notifee.createChannel({
+          id: 'default',
+          name: 'Default Channel',
+          importance: AndroidImportance.HIGH,
+        });
+
+        // Cancel all previous notifications before scheduling new ones
+        await notifee.cancelAllNotifications();
+
+        await scheduleNotifications(routineData);
+      })();
+    }
   }, [routineData]);
 
   const getDay = (day) => {
@@ -115,7 +200,7 @@ export default function RoutinesView() {
                       onPress={() => {
                         setEditSchedule(true);
                         setSelectedMarker(routine.name);
-                        setScheduleID(schedule.id); // ✅ now works
+                        setScheduleID(schedule.id);
                       }}
                     >
                       <Feather name="edit" size={20} color="#2D3B75" />
