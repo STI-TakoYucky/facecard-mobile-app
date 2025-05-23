@@ -14,6 +14,7 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiv
   const slideAnim = useRef(new Animated.Value(250)).current; // Starts off-screen
   const [isPremiumSubProcess, setPremiumSubProcess] = useState(false)
   const isUserUser = userData.role === "User"
+  const isUserDerma = userData.role === "Dermatologist"
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
@@ -57,6 +58,8 @@ const renderDermaChat = () => {
     if( !userData.isPremiumAcc && isUserUser) {
       setPremiumSubProcess(true)
     } else if(userData.isPremiumAcc == true && isUserUser) {
+      setActiveTab("Chat")
+    } else if(isUserDerma) {
       setActiveTab("Chat")
     }
   }
