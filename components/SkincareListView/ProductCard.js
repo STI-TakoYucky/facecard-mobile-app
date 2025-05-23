@@ -1,13 +1,18 @@
-import React, { useState } from "react";
-import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator  } from 'react-native';
 
 import ProductModal from "./ProductModal";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '../../firebase/firebase';
+
 export default function ProductCard(props) {
+  const [products, setProducts] = useState([]);
   const [modalVisible, isModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [favorites, setFavorites] = useState({});
+  const [loading, setLoading] = useState(true);
   
   const handleFavorite = (id) => {
     setFavorites((prev) => ({
@@ -16,16 +21,36 @@ export default function ProductCard(props) {
     }));
   };
 
+  useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'products'));
+      const fetchedProducts = [];
 
-  let product = [];
-  for (let i = 0; i < 10; i++) {
-    product.push({
-      id: i,
-      name: props.name,
-      size: props.size,
-      brand: props.brand,
-      image: require('../../assets/celeteque_sunscreen.png')
-    });
+      querySnapshot.forEach((doc) => {
+        fetchedProducts.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+
+      setProducts(fetchedProducts);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products: ", error);
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
   }
 
   const handleOpenModal = (item) => {
@@ -36,7 +61,7 @@ export default function ProductCard(props) {
   return (
     <View style={{ marginTop: 10 }}>
       <ScrollView>
-        {product.map((item) => (
+        {products.map((item) => (
           <View key={item.id} style={styles.card}>
             <TouchableOpacity 
               style={styles.heartIcon} 
@@ -50,7 +75,7 @@ export default function ProductCard(props) {
             </TouchableOpacity>
             <Image source={item.image} style={styles.image} resizeMode="cover" />
             <View style={styles.infoContainer}>
-              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.name}>{item.productName}</Text>
               <Text style={styles.brand}>{item.brand}</Text>
               <Text style={styles.size}>{item.size}</Text>
               <TouchableOpacity onPress={() => handleOpenModal(item)}>
@@ -65,12 +90,12 @@ export default function ProductCard(props) {
         visible={modalVisible}
         onClose={() => isModalVisible(false)}
         product={selectedProduct}
-        name={props.name}
-        category={props.category}
+        name={selectedProduct?.productName}
+        category={selectedProduct?.category}
         color={props.color}
-        brand={props.brand}
-        size={props.size}
-        skinType={props.skinType}
+        brand={selectedProduct?.brand}
+        size={selectedProduct?.size}
+        skinType={selectedProduct?.skinType}
       />
     </View>
   );

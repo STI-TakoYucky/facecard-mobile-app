@@ -72,6 +72,11 @@ const openGallery = async () => {
             color='#162041' />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
+          if (!title && !mainText && !imageUri) {
+            console.warn("All fields are empty");
+            props.onClose();
+            return;
+          }
           if (!props.onSubmit) {
             console.warn("onSubmit prop is missing!");
             return;
@@ -89,7 +94,7 @@ const openGallery = async () => {
           <MaterialIcons 
           name="done" 
           size={22} 
-          color="162041" />
+          color="#162041" />
         </TouchableOpacity>
       </View>
 

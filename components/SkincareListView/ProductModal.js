@@ -40,8 +40,10 @@ export default function ProductModal(props) {
                 <View style={styles.productInfo}>
                   
                   {/* PRODUCT CATEGORY */}
-                  <Text style={[styles.category, {backgroundColor: props.color}]}>{props.category}</Text>
-
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={[styles.category, {backgroundColor: props.color}]}>{props.category}</Text>
+                  </View>
+                
                   {/* PRODUCT NAME */}
                   <Text className="my-6 text-2xl font-bold">{props.name}</Text>
 
