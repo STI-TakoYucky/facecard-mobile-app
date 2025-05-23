@@ -30,7 +30,7 @@ export default function ProductModal(props) {
           <ScrollView>
             <View>
               <Image 
-                source={require('../../assets/celeteque_sunscreen.png')}
+                source={require('../../assets/3d-skincare-bottle-free-png.png')}
                 style={{width: 250, height: 300, alignSelf: 'center'}}
               />
             </View>
@@ -41,7 +41,8 @@ export default function ProductModal(props) {
                   
                   {/* PRODUCT CATEGORY */}
                   <View style={{flexDirection: 'row'}}>
-                    <Text style={[styles.category, {backgroundColor: props.color}]}>{props.category}</Text>
+                    <Text style={[styles.category, props.color]}>{props.category}</Text>
+                    
                   </View>
                 
                   {/* PRODUCT NAME */}
@@ -50,7 +51,9 @@ export default function ProductModal(props) {
                   {/* PRODUCT BRANDS, GRAM, SKINTYPE */}
                   <Text style={{fontSize: 18}}>{props.brand}</Text>
                   <View style={{flexDirection: 'row', marginTop: 15}}>
-                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>{props.size}</Text>
+                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>
+                      {props.size}ml
+                    </Text>
                     <Feather 
                     name="droplet" 
                     size={24} 
@@ -75,7 +78,7 @@ export default function ProductModal(props) {
                   <View style={styles.card}>
                     <View style={styles.imageContainer}>
                       <Image 
-                      source={require('../../assets/celeteque_sunscreen.png')}
+                      source={require('../../assets/3d-skincare-bottle-free-png.png')}
                       style={{width: 100, height: 100, marginBottom: 10}}
                       />
                     </View>

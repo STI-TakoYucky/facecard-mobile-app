@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator  } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator, Pressable  } from 'react-native';
 
 import ProductModal from "./ProductModal";
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -58,31 +58,47 @@ export default function ProductCard(props) {
     isModalVisible(true);
   };
 
+  const colorPicker = (category) => {
+    switch (category) {
+      case "Sunscreen": 
+        return {backgroundColor: "#FCF079"};
+      case "Moisturizer":
+        return {backgroundColor: "#CFF2FA"};
+      case "Eye Cream":
+        return {backgroundColor: "#D5CFFF"};
+      case "Toner": 
+        return {backgroundColor: "#CFFEAE"};
+      case "Facial Cleanser":
+        return {backgroundColor: "#FCD7F6"};
+      case "Retinol":
+        return {backgroundColor: "#FFC9BA"};
+    }
+  }
+
   return (
     <View style={{ marginTop: 10 }}>
       <ScrollView>
         {products.map((item) => (
-          <View key={item.id} style={styles.card}>
-            <TouchableOpacity 
-              style={styles.heartIcon} 
-              onPress={() => handleFavorite(item.id)}
-            >
-              <AntDesign 
-                name={favorites[item.id] ? "heart" : "hearto"} 
-                size={15} 
-                color={favorites[item.id] ? "red" : "gray"} 
-              />
-            </TouchableOpacity>
-            <Image source={item.image} style={styles.image} resizeMode="cover" />
-            <View style={styles.infoContainer}>
-              <Text style={styles.name}>{item.productName}</Text>
-              <Text style={styles.brand}>{item.brand}</Text>
-              <Text style={styles.size}>{item.size}</Text>
-              <TouchableOpacity onPress={() => handleOpenModal(item)}>
-                <Text style={styles.link}>More Details</Text>
+          <Pressable key={item.id} onPress={() => handleOpenModal(item)}>
+            <View style={styles.card}>
+              <TouchableOpacity 
+                style={styles.heartIcon} 
+                onPress={() => handleFavorite(item.id)}
+              >
+                <AntDesign 
+                  name={favorites[item.id] ? "heart" : "hearto"} 
+                  size={15} 
+                  color={favorites[item.id] ? "red" : "gray"} 
+                />
               </TouchableOpacity>
+              <Image source={require('../../assets/3d-skincare-bottle-free-png.png')} style={styles.image} resizeMode="cover" />
+              <View style={styles.infoContainer}>
+                <Text style={styles.name}>{item.productName}</Text>
+                <Text style={styles.brand}>{item.brand}</Text>
+                <Text style={styles.size}>{item.size}ml</Text>
+              </View>
             </View>
-          </View>
+          </Pressable>
         ))}
       </ScrollView>
 
@@ -92,10 +108,11 @@ export default function ProductCard(props) {
         product={selectedProduct}
         name={selectedProduct?.productName}
         category={selectedProduct?.category}
-        color={props.color}
+        color={colorPicker(selectedProduct?.category)}
         brand={selectedProduct?.brand}
         size={selectedProduct?.size}
         skinType={selectedProduct?.skinType}
+        productImage={selectedProduct?.productImage}
       />
     </View>
   );
