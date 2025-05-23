@@ -68,7 +68,7 @@ export default function PreloaderComponent() {
         <Text className="text-dark-800 text-xl text-center px-5 mt-5">{preloaderData?.message}</Text>
 
         <View className="absolute">
-            <Animated.Image source={require('../assets/3d-skincare-bottle-free-png.png')}
+            <Animated.Image source={require('../assets/skincare-aquaflask.png')}
             className="absolute bottom-[-27rem] left-[-19rem]"
             style={{
                 width: 200,
@@ -77,7 +77,7 @@ export default function PreloaderComponent() {
             }}
             ></Animated.Image>
 
-            <Animated.Image source={require('../assets/vecteezy_3d-skincare-bottle_19470925.png')}
+            <Animated.Image source={require('../assets/skincare-rectangle.png')}
             className="absolute top-[-27rem] right-[-18rem]"
             style={{
                 width: 170,

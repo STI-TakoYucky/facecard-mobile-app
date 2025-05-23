@@ -57,24 +57,11 @@ const userDataSlice = createSlice({
         const data = action.payload
         state.isPremiumAcc = data;
        },
-       sendMessage: (state, action) => {
-        const { dermatologistUID, data } = action.payload;
-
-        // Ensure `messages` exists
-        if (!state.messages) {
-          state.messages = {};
-        }
-
-        // Ensure there's an array for this dermatologist
-        if (!state.messages[dermatologistUID]) {
-          state.messages[dermatologistUID] = [];
-        }
-
-        // Add message to the correct thread
-        state.messages[dermatologistUID].push(data);
-      }
+       setStreak: (state, action) => {
+        state.streak = action.payload;
+       }
     }
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, sendMessage } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, setStreak } = userDataSlice.actions;
 export default userDataSlice.reducer;

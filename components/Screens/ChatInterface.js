@@ -262,7 +262,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
                     }}
                   >
                     { mess.isImage == false ? <Text className="text-dark-800">{mess.text}</Text>: 
-                    <Pressable onPress={() => setImageClicked(true)}>
+                    <Pressable onPress={() => {setImageClicked(true); setSelectedImageUri(mess.text)}}>
                       <Image
                         source={{
                           uri: mess.text
@@ -296,7 +296,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
                 }}
               >
                 { mess.isImage == false ? <Text className="text-white">{mess.text}</Text>: 
-                <Pressable onPress={() => setImageClicked(true)}> 
+                <Pressable onPress={() => {setImageClicked(true); setSelectedImageUri(mess.text)}}> 
                   <Image
                     source={{
                       uri: mess.text
