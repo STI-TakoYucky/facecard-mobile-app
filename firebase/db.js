@@ -1,4 +1,4 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, query, where } from 'firebase/firestore';
 import { db, createUserWithEmailAndPassword, signInWithEmailAndPassword, auth } from '../firebase/firebase'; 
 import { getFormattedDate } from '../utils/GetFormattedDate';
 
@@ -16,12 +16,14 @@ export async function signUp(email, password, firstName, lastName, birthdate) {
         uid: userCredential.user.uid,
         firstName: firstName,
         lastName: lastName,
+        role: "User",
         birthday: birthdate,
         markedDates: {},
         profilePicture: "",
         savedProducts: [],
         streak: 0,
         isPremiumAcc: false,
+        messages: [],
         routineSchedules: [
           {
             name: "Cleanser",
@@ -63,3 +65,20 @@ export async function signUp(email, password, firstName, lastName, birthdate) {
         
       }
   }
+
+export async function getDermatologists() {
+  try {
+    const q = query(collection(db, "users"), where("role", "==", "Dermatologist"));
+    const querySnapshot = await getDocs(q);
+
+    const dermatologists = [];
+    querySnapshot.forEach((doc) => {
+      dermatologists.push(doc.data()); // no id included
+    });
+
+    return dermatologists;
+  } catch (error) {
+    console.log("Error fetching dermatologists:", error);
+    return [];
+  }
+}

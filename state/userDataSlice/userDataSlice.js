@@ -52,10 +52,29 @@ const userDataSlice = createSlice({
           coordinates: data.location,
           isScheduled: data.schedule
         }
-       }
-    }
+       },
+       setUserPremiumAcc: (state, action) => {
+        const data = action.payload
+        state.isPremiumAcc = data;
+       },
+       sendMessage: (state, action) => {
+        const { dermatologistUID, data } = action.payload;
 
+        // Ensure `messages` exists
+        if (!state.messages) {
+          state.messages = {};
+        }
+
+        // Ensure there's an array for this dermatologist
+        if (!state.messages[dermatologistUID]) {
+          state.messages[dermatologistUID] = [];
+        }
+
+        // Add message to the correct thread
+        state.messages[dermatologistUID].push(data);
+      }
+    }
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, sendMessage } = userDataSlice.actions;
 export default userDataSlice.reducer;
