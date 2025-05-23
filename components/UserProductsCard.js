@@ -12,7 +12,6 @@ export default function UserProductsCard() {
           <Text className="text-wrap max-w-[13rem] font-bold text-dark-800">Celeteque Dermo Science Skin Defense</Text>
           <Text className="text-wrap max-w-[13rem] text-dark-900 pb-3 pt-1">Celeteque</Text>
           <Text className="text-wrap max-w-[13rem] text-dark-900">100ml</Text>
-          <Text className="text-wrap max-w-[13rem] underline text-dark-800 font-bold pt-3">More Details</Text>
         </View>
       </View>
     </Pressable>

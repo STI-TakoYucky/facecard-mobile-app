@@ -16,12 +16,16 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.luckyestrada.facecard",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "location", "remote-notification"]
+        "UIBackgroundModes": [
+          "fetch",
+          "location",
+          "remote-notification"
+        ]
       }
     },
     "android": {
       "permissions": [
-        "ACCESS_FINE_LOCATION", 
+        "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "CAMERA"
       ],
@@ -44,6 +48,9 @@
       "eas": {
         "projectId": "d94a7d41-5f9d-4972-955e-eaddf3fb6f5e"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

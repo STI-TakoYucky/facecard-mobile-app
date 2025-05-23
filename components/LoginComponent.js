@@ -9,6 +9,7 @@ import { storeUser } from '../state/userDataSlice/userDataSlice';
 import { initDates } from '../state/markedDatesSlice/markedDatesSlice';
 import { useEffect, useState } from 'react';
 import { togglePreloader } from '../state/PreloaderSlice/PreloaderSlice';
+import { fonts } from '../utils/fonts';
 
 export default function LoginComponent({ setLoggedIn }) {
 
@@ -73,6 +74,7 @@ export default function LoginComponent({ setLoggedIn }) {
                 value={value}
                 keyboardType="email-address"
                 autoCapitalize="none"
+
             />
             )}
             name="email"

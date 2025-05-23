@@ -19,20 +19,38 @@ import { toastConfig } from './components/ToastConfig.js';
 import DrawerComponent from './components/DrawerComponent.js';
 import Profile from './components/Screens/Profile.js';
 import { saveUserData } from './state/userDataSlice/userDataSlice.js';
+import * as Font from 'expo-font';
+import Inbox from './components/Screens/Inbox.js';
 
 export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    Font.loadAsync({
+      'OpenSans-Bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+      'NunitoSansVariable': require('./assets/fonts/NunitoSans-SemiBold.ttf'),
+    }).then(() => setFontsLoaded(true));
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or show a loading spinner
+  }
 
   return (
     <Provider store={store}>
-      <AppContent/>
+      <AppContent />
     </Provider>
-  )
+  );
 }
 
 function AppContent() {
 
   const userData = useSelector(state => state.userData)
   const dispatch = useDispatch()
+  const [activeTab, setActiveTab] = useState("Home");
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const preloaderFlag = useSelector((state) => state.preloader);
+  const [isDrawerActive, setDrawerActive] = useState(false);
 
   useEffect(() => {
     if (!userData?.uid && isLoggedIn == false) return; // only save if uid exists
@@ -44,10 +62,6 @@ function AppContent() {
     return () => clearTimeout(saveTimeout);
   }, [userData]);
 
-  const [activeTab, setActiveTab] = useState("Home");
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const preloaderFlag = useSelector((state) => state.preloader);
-  const [isDrawerActive, setDrawerActive] = useState(false);
   
   const renderView = () => {
     switch (activeTab) {
@@ -68,6 +82,9 @@ function AppContent() {
 
       case "Profile":
       return <Profile/>
+      
+      case "Chat":
+        return <Inbox></Inbox>
     
       default:
         return <Home></Home>
@@ -75,7 +92,7 @@ function AppContent() {
   }
 
   return (
-      <SafeAreaView className="w-full relative !text-dark-900 flex-1 bg-white">
+      <SafeAreaView className="w-full relative !text-dark-900 flex-1 bg-white ">
 
           { preloaderFlag?.toggle && (<PreloaderComponent></PreloaderComponent>) } 
           
