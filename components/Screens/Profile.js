@@ -9,6 +9,7 @@ import EditProfile from './EditProfile';
 import * as ImagePicker from 'expo-image-picker';
 import { updateProfilePicture } from '../../state/userDataSlice/userDataSlice';
 import Entypo from '@expo/vector-icons/Entypo';
+import { fonts } from '../../utils/fonts';
 
 export default function Profile() {
 
@@ -87,17 +88,17 @@ const uploadToImgBB = async (base64) => {
         </View>
         <View className="flex items-center justify-center gap-3">
          <View className="flex-row flex gap-5">
-           <View className="flex flex-row">
-            <MaterialIcons name="person" size={24} color="#2D3B75" className="min-w-8"/>
-            <Text className="text-lg text-dark-800">{userData.firstName + " " + userData.lastName}</Text>
+           <View className="flex flex-row items-center">
+            <MaterialIcons name="person" size={22} color="#2D3B75" className="min-w-8"/>
+            <Text className="text-lg text-dark-800" style={[fonts.BodyFont]}>{userData.firstName + " " + userData.lastName}</Text>
           </View>
-          <View className="flex flex-row">
-            <Entypo name="cake" size={20} color="#2D3B75"  className="min-w-8"/>
-            <Text className="text-lg text-dark-800">{userData.birthday}</Text>
+          <View className="flex flex-row items-center">
+            <Entypo name="cake" size={18} color="#2D3B75"  className="min-w-8"/>
+            <Text className="text-lg text-dark-800" style={[fonts.BodyFont]}>{userData.birthday}</Text>
           </View>
          </View>
           <TouchableOpacity onPress={() => setEditProfile(true)}>
-            <Text className="bg-dark-800 text-white text-base max-w-[8rem] py-3 px-[1rem] rounded-md text-center">Edit Profile</Text>
+            <Text className="bg-dark-800 text-white text-base max-w-[8rem] py-3 px-[1rem] rounded-md text-center" style={[fonts.BodyFont]}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
       </View>

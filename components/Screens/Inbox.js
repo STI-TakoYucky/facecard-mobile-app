@@ -6,7 +6,6 @@ import { getDermatologists } from '../../firebase/db';
 import ChatInterface from './ChatInterface';
 import { db } from '../../firebase/firebase';
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
 
 export default function Inbox() {
@@ -106,7 +105,7 @@ export default function Inbox() {
         />
       )}
 
-      <Text className="text-dark-800 text-2xl mb-3" style={[fonts.openSansBold]}>
+      <Text className="text-dark-800 text-3xl" style={[fonts.HeaderFont, { marginBottom: 20, marginTop: 10 }]}>
         {userData.role === "User" ? "Dermatologist Chat" : "User Chats"}
       </Text>
 
@@ -128,14 +127,14 @@ export default function Inbox() {
                 }}
               />
               <View className="flex justify-center">
-                <Text className="mb-1 text-dark-800">{getDisplayName(doc)}</Text>
+                <Text className="mb-1 text-dark-800 font-bold" style={[fonts.BodyFont]}>{getDisplayName(doc)}</Text>
                 {!latestMsg?.isImage ? 
-                  <Text className="text-gray-400" numberOfLines={1}>
+                  <Text className="text-gray-400" numberOfLines={1} style={[fonts.BodyFont]}>
                   {latestMsg
                     ? `${latestMsg.senderId === userData.uid ? "You:" : doc.firstName + ":"} ${latestMsg.text}`
                     : "No messages yet"}
                 </Text> :
-                  <Text className="text-gray-400" numberOfLines={1}>
+                  <Text className="text-gray-400" numberOfLines={1} style={[fonts.BodyFont]}>
                   {latestMsg
                     ? `${latestMsg.senderId === userData.uid ? "You:" : doc.firstName + ":"} Sent a photo.`
                     : "No messages yet"}

@@ -5,6 +5,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux';
+import { fonts } from '../utils/fonts';
 import SubscriptionProcess from './Screens/SubscriptionProcess';
 
 export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiveTab }) {
@@ -86,24 +87,24 @@ const renderDermaChat = () => {
             objectFit: "cover"
           }}
           ></Image>
-          <Text className="font-bold text-dark-800 text-2xl">{userData.firstName + " " + userData.lastName}</Text>
+          <Text className="text-dark-800 text-2xl" style={[fonts.HeaderFont]}>{userData.firstName + " " + userData.lastName}</Text>
         </View>
 
         <View className="flex gap-8 mt-10">
           <TouchableOpacity className="flex flex-row gap-2 justify-start" onPress={() => setActiveTab("Profile")}>
             <MaterialIcons name="person" size={24} color="#2D3B75" className="min-w-8"/>
-            <Text className="text-dark-800 text-lg">Profile</Text>
+            <Text className="text-dark-800 text-lg" style={[fonts.BodyFont]}>Profile</Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="flex justify-start flex-row gap-2 items-center" onPress={() => handleDermaChatOnPress()}>
             <FontAwesome6 name="user-doctor" size={19} color="#2D3B75" className="min-w-7 ml-[.2rem]"/>
-            <Text className="text-dark-800 text-lg">Derma Chat</Text>
-            <FontAwesome5 name="crown" size={16} color="#f2c611" />
+            <Text className="text-dark-800 text-lg" style={[fonts.BodyFont]}>Derma Chat</Text>
+            <FontAwesome5 name="crown" size={15} color="#f2c611" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {handleLogout()}} className="justify-start flex flex-row gap-2">
             <MaterialCommunityIcons name="logout" size={24} color="#2D3B75" className="min-w-8"/>
-            <Text className="text-dark-800 text-lg">Logout</Text>
+            <Text className="text-dark-800 text-lg" style={[fonts.BodyFont]}>Logout</Text>
           </TouchableOpacity>
         </View>
       </Animated.View>
