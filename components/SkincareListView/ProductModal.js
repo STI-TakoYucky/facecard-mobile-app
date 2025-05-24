@@ -4,6 +4,8 @@ import { StyleSheet, Modal, View, Text, Image, TouchableOpacity, ScrollView } fr
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 
+import ProductCard from "./ProductCard";
+
 export default function ProductModal(props) {
 
   return (
@@ -28,7 +30,7 @@ export default function ProductModal(props) {
           <ScrollView>
             <View>
               <Image 
-                source={require('../../assets/celeteque_sunscreen.png')}
+                source={require('../../assets/3d-skincare-bottle-free-png.png')}
                 style={{width: 250, height: 300, alignSelf: 'center'}}
               />
             </View>
@@ -38,15 +40,20 @@ export default function ProductModal(props) {
                 <View style={styles.productInfo}>
                   
                   {/* PRODUCT CATEGORY */}
-                  <Text style={[styles.category, {backgroundColor: props.color}]}>{props.category}</Text>
-
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={[styles.category, props.color]}>{props.category}</Text>
+                    
+                  </View>
+                
                   {/* PRODUCT NAME */}
-                  <Text style={styles.name}>{props.name}</Text>
+                  <Text className="my-6 text-2xl font-bold">{props.name}</Text>
 
                   {/* PRODUCT BRANDS, GRAM, SKINTYPE */}
                   <Text style={{fontSize: 18}}>{props.brand}</Text>
                   <View style={{flexDirection: 'row', marginTop: 15}}>
-                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>{props.size}</Text>
+                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>
+                      {props.size}ml
+                    </Text>
                     <Feather 
                     name="droplet" 
                     size={24} 
@@ -63,25 +70,23 @@ export default function ProductModal(props) {
                   </View>
                 
                   {/* RECOMMENDATION */}
-                  <Text style={{marginVertical: 40, fontSize: 20, fontWeight: 'bold'}}>
+                  <Text style={{marginVertical: 30, fontSize: 20, fontWeight: 'bold'}}>
                     More From {props.brand}
                   </Text>
 
                 <ScrollView horizontal={true} showsVerticalScrollIndicator ={false}>
                   <View style={styles.card}>
-                    <Image 
-                      source={require('../../assets/celeteque_sunscreen.png')}
+                    <View style={styles.imageContainer}>
+                      <Image 
+                      source={require('../../assets/3d-skincare-bottle-free-png.png')}
                       style={{width: 100, height: 100, marginBottom: 10}}
-                    />
-                    <Text>Hello</Text>
-                  </View>
-
-                  <View style={styles.card}>
-                    <Image 
-                      source={require('../../assets/celeteque_sunscreen.png')}
-                      style={{width: 100, height: 100, marginBottom: 10}}
-                    />
-                    <Text>Hello</Text>
+                      />
+                    </View>
+                    <View style={styles.infoContainer}>
+                      <Text style={{fontSize: 16, fontWeight: 'bold', padding: 1, marginVertical: 2}}>{props.name}</Text>
+                      <Text style={{fontSize: 12, padding: 1}}>{props.brand}</Text>
+                      <Text style={{fontSize: 12, padding: 1}}>{props.size}ml</Text>
+                    </View>
                   </View>
 
                   <View style={styles.card}>
@@ -106,6 +111,13 @@ const styles = StyleSheet.create({
   },  
   header:{
     backgroundColor: 'lightpink',
+    
+    elevation: 15,
+
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
   },
   productInfoView:{
     flex: 1,
@@ -134,25 +146,23 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 7,
   },
-  name:{
-    marginVertical: 15,
-    fontSize: 25,
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif',
-    color: 'black',   
-  },
   card:{
-    backgroundColor: '#fff',
+    backgroundColor: '#eee',
     flexDirection: 'row',
     width: 300,
-    height: 100,
-    marginHorizontal: 30,
+    height: 'auto',
+    marginHorizontal: 17,
+    borderRadius: 10,
 
-    elevation: 10,
+    elevation: 13,
 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
+  },
+  infoContainer:{
+    flex: 1,
+    justifyContent: 'center'
   }
 });
