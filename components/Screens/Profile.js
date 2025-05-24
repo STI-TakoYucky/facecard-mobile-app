@@ -61,14 +61,14 @@ const uploadToImgBB = async (base64) => {
 };
 
   return (
-    <ScrollView className="p-5 mt-[2rem]" showsVerticalScrollIndicator={false}>
+    <ScrollView className="p-5 mt-1" showsVerticalScrollIndicator={false}>
 
       { 
       isEditProfile &&
         <EditProfile isEditProfile={isEditProfile} setEditProfile={setEditProfile} userData={userData}></EditProfile>
       }
 
-      <View className="flex flex-row gap-7">
+      <View className="flex flex-col items-center gap-7 bg-slate-200 py-8 rounded-md">
         <View>
           <TouchableOpacity className="relatve" onPress={pickImage}>
               <Image
@@ -85,8 +85,9 @@ const uploadToImgBB = async (base64) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View className="flex justify-around gap-3">
-          <View className="flex flex-row">
+        <View className="flex items-center justify-center gap-3">
+         <View className="flex-row flex gap-5">
+           <View className="flex flex-row">
             <MaterialIcons name="person" size={24} color="#2D3B75" className="min-w-8"/>
             <Text className="text-lg text-dark-800">{userData.firstName + " " + userData.lastName}</Text>
           </View>
@@ -94,13 +95,15 @@ const uploadToImgBB = async (base64) => {
             <Entypo name="cake" size={20} color="#2D3B75"  className="min-w-8"/>
             <Text className="text-lg text-dark-800">{userData.birthday}</Text>
           </View>
+         </View>
           <TouchableOpacity onPress={() => setEditProfile(true)}>
-            <Text className="bg-dark-800 text-white text-base max-w-[8rem] py-3 rounded-md text-center">Edit Profile</Text>
+            <Text className="bg-dark-800 text-white text-base max-w-[8rem] py-3 px-[1rem] rounded-md text-center">Edit Profile</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <UserProductContainer></UserProductContainer>
+
     </ScrollView>
   )
 }

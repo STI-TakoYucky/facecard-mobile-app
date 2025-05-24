@@ -1,16 +1,20 @@
 import { View, Text, Pressable, Image, TouchableWithoutFeedback, Animated, useAnimatedValue, TouchableOpacity } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux';
+import SubscriptionProcess from './Screens/SubscriptionProcess';
 
 export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiveTab }) {
 
   const dispatch = useDispatch();
   const userData = useSelector(state => state.userData);
   const slideAnim = useRef(new Animated.Value(250)).current; // Starts off-screen
+  const [isPremiumSubProcess, setPremiumSubProcess] = useState(false)
+  const isUserUser = userData.role === "User"
+  const isUserDerma = userData.role === "Dermatologist"
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
@@ -44,8 +48,27 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiv
   }
 
 
+const renderDermaChat = () => {
+    if( isPremiumSubProcess && !userData.isPremiumAcc && isUserUser ) {
+      return <SubscriptionProcess isPremiumSubProcess={isPremiumSubProcess} setPremiumSubProcess={setPremiumSubProcess}></SubscriptionProcess>
+     }
+}
+
+  const handleDermaChatOnPress = () => {
+    if( !userData.isPremiumAcc && isUserUser) {
+      setPremiumSubProcess(true)
+    } else if(userData.isPremiumAcc == true && isUserUser) {
+      setActiveTab("Chat")
+    } else if(isUserDerma) {
+      setActiveTab("Chat")
+    }
+  }
+
+
   return (
     <View className="absolute inset-0 z-50 flex-row">
+
+      {renderDermaChat()}
       
       {/* This is the semi-transparent overlay */}
       <TouchableWithoutFeedback onPress={() => { slideOut()}}>
@@ -72,7 +95,7 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiv
             <Text className="text-dark-800 text-lg">Profile</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex justify-start flex-row gap-2 items-center">
+          <TouchableOpacity className="flex justify-start flex-row gap-2 items-center" onPress={() => handleDermaChatOnPress()}>
             <FontAwesome6 name="user-doctor" size={19} color="#2D3B75" className="min-w-7 ml-[.2rem]"/>
             <Text className="text-dark-800 text-lg">Derma Chat</Text>
             <FontAwesome5 name="crown" size={16} color="#f2c611" />

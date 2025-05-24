@@ -52,10 +52,16 @@ const userDataSlice = createSlice({
           coordinates: data.location,
           isScheduled: data.schedule
         }
+       },
+       setUserPremiumAcc: (state, action) => {
+        const data = action.payload
+        state.isPremiumAcc = data;
+       },
+       setStreak: (state, action) => {
+        state.streak = action.payload;
        }
     }
-
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, setStreak } = userDataSlice.actions;
 export default userDataSlice.reducer;

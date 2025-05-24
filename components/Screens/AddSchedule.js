@@ -22,6 +22,7 @@ export default function AddSchedule({
   selectedMarker,
 }) {
   const schedulesData = useSelector((state) => state.routineSchedules);
+  const userData = useSelector(state => state.userData)
   const selectedSchedule = schedulesData.find((sched) => sched.name === selectedMarker) || [];
   const dispatch = useDispatch();
 
