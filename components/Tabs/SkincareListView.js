@@ -38,43 +38,37 @@ export default function SkincareListView() {
       fetchProducts();
   }, []);
 
-  const filterProducts = () => {
-    const search = searchText.toLowerCase();
-    const filtered = allProducts.filter((item) => {
+    const handleSearch = () => {
+      const keyword = searchText.toLowerCase();
+
+      let result = [];
+
       if (selectedFilter === "All") {
-        return (
-          item.productName?.toLowerCase().includes(search.toLowerCase()) ||
-          item.brand?.toLowerCase().includes(search.toLowerCase()) ||
-          item.category?.toLowerCase().includes(search.toLowerCase()) ||
-          item.skinType?.toLowerCase().includes(search.toLowerCase())
+        result = allProducts.filter(p =>
+          p.productName.toLowerCase().includes(keyword) ||
+          p.brand.toLowerCase().includes(keyword) ||
+          p.category.toLowerCase().includes(keyword) ||
+          p.skinType.toLowerCase().includes(keyword)
         );
+      } else if (selectedFilter === "Category") {
+        result = allProducts.filter(p => p.category.toLowerCase().includes(keyword));
+      } else if (selectedFilter === "Brand") {
+        result = allProducts.filter(p => p.brand.toLowerCase().includes(keyword));
+      } else if (selectedFilter === "Skin Type") {
+        result = allProducts.filter(p => p.skinType.toLowerCase().includes(keyword));
       }
-      if (selectedFilter === "Category") {
-        return item.category?.toLowerCase().includes(search.toLowerCase());
-      }
-      if (selectedFilter === "Brand") {
-        return item.brand?.toLowerCase().includes(search.toLowerCase());
-      }
-      if (selectedFilter === "Skin Type") {
-        return item.skinType?.toLowerCase().includes(search.toLowerCase());
-      }
-      return false;
-    });
 
-    setFilteredProducts(filtered);
-  }
-
-  //FILTERS DATA BASED ON SEARCHBAR OR MENU
-  useEffect(() => {
-    filterProducts();
-  }, [searchText, selectedFilter]);
+      setFilteredProducts(result);
+    };
 
   return (
     <ScrollView className="p-5">
         <SearchBar 
           search={searchText}
-          setSearch={setSearchText} 
-          onFilterSelect={setSelectedFilter} 
+          setSearch={setSearchText}
+          onSearch={handleSearch}
+          onFilterSelect={setSelectedFilter}
+          selectedFilter={selectedFilter} 
         />
         <SkincareAds></SkincareAds>
         <ProductCard 

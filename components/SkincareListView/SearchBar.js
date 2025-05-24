@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-nativ
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-export default function SearchBar({ search, setSearch, onFilterSelect, selectedFilter }) {
+export default function SearchBar({ search, onSearch, onFilterSelect, selectedFilter, setSearch }) {
   
   const [menuVisible, isMenuVisible] = useState(false);
   
@@ -16,7 +16,8 @@ export default function SearchBar({ search, setSearch, onFilterSelect, selectedF
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      {/* SEARCH BUTTON */}
+      <TouchableOpacity onPress={onSearch}>
         <Icon 
           style={styles.searchIcon}
           name="search"
@@ -24,12 +25,16 @@ export default function SearchBar({ search, setSearch, onFilterSelect, selectedF
           color="black"
         /> 
       </TouchableOpacity>
+
+      {/* SEARCH BAR */}
       <TextInput 
         value={search}
         style={styles.searchBar} 
         placeholder="Search..."
         onChangeText={setSearch}
       />
+
+      {/* MENU BUTTON */}
       <TouchableOpacity style={styles.menuIcon} onPress={() => isMenuVisible(!menuVisible)}>
         <Entypo 
           name="menu"
@@ -64,13 +69,13 @@ export default function SearchBar({ search, setSearch, onFilterSelect, selectedF
 }
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flexDirection: 'row',
     backgroundColor: 'white',
     alignItems: 'center',
     marginBottom: 13
   },
-  searchIcon:{
+  searchIcon: {
     padding: 5,
     marginHorizontal: 10
   },
@@ -84,13 +89,13 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     padding: 8,
   },
-  menuIcon:{
+  menuIcon: {
     marginLeft: 'auto',
     marginRight: 10
   },
   dropdown: {
     position: 'absolute',
-    top: 25,
+    top: 45, // adjust if it overlaps input
     right: 15,
     backgroundColor: 'white',
     borderWidth: 1,
@@ -105,16 +110,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
   },
-  selectedItem: {
-  backgroundColor: '#eee',
-  borderRadius: 5,
-  },
-  selectedText: {
-    color: 'green',
-    fontWeight: 'bold',
-  },
   dropdownText: {
     fontSize: 14,
     color: '#333',
+  },
+  selectedText: {
+    color: '#007AFF',
+    fontWeight: 'bold',
+  },
+  selectedItem: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
   },
 });
