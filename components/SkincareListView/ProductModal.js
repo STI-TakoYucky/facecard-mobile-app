@@ -85,6 +85,7 @@ export default function ProductModal(props) {
                     <View style={styles.infoContainer}>
                       <Text style={{fontSize: 16, fontWeight: 'bold', padding: 1, marginVertical: 2}}>{props.name}</Text>
                       <Text style={{fontSize: 12, padding: 1}}>{props.brand}</Text>
+                      <Text style={{fontSize: 12, padding: 1}}>{props.size}ml</Text>
                     </View>
                   </View>
 
@@ -162,6 +163,6 @@ const styles = StyleSheet.create({
   },
   infoContainer:{
     flex: 1,
-    justifyContent: 'space-around'
+    justifyContent: 'center'
   }
 });

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 
 export default function EntryCard({ entry }) {
@@ -32,14 +32,16 @@ export default function EntryCard({ entry }) {
         </TouchableOpacity>
 
         {editEntry && (
-          <View style={styles.popupMenu}>
-            <TouchableOpacity>
-              <Text style={styles.popupText}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.popupText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+          <Animated.View>
+            <View style={styles.popupMenu}>
+              <TouchableOpacity>
+                <Text style={styles.popupText}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.popupText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         )}
 
       </View>
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 6,
     elevation: 6,
+
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,

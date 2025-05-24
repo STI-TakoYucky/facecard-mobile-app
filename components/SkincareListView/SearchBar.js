@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-export default function SearchBar({ onFilterSelect }) {
+export default function SearchBar({ search, setSearch, onFilterSelect, selectedFilter }) {
   
-  const [search, setSearch] = useState('');
   const [menuVisible, isMenuVisible] = useState(false);
-
+  
   const filters = ["All", "Category", "Brand", "Skin Type"];
 
   const handleMenu = (filter) => {
@@ -45,9 +44,17 @@ export default function SearchBar({ onFilterSelect }) {
             <TouchableOpacity 
               key={item} 
               onPress={() => handleMenu(item)} 
-              style={styles.dropdownItem}
+              style={[
+                styles.dropdownItem,
+                selectedFilter === item && styles.selectedItem
+              ]}
             >
-              <Text>{item}</Text>
+              <Text style={[
+                styles.dropdownText,
+                selectedFilter === item && styles.selectedText
+              ]}>
+                {item}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -97,5 +104,17 @@ const styles = StyleSheet.create({
   dropdownItem: {
     paddingHorizontal: 15,
     paddingVertical: 10,
+  },
+  selectedItem: {
+  backgroundColor: '#eee',
+  borderRadius: 5,
+  },
+  selectedText: {
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  dropdownText: {
+    fontSize: 14,
+    color: '#333',
   },
 });

@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator, Pressable  } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, Pressable } from 'react-native';
 
 import ProductModal from "./ProductModal";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-import { collection, getDocs } from "firebase/firestore";
-import { db } from '../../firebase/firebase';
+export default function ProductCard({ products }) {
 
-export default function ProductCard(props) {
-  const [products, setProducts] = useState([]);
   const [modalVisible, isModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [favorites, setFavorites] = useState({});
-  const [loading, setLoading] = useState(true);
   
   const handleFavorite = (id) => {
     setFavorites((prev) => ({
@@ -20,38 +16,6 @@ export default function ProductCard(props) {
       [id]: !prev[id],
     }));
   };
-
-  useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'products'));
-      const fetchedProducts = [];
-
-      querySnapshot.forEach((doc) => {
-        fetchedProducts.push({
-          id: doc.id,
-          ...doc.data()
-        });
-      });
-
-      setProducts(fetchedProducts);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching products: ", error);
-      setLoading(false);
-    }
-  };
-
-  fetchProducts();
-}, []);
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
-    );
-  }
 
   const handleOpenModal = (item) => {
     setSelectedProduct(item);
@@ -72,34 +36,45 @@ export default function ProductCard(props) {
         return {backgroundColor: "#FCD7F6"};
       case "Retinol":
         return {backgroundColor: "#FFC9BA"};
+      default: 
+        return { backgroundColor: "#fff" };
     }
   }
 
   return (
     <View style={{ marginTop: 10 }}>
       <ScrollView>
-        {products.map((item) => (
-          <Pressable key={item.id} onPress={() => handleOpenModal(item)}>
-            <View style={styles.card}>
-              <TouchableOpacity 
-                style={styles.heartIcon} 
-                onPress={() => handleFavorite(item.id)}
-              >
-                <AntDesign 
-                  name={favorites[item.id] ? "heart" : "hearto"} 
-                  size={15} 
-                  color={favorites[item.id] ? "red" : "gray"} 
+        {products.length === 0 ? (
+          <Text style={{ textAlign: 'center', marginTop: 20 }}>No products found.</Text>
+        ) : (
+          products.map((item) => (
+            <Pressable key={item.id} onPress={() => handleOpenModal(item)}>
+              <View style={styles.card}>
+                <TouchableOpacity 
+                  style={styles.heartIcon} 
+                  onPress={() => handleFavorite(item.id)}
+                >
+                  <AntDesign 
+                    name={favorites[item.id] ? "heart" : "hearto"} 
+                    size={15} 
+                    color={favorites[item.id] ? "red" : "gray"} 
+                  />
+                </TouchableOpacity>
+                <Image 
+                  source={require('../../assets/3d-skincare-bottle-free-png.png')} 
+                  style={styles.image} 
+                  resizeMode="cover" 
                 />
-              </TouchableOpacity>
-              <Image source={require('../../assets/3d-skincare-bottle-free-png.png')} style={styles.image} resizeMode="cover" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.name}>{item.productName}</Text>
-                <Text style={styles.brand}>{item.brand}</Text>
-                <Text style={styles.size}>{item.size}ml</Text>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.name}>{item.productName}</Text>
+                  <Text style={styles.brand}>{item.brand}</Text>
+                  <Text style={styles.size}>{item.size}ml</Text>
+                  <Text style={styles.skinType}>{item.skinType}</Text>
+                </View>
               </View>
-            </View>
-          </Pressable>
-        ))}
+            </Pressable>
+          ))
+        )}
       </ScrollView>
 
       <ProductModal
@@ -157,6 +132,11 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   size: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 8,
+  },
+  skinType: {
     fontSize: 13,
     color: '#666',
     marginBottom: 8,
