@@ -5,6 +5,7 @@ import { Controller } from "react-hook-form";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useDispatch } from "react-redux";
 import { updateUserInfo } from "../../state/userDataSlice/userDataSlice";
+import { fonts } from "../../utils/fonts";
 
 export default function EditProfile({ isEditProfile, setEditProfile, userData }) {
 
@@ -43,7 +44,7 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
       <View className="flex-1 bg-black/40 justify-center items-center">
         <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] shadow-xl justify-between">
           <View className="flex gap-2">
-            <Text className="text-2xl font-semibold mb-6 text-dark-800">
+            <Text className="text-2xl font-semibold mb-6 text-dark-800" style={[fonts.HeaderFont]}>
               Edit Profile
             </Text>
 
@@ -54,20 +55,21 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
                 rules={{ required: "First Name is required" }}
                 render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text className="text-dark-800 mb-4">First Name</Text>
+                    <Text className="text-dark-800 mb-4" style={[fonts.BodyFont]}>First Name</Text>
                   <TextInput
                     className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
                     placeholder="First Name"
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
+                    style={[fonts.BodyFont]}
                   />
                 </>
                 )}
                 name="firstName"
               />
               {errors.firstName && (
-                <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+                <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4" style={[fonts.BodyFont]}>
                   {errors.firstName.message}
                 </Text>
               )}
@@ -80,13 +82,14 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
                 rules={{ required: "Last Name is required" }}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <>
-                    <Text className="text-dark-800 mb-4">Last Name</Text>
+                    <Text className="text-dark-800 mb-4" style={[fonts.BodyFont]}>Last Name</Text>
                     <TextInput
                         className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
                         placeholder="Last Name"
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        style={[fonts.BodyFont]}
                     />
                     </>
 
@@ -94,7 +97,7 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
                 name="lastName"
               />
               {errors.lastName && (
-                <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+                <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4" style={[fonts.BodyFont]}>
                   {errors.lastName.message}
                 </Text>
               )}
@@ -106,14 +109,15 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
                     rules={{ required: "Birthday is required" }}
                     render={({ field: { onChange, value } }) => (
                     <>
-                                        <Text className="text-dark-800 mb-4">Birthdate</Text>
+                    <Text className="text-dark-800 mb-4" style={[fonts.BodyFont]}>Birthdate</Text>
                     <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
                     <TextInput
                         className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
                         placeholder="Birthdate"
                         editable={false}
                         value={value}
-                        pointerEvents="none" // prevents the keyboard from opening
+                        pointerEvents="none"
+                        style={[fonts.BodyFont]}
                     />
                     </TouchableOpacity>
             
@@ -122,7 +126,7 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
                         mode="date"
                         onConfirm={(date) => {
                             const day = String(date.getDate()).padStart(2, '0');
-                            const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
                             const year = date.getFullYear();
                             const formattedDate = `${month}/${day}/${year}`;
                             onChange(formattedDate);
@@ -137,7 +141,7 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
                 </Controller>
             
                 {errors.birthdate && (
-                    <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+                    <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4" style={[fonts.BodyFont]}>
                     {errors.birthdate.message}
                     </Text>
                 )}
@@ -147,16 +151,16 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
           </View>
 
           <View className="flex flex-row gap-2 justify-end mt-[2rem]">
-            <Pressable onPress={() => setEditProfile(false)}>
-              <Text className="bg-white border border-dark-800 rounded-md px-4 py-[.49rem] shadow-sm">
+            <TouchableOpacity onPress={() => setEditProfile(false)} style={[fonts.BodyFont]}>
+              <Text className="bg-white border border-dark-800 text-dark-800 rounded-md px-4 py-[.49rem]">
                 Cancel
               </Text>
-            </Pressable>
-            <Pressable onPress={handleSubmit(onSubmit)}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSubmit(onSubmit)} style={[fonts.BodyFont]}>
               <Text className="bg-dark-800 text-white text-base py-2 px-4 rounded-md">
                 Save
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

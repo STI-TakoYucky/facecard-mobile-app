@@ -9,7 +9,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import EditSchedule from '../Screens/EditSchedule.js'
 import { updateUserSchedules } from '../../state/userDataSlice/userDataSlice.js';
 import notifee, { TimestampTrigger, TriggerType, RepeatFrequency, AndroidImportance } from '@notifee/react-native';
-
+import { fonts } from '../../utils/fonts.js';
 
 
 export default function RoutinesView() {
@@ -155,7 +155,7 @@ async function scheduleNotifications(routineData) {
       }
 
       <View className="mb-[8rem]">
-      <Text className="text-dark-800 font-bold text-3xl">Setup your routines with ease!</Text>
+      <Text className="text-dark-800 text-3xl mt-5" style={[fonts.HeaderFont]}>Setup your routines with ease!</Text>
 
       <View className="gap-8 mt-7">
         {routineData.map((routine, index) => {
@@ -164,7 +164,7 @@ async function scheduleNotifications(routineData) {
 
           return (
             <View className="flex flex-col justify-center gap-2" key={index}>
-              <Text className="text-dark-800 font-bold text-xl mb-2">{routine.name}</Text>
+              <Text className="text-dark-800 text-xl mb-2" style={[fonts.HeaderFont]}>{routine.name}</Text>
 
               {routine.schedules.map((schedule) => {
 
@@ -180,7 +180,7 @@ async function scheduleNotifications(routineData) {
                   >
                     <View className="flex items-center flex-row gap-2">
                       <FontAwesome5 name="calendar-day" size={15} color="#2D3B75" /> 
-                       <Text className="text-dark-800 text-base">
+                       <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>
                         {getDay(schedule.dayOfWeek)}
                       </Text>
                     </View>
@@ -191,7 +191,7 @@ async function scheduleNotifications(routineData) {
                         size={18}
                         color="#2D3B75"
                       />
-                      <Text className="text-dark-800 text-base font-bold">
+                      <Text className="text-dark-800 text-base" style={[fonts.BodyFont, {fontWeight: 500}]}>
                         {schedule.time.length > 0 ? 'Notifications On' : 'Notifications Off'}
                       </Text>
                     </View>
@@ -214,7 +214,7 @@ async function scheduleNotifications(routineData) {
                 (
                   <TouchableOpacity onPress={() => {setAddSchedule(true); setSelectedMarker(routine.name)}}>
                     <View className="bg-gray-200 rounded-lg py-5 px-4 flex flex-row justify-between items-center">
-                      <Text className="text-gray-500 text-base">Add Marker</Text>
+                      <Text className="text-gray-500 text-base" style={[fonts.BodyFont]}>Add Marker</Text>
                       <AntDesign name="plus" size={24} color="#6b7280" />
                     </View>
                   </TouchableOpacity>

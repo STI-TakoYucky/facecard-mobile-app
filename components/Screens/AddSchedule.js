@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Modal,
-  Pressable,
-  Platform,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, Modal, Pressable, Platform, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -14,7 +7,7 @@ import { setSchedules } from "../../state/routineSchedulesSlice/routineSchedules
 import { generateUniqueId } from "../../utils/GenerateUniqueID";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { updateUserSchedules } from "../../state/userDataSlice/userDataSlice";
+import { fonts } from "../../utils/fonts";
 
 export default function AddSchedule({
   isAddSchedule,
@@ -22,7 +15,6 @@ export default function AddSchedule({
   selectedMarker,
 }) {
   const schedulesData = useSelector((state) => state.routineSchedules);
-  const userData = useSelector(state => state.userData)
   const selectedSchedule = schedulesData.find((sched) => sched.name === selectedMarker) || [];
   const dispatch = useDispatch();
 
@@ -115,14 +107,14 @@ export default function AddSchedule({
         <View className="flex-1 bg-black/40 justify-center items-center">
           <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] h-[29rem] shadow-xl justify-between">
             <View>
-              <Text className="text-2xl font-semibold text-dark-800">
+              <Text className="text-2xl font-semibold text-dark-800" style={[fonts.HeaderFont]}>
                 {selectedMarker}
               </Text>
               <View className="my-5 flex gap-3">
                 <View className="my-2 gap-[2rem]">
                   <View className="gap-5">
                     <View>
-                      <Text className="text-dark-800 mb-2">
+                      <Text className="text-dark-800 mb-2" style={[fonts.BodyFont]}>
                         Which day would you like to track it?
                       </Text>
                       <DropDownPicker
@@ -131,6 +123,7 @@ export default function AddSchedule({
                           color: "#2D3B75",
                         }}
                         textStyle={{
+                          ...fonts.BodyFont,
                           color: "#2D3B75",
                         }}
                         dropDownContainerStyle={{
@@ -169,16 +162,16 @@ export default function AddSchedule({
                               key={index}
                             >
                               <View className="flex items-center flex-row gap-3">
-                                <Pressable
+                                <TouchableOpacity
                                   onPress={() => {
                                     setShowTimePicker(true);
                                     setCurrentIndex(index);
                                   }}
                                 >
-                                  <Text className="text-lg text-dark-900 bg-[#E3E7F6] py-[.4rem] px-3 rounded-md">
+                                  <Text className="text-lg text-dark-800 bg-[#E3E7F6] py-[.4rem] px-3 rounded-md" style={[fonts.BodyFont]}>
                                     {time}
                                   </Text>
-                                </Pressable>
+                                </TouchableOpacity>
 
                                 <Pressable
                                   onPress={() => deleteNotification(index)}
@@ -197,7 +190,7 @@ export default function AddSchedule({
                       {timeGroup.length < 3 && (
                         <Pressable onPress={() => addNotification(new Date())}>
                           <View className="flex flex-row dropdownBoxItem-center gap-2 mt-3 items-center">
-                            <Text className="text-dark-800 text-base">
+                            <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>
                               Add notifications
                             </Text>
                             <View>
@@ -227,16 +220,16 @@ export default function AddSchedule({
             </View>
 
             <View className="flex flex-row gap-2 justify-end">
-              <Pressable onPress={() => setAddSchedule(false)}>
-                <Text className="bg-white border border-dark-800 rounded-md px-4 py-[.49rem] shadow-sm">
+              <TouchableOpacity onPress={() => setAddSchedule(false)}>
+                <Text className="bg-white border border-dark-800 text-dark-800 rounded-md px-4 py-[.49rem]">
                   Cancel
                 </Text>
-              </Pressable>
-              <Pressable onPress={() => handleConfirm()}>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleConfirm()}>
                 <Text className="bg-dark-800 text-white text-base py-2 px-4 rounded-md">
                   Confirm
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

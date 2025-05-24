@@ -10,8 +10,9 @@ import { initDates } from "../../state/markedDatesSlice/markedDatesSlice";
 import { initRoutineSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 import { fonts } from "../../utils/fonts";
 import { setStreak } from "../../state/userDataSlice/userDataSlice";
+import StartingAd from "../StartingAd";
 
-export default function Home() {
+export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFired }) {
 
   const dispatch = useDispatch()
   const userData = useSelector(state => state.userData) 
@@ -25,6 +26,7 @@ export default function Home() {
     //initialize dates from the database
     dispatch(initDates(userData.markedDates))
     dispatch(initRoutineSchedules(userData.routineSchedules))
+
   }, [])
 
   useEffect(() => {
@@ -84,6 +86,8 @@ export default function Home() {
   }
 
   return (
+    <>
+    {!isStartingAdAlreadyFired && <StartingAd setStartingAdAlreadyFired={setStartingAdAlreadyFired}></StartingAd>}
     <ScrollView className={`p-5 text-dark-900`} showsVerticalScrollIndicator={false}>
       <View className="pb-[8rem]">
       <SkincareChecklist 
@@ -105,6 +109,7 @@ export default function Home() {
         enableSwipeMonths={true}
         theme={{
           textMonthFontSize: 16,
+          textDayFontFamily: fonts.HeaderFont,
           monthTextColor: '#2D3B75',
           arrowColor: '#2D3B75',
         }}
@@ -135,6 +140,7 @@ export default function Home() {
                   className={`text-base font-bold ${
                     isDisabled ? "text-slate-300" : "text-dark-800"
                   } ${isMarked ? "text-white" : ""}`}
+                   style={[fonts.BodyFont]}
                 >
                   {date?.day}
                 </Text>
@@ -175,7 +181,7 @@ export default function Home() {
               return (
                 <View className="flex flex-row justify-center items-center gap-1" key={index}>
                   <View className={`h-3 w-3 rounded-full ${getScheduleColor(routine.name)}`}></View>
-                  <Text className="flex items-center gap-2 text-base text-dark-800" style={[fonts.NunitoSansVariable]}>{routine.name}</Text>
+                  <Text className="flex items-center gap-2 text-base text-dark-800" style={[fonts.BodyFont]}>{routine.name}</Text>
                 </View>
               )
             })
@@ -185,5 +191,6 @@ export default function Home() {
       <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
       </View>
     </ScrollView>
+  </>
   );
 }

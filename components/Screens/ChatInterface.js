@@ -7,6 +7,7 @@ import { db } from "../../firebase/firebase";
 import * as ImagePicker from 'expo-image-picker';
 import ImagePreviewModal from "./ImagePreviewModal";
 import ImageClickedModal from "./ImageClickedModal";
+import { fonts } from "../../utils/fonts";
 
 export default function ChatInterface({ selectedPerson, isChatActive, setChatActive, userData,}) {
   const data = selectedPerson;
@@ -193,7 +194,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
         <TouchableOpacity onPress={() => setChatActive(false)}>
           <Ionicons name="caret-back" size={20} color="#2D3B75" />
         </TouchableOpacity>
-        <View className="flex flex-row items-center gap-2">
+        <View className="flex flex-row items-center justify-center gap-4">
           <Image
             source={{
               uri:
@@ -208,8 +209,8 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
             }}
           />
           <Text
-            className="text-dark-800 font-bold"
-            style={{ fontWeight: "bold" }}
+            className="text-dark-800 text-lg"
+            style={[fonts.HeaderFont]}
           >
             Dr. {data.firstName + " " + data.lastName}
           </Text>
@@ -261,7 +262,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
                       borderBottomRightRadius: 10,
                     }}
                   >
-                    { mess.isImage == false ? <Text className="text-dark-800">{mess.text}</Text>: 
+                    { mess.isImage == false ? <Text className="text-dark-800" style={[fonts.BodyFont]}>{mess.text}</Text>: 
                     <Pressable onPress={() => {setImageClicked(true); setSelectedImageUri(mess.text)}}>
                       <Image
                         source={{
@@ -295,7 +296,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
                   borderBottomRightRadius: 0, // pointy corner
                 }}
               >
-                { mess.isImage == false ? <Text className="text-white">{mess.text}</Text>: 
+                { mess.isImage == false ? <Text className="text-white" style={[fonts.BodyFont]}>{mess.text}</Text>: 
                 <Pressable onPress={() => {setImageClicked(true); setSelectedImageUri(mess.text)}}> 
                   <Image
                     source={{
@@ -349,7 +350,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
             className="flex-1 text-base px-3 py-2 border rounded-full border-dark-800"
             multiline={true}
             maxLength={500}
-            style={{ maxHeight: 100 }}
+            style={[fonts.BodyFont, {maxHeight: 37}]}
           />
 
           {/* Send button */}

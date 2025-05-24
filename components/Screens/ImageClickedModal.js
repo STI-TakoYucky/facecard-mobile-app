@@ -12,7 +12,13 @@ export default function ImageClickedModal({ isImageClicked, imageUri, setImageCl
       <View className="flex-1 bg-black/40 justify-center items-center">
           <Image
             source={{ uri: imageUri }}
-            className="w-[53rem] h-[53rem] rounded-xl mb-8"
+            className="rounded-xl mb-8"
+            style={{
+              maxWidth: 550,
+              maxHeight: 550,
+              minWidth: 550,
+              minHeight: 550
+            }}
             resizeMode="contain"
           />
       </View>

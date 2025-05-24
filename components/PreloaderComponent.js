@@ -2,6 +2,7 @@ import { View, Text, Animated, ActivityIndicator, Image, Easing  } from 'react-n
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { togglePreloader } from '../state/PreloaderSlice/PreloaderSlice';
+import { fonts } from '../utils/fonts';
 
 export default function PreloaderComponent() {
     const dispatch = useDispatch();
@@ -65,7 +66,7 @@ export default function PreloaderComponent() {
         opacity: fadeAnim,
     }} className="absolute bg-white top-0 left-0 right-0 bottom-0 justify-center items-center z-50">
         <ActivityIndicator size="large" color="#dddddd" />
-        <Text className="text-dark-800 text-xl text-center px-5 mt-5">{preloaderData?.message}</Text>
+        <Text className="text-dark-800 text-lg text-center px-5 mt-5" style={[fonts.BodyFont]}>{preloaderData?.message}</Text>
 
         <View className="absolute">
             <Animated.Image source={require('../assets/skincare-aquaflask.png')}

@@ -5,6 +5,7 @@ import { useState } from "react";
 import {DateTimePickerModal} from 'react-native-modal-datetime-picker'
 import { useDispatch } from "react-redux";
 import { togglePreloader } from "../state/PreloaderSlice/PreloaderSlice";
+import { fonts } from "../utils/fonts";
 
 export default function RegisterComponentSecondPhase({control, errors, handleSubmit, onSubmit, setSecondPhase}) {
 
@@ -13,22 +14,29 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
     <View className="relative">
     {/* firstName*/}
     <View className="mb-8 relative">
-      <Controller
-        control={control}
-        rules={{ required: "First Name is required" }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
-            placeholder="First Name"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="firstName"
-      />
+    <Controller
+      control={control}
+      rules={{
+        required: "First Name is required",
+        pattern: {
+          value: /^[A-Za-z\s]+$/,
+          message: "Only letters and spaces are allowed",
+        },
+      }}
+      render={({ field: { onChange, onBlur, value } }) => (
+        <TextInput
+          className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
+          placeholder="First Name"
+          onBlur={onBlur}
+          onChangeText={onChange}
+          value={value}
+          style={[fonts.BodyFont]}
+        />
+      )}
+      name="firstName"
+    />
       {errors.firstName && (
-        <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+        <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>
           {errors.firstName.message}
         </Text>
       )}
@@ -38,7 +46,13 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
     <View className="mb-8 relative">
       <Controller
         control={control}
-        rules={{ required: "Last Name is required" }}
+        rules={{
+          required: "Last Name is required",
+          pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Only letters and spaces are allowed",
+          },
+        }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
@@ -46,12 +60,13 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            style={[fonts.BodyFont]}
           />
         )}
         name="lastName"
       />
       {errors.lastName && (
-        <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+        <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>
           {errors.lastName.message}
         </Text>
       )}
