@@ -5,6 +5,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserLocation } from '../../state/userDataSlice/userDataSlice';
+import { fonts } from '../../utils/fonts';
 
 export default function LocationComponent() {
   const [initialLocation, setInitialLocation] = useState(null);
@@ -194,8 +195,8 @@ export default function LocationComponent() {
   return (
     <ScrollView className="p-5">
       <View className="flex gap-5">
-        <Text className="text-3xl font-bold text-dark-800">Apply your sunscreen!</Text>
-        <Text className="text-dark-800 text-base">
+        <Text className="text-3xl text-dark-800 mt-5" style={[fonts.HeaderFont]}>Apply your sunscreen!</Text>
+        <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>
           Be reminded to apply sunscreen whenever you leave your home!
         </Text>
         <Image
@@ -209,7 +210,7 @@ export default function LocationComponent() {
           onPressOut={() => setCalibrateBtnFocused(false)}
           className={`bg-dark-800 ${calibrateBtnFocused && ' bg-primary-100'} transition-all rounded-full p-3`}
         >
-          <Text className="text-white text-center text-base">
+          <Text className="text-white text-center text-base" style={[fonts.BodyFont]}>
             Calibrate Location
           </Text>
         </Pressable>

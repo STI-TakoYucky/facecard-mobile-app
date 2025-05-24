@@ -74,12 +74,12 @@ export default function LoginComponent({ setLoggedIn }) {
                 value={value}
                 keyboardType="email-address"
                 autoCapitalize="none"
-
+                style={[fonts.BodyFont]}
             />
             )}
             name="email"
         />
-        {errors.email && <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">{errors.email.message}</Text>}
+        {errors.email && <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>{errors.email.message}</Text>}
       </View>
 
       {/* Password */}
@@ -95,18 +95,19 @@ export default function LoginComponent({ setLoggedIn }) {
                 onChangeText={onChange}
                 value={value}
                 secureTextEntry
+                style={[fonts.BodyFont]}
             />
             )}
             name="password"
         />
-        {errors.password && <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">{errors.password.message}</Text>}
+        {errors.password && <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>{errors.password.message}</Text>}
       </View>
 
       <TouchableOpacity
         onPress={handleSubmit(onSubmit)}
         className="py-3 mt-2 rounded-lg bg-dark-800"
       >
-        <Text className="font-bold text-center text-white">Login</Text>
+        <Text className="text-center text-white font-bold" style={[fonts.BodyFont]}>Login</Text>
       </TouchableOpacity>
     </View>
   );

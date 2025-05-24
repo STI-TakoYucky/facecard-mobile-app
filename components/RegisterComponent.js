@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { togglePreloader } from "../state/PreloaderSlice/PreloaderSlice";
 import { signUp } from "../firebase/db";
 import Toast from "react-native-toast-message";
+import { fonts } from "../utils/fonts";
 
 
 
@@ -101,12 +102,13 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsR
                   value={value}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  style={[fonts.BodyFont]}
                 />
               )}
               name="email"
             />
             {errors.email && (
-              <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+              <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>
                 {errors.email.message}
               </Text>
             )}
@@ -131,6 +133,7 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsR
                     onChangeText={onChange}
                     value={value}
                     secureTextEntry={isPasswordVisible}
+                    style={[fonts.BodyFont]}
                     />
               )}
               name="password"
@@ -139,7 +142,7 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsR
                   <AntDesign className="absolute right-0 bottom-[-.3rem] p-5 z-50" name="eyeo" size={24} color="#2D3B75" />
               </TouchableOpacity>
             {errors.password && (
-              <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+              <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>
                 {errors.password.message}
               </Text>
             )}
@@ -162,6 +165,7 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsR
                   onChangeText={onChange}
                   value={value}
                   secureTextEntry={isConfirmPasswordVisible}
+                  style={[fonts.BodyFont]}
                 />
               )}
               name="confirmPassword"
@@ -171,7 +175,7 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsR
                   <AntDesign className="absolute right-0 bottom-[-.3rem] p-5 z-50" name="eyeo" size={24} color="#2D3B75" />
               </TouchableOpacity>
             {errors.confirmPassword && (
-              <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+              <Text className="text-red-400 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4" style={[fonts.BodyFont]}>
                 {errors.confirmPassword.message}
               </Text>
             )}
@@ -181,7 +185,7 @@ export default function RegisterComponent({isSecondPhase, setSecondPhase, setIsR
             onPress={handleSubmit(onSubmit)}
             className="bg-dark-800 py-3 rounded-lg mt-2"
           >
-            <Text className="text-white text-center font-bold">Register</Text>
+            <Text className="text-white text-center font-bold" style={[fonts.BodyFont]}>Register</Text>
           </TouchableOpacity>
 
         </>

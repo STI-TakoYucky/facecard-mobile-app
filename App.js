@@ -1,5 +1,5 @@
 
-import { SafeAreaView, TouchableWithoutFeedback, View } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import Header from './components/Header';
 import Home from './components/Tabs/HomeView'
@@ -27,8 +27,8 @@ export default function App() {
 
   useEffect(() => {
     Font.loadAsync({
-      'OpenSans-Bold': require('./assets/fonts/OpenSans-Bold.ttf'),
-      'NunitoSansVariable': require('./assets/fonts/NunitoSans-SemiBold.ttf'),
+      'BodyFont': require('./assets/fonts/OpenSans-Regular.ttf'),
+      'HeaderFont': require('./assets/fonts/Poppins-SemiBold.ttf'),
     }).then(() => setFontsLoaded(true));
   }, []);
 
@@ -51,6 +51,7 @@ function AppContent() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const preloaderFlag = useSelector((state) => state.preloader);
   const [isDrawerActive, setDrawerActive] = useState(false);
+  const [isStartingAdAlreadyFired, setStartingAdAlreadyFired] = useState(false);
 
   useEffect(() => {
     if (!userData?.uid && isLoggedIn == false) return; // only save if uid exists
@@ -58,7 +59,7 @@ function AppContent() {
     const saveTimeout = setTimeout(() => {
       dispatch(saveUserData(userData));
     }, 1000);
-
+    
     return () => clearTimeout(saveTimeout);
   }, [userData]);
 
@@ -66,7 +67,7 @@ function AppContent() {
   const renderView = () => {
     switch (activeTab) {
       case "Home":
-        return <Home></Home>
+        return <Home isStartingAdAlreadyFired={isStartingAdAlreadyFired} setStartingAdAlreadyFired={setStartingAdAlreadyFired}></Home>
 
       case "Skincare":
         return <SkincareListView></SkincareListView>
@@ -87,7 +88,7 @@ function AppContent() {
         return <Inbox></Inbox>
     
       default:
-        return <Home></Home>
+        return <Home isStartingAdAlreadyFired={isStartingAdAlreadyFired} setStartingAdAlreadyFired={setStartingAdAlreadyFired}></Home>
     }
   }
 

@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 export const fonts = StyleSheet.create({
-  openSansBold: {
-    fontFamily: 'OpenSans-Bold',
+  BodyFont: {
+    fontFamily: 'BodyFont',
   },
-  NunitoSansVariable: {
-    fontFamily: 'NunitoSansVariable',
+  HeaderFont: {
+    fontFamily: 'HeaderFont',
   },
 });

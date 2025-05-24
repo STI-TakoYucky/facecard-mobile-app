@@ -13,7 +13,7 @@ export default function AuthenticationForm({setLoggedIn}) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView className="flex-1 items-center justify-center px-6 bg-slate-100 relative">
       <View className="w-full max-w-md relative">
-        <Text className="text-3xl text-center mb-6 text-dark-800 " style={[fonts.openSansBold]}>
+        <Text className="text-3xl text-center mb-6 text-dark-800 " style={[fonts.HeaderFont]}>
           {!isSecondPhase ? "Welcome to Facecard!" : "You are almost there!"}
         </Text>
 
@@ -23,7 +23,7 @@ export default function AuthenticationForm({setLoggedIn}) {
           onPress={() => setIsRegister(!isRegister)}
           className="mt-4"
         >
-          { !isSecondPhase && <Text className="text-center text-dark-800" style={[fonts.NunitoSansVariable]}>
+          { !isSecondPhase && <Text className="text-center text-dark-800" style={[fonts.BodyFont]}>
             {isRegister
               ? 'Already have an account? Login'
               : "Don't have an account? Register"}
@@ -33,9 +33,9 @@ export default function AuthenticationForm({setLoggedIn}) {
         {
           isRegister && !isSecondPhase &&  (
             <View className="mt-10 flex gap-3">
-              <Text className="text-gray-500">Password must contain atleast one special character from !#$-_%@.</Text>
-              <Text className="text-gray-500">Password must contain atleast a letter and a number.</Text>
-              <Text className="text-gray-500">Password must not have spaces.</Text>
+              <Text className="text-gray-500" style={[fonts.BodyFont]}>Password must contain atleast one special character from !#$-_%@.</Text>
+              <Text className="text-gray-500" style={[fonts.BodyFont]}>Password must contain atleast a letter and a number.</Text>
+              <Text className="text-gray-500" style={[fonts.BodyFont]}>Password must not have spaces.</Text>
             </View>
           )
         }

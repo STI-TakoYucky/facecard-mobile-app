@@ -30,7 +30,7 @@ export default function ProductModal(props) {
           <ScrollView>
             <View>
               <Image 
-                source={require('../../assets/3d-skincare-bottle-free-png.png')}
+                source={require('../../assets/skincare-aquaflask.png')}
                 style={{width: 250, height: 300, alignSelf: 'center'}}
               />
             </View>
@@ -78,7 +78,7 @@ export default function ProductModal(props) {
                   <View style={styles.card}>
                     <View style={styles.imageContainer}>
                       <Image 
-                      source={require('../../assets/3d-skincare-bottle-free-png.png')}
+                      source={require('../../assets/skincare-aquaflask.png')}
                       style={{width: 100, height: 100, marginBottom: 10}}
                       />
                     </View>
