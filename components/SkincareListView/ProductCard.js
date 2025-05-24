@@ -61,7 +61,7 @@ export default function ProductCard({ products }) {
                   />
                 </TouchableOpacity>
                 <Image 
-                  source={require('../../assets/3d-skincare-bottle-free-png.png')} 
+                  source={require('../../assets/skincare-aquaflask.png')} 
                   style={styles.image} 
                   resizeMode="cover" 
                 />
