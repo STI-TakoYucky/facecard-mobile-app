@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initDates } from "../../state/markedDatesSlice/markedDatesSlice";
 import { initRoutineSchedules } from "../../state/routineSchedulesSlice/routineSchedulesSlice";
 import { fonts } from "../../utils/fonts";
+import { setStreak } from "../../state/userDataSlice/userDataSlice";
 
 export default function Home() {
 
@@ -25,6 +26,36 @@ export default function Home() {
     dispatch(initDates(userData.markedDates))
     dispatch(initRoutineSchedules(userData.routineSchedules))
   }, [])
+
+  useEffect(() => {
+
+    function getStreak() {
+    let dates = Object.keys(markedDates);
+    if (dates.length === 0) return 0;
+
+    let sortedDate = dates.sort().reverse();
+    let streak = 1; // At least one date exists
+
+    for (let i = 0; i < sortedDate.length - 1; i++) {
+      let date1 = new Date(sortedDate[i]);
+      let date2 = new Date(sortedDate[i + 1]);
+
+      const differenceInDays = (date1 - date2) / (1000 * 60 * 60 * 24);
+
+      if (differenceInDays === 1) {
+        streak++;
+      } else {
+        break; // Streak broken
+      }
+    }
+
+    dispatch(setStreak(streak))
+  }
+
+  getStreak()
+
+  }, [markedDates])
+
 
   const HandleDayClick = (date, isMarked ) => {
     if (isMarked) {
@@ -151,6 +182,7 @@ export default function Home() {
           }
       </View>
 
+      <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
       </View>
     </ScrollView>
   );

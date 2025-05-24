@@ -129,11 +129,18 @@ export default function Inbox() {
               />
               <View className="flex justify-center">
                 <Text className="mb-1 text-dark-800">{getDisplayName(doc)}</Text>
-                <Text className="text-gray-400" numberOfLines={1}>
+                {!latestMsg?.isImage ? 
+                  <Text className="text-gray-400" numberOfLines={1}>
                   {latestMsg
                     ? `${latestMsg.senderId === userData.uid ? "You:" : doc.firstName + ":"} ${latestMsg.text}`
                     : "No messages yet"}
+                </Text> :
+                  <Text className="text-gray-400" numberOfLines={1}>
+                  {latestMsg
+                    ? `${latestMsg.senderId === userData.uid ? "You:" : doc.firstName + ":"} Sent a photo.`
+                    : "No messages yet"}
                 </Text>
+                }
               </View>
             </View>
           </TouchableOpacity>

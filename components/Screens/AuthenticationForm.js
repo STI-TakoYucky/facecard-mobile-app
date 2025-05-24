@@ -48,7 +48,7 @@ export default function AuthenticationForm({setLoggedIn}) {
         }}
         ></Image>
 
-        <Image source={require('../../assets/vecteezy_3d-skincare-bottle_18778927.png')}
+        <Image source={require('../../assets/skincare-square-bottle.png')}
         className="absolute top-[-17rem] right-[-2.8rem]"
         style={{
             width: 140,

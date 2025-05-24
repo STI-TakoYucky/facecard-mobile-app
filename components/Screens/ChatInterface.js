@@ -1,41 +1,25 @@
-import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, Modal, TouchableOpacity, Image, TextInput, ScrollView, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  updateDoc,
-  doc,
-  arrayUnion,
-  getDoc,
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, arrayUnion, getDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
+import * as ImagePicker from 'expo-image-picker';
+import ImagePreviewModal from "./ImagePreviewModal";
+import ImageClickedModal from "./ImageClickedModal";
 
-export default function ChatInterface({
-  selectedPerson,
-  isChatActive,
-  setChatActive,
-  userData,
-}) {
+export default function ChatInterface({ selectedPerson, isChatActive, setChatActive, userData,}) {
   const data = selectedPerson;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [selectedImageBase64, setSelectedImageBase64] = useState(null);
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
 
+  const [isImageClicked, setImageClicked] = useState(false)
   const participants = [data.uid, userData.uid].sort();
   const participantsID = participants.join("_");
 
-  // Load messages on mount or when participantsID changes
   useEffect(() => {
     const fetchMessages = async () => {
       const threadsRef = collection(db, "threads");
@@ -49,7 +33,7 @@ export default function ChatInterface({
         const messagesData = snapshot.docs[0].data().messages || [];
         setMessages(messagesData);
       } else {
-        setMessages([]); // no messages yet
+        setMessages([]);
       }
     };
 
@@ -58,17 +42,10 @@ export default function ChatInterface({
     }
   }, [participantsID, isChatActive]);
 
-  const onSendMessage = async () => {
-    try {
-      if (message.trim() === "") return;
 
-      const msgData = {
-        senderId: userData.uid,
-        text: message.trim(),
-        timestamp: Date.now(),
-      };
-
-      const threadsRef = collection(db, "threads");
+    //=== PUSH MESSAGES TO DATABASE ===///
+    const pushToDB = async (msgData) => {
+       const threadsRef = collection(db, "threads");
       const q = query(
         threadsRef,
         where("participantsID", "==", participantsID)
@@ -105,14 +82,83 @@ export default function ChatInterface({
       // Update UI immediately (optional: you can fetch again from Firestore)
       setMessages((prev) => [...prev, msgData]);
       setMessage("");
+    }
+
+
+  //=== SEND TEXT MESSAGES ===//
+  const onSendMessage = async () => {
+    try {
+      if (message.trim() === "") return;
+
+      const msgData = {
+        senderId: userData.uid,
+        text: message.trim(),
+        isImage: false,
+        timestamp: Date.now(),
+      };
+
+      pushToDB(msgData)
+     
     } catch (error) {
       console.log(error);
     }
   };
 
-  const onAddPhoto = () => {
-    console.log("Add photo pressed");
-  };
+ 
+//=== SEND IMAGES ===//
+ const pickImage = async () => {
+   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+ 
+   if (!permissionResult.granted) {
+     alert('Permission to access media library is required!');
+     return;
+   }
+ 
+   const result = await ImagePicker.launchImageLibraryAsync({
+     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+     base64: true,
+     quality: 1,
+   });
+ 
+   if (!result.canceled) {
+     const { uri, base64 } = result.assets[0];
+      setSelectedImageUri(uri);
+      setSelectedImageBase64(base64);
+      setPreviewVisible(true); // Show preview modal
+   }
+ };
+ 
+ const uploadToImgBB = async (base64) => {
+   try {
+     const API_KEY = "3b877b2fba08dfee313f6e74e4636fa9"; 
+     const formData = new FormData();
+     formData.append('image', base64);
+ 
+     const response = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+       method: 'POST',
+       body: formData,
+     });
+ 
+     const data = await response.json();
+     if (data.success) {
+       console.log("✅ Uploaded to ImgBB:", data.data.url);
+       const msgData = {
+        senderId: userData.uid,
+        text: data.data.url,
+        isImage: true,
+        timestamp: Date.now(),
+      };
+
+      pushToDB(msgData)
+     } else {
+       console.log('❌ Upload failed:', data);
+     }
+   } catch (error) {
+     console.error('Upload error:', error);
+   }
+ };
+ 
+  
 
   return (
     <Modal
@@ -120,6 +166,25 @@ export default function ChatInterface({
       animationType="slide"
       onRequestClose={() => setChatActive(false)}
     >
+
+    <ImagePreviewModal
+      visible={previewVisible}
+      imageUri={selectedImageUri}
+      onCancel={() => setPreviewVisible(false)}
+      onConfirm={() => {
+        uploadToImgBB(selectedImageBase64);
+        setPreviewVisible(false);
+      }}
+    />
+
+    <ImageClickedModal
+      isImageClicked={isImageClicked}
+      imageUri={selectedImageUri}
+      setImageClicked={setImageClicked}
+    >
+
+    </ImageClickedModal>
+
       {/* Header */}
       <View
         className="bg-primary-100 px-5 py-4 max-h-[80px] gap-5 flex-row justify-start items-center"
@@ -196,7 +261,20 @@ export default function ChatInterface({
                       borderBottomRightRadius: 10,
                     }}
                   >
-                    <Text className="text-dark-800">{mess.text}</Text>
+                    { mess.isImage == false ? <Text className="text-dark-800">{mess.text}</Text>: 
+                    <Pressable onPress={() => {setImageClicked(true); setSelectedImageUri(mess.text)}}>
+                      <Image
+                        source={{
+                          uri: mess.text
+                        }}
+                        style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: 2
+                      }}
+                      />
+                    </Pressable>
+                    }
                   </View>
                 </View>
               );
@@ -217,7 +295,20 @@ export default function ChatInterface({
                   borderBottomRightRadius: 0, // pointy corner
                 }}
               >
-                <Text className="text-white">{mess.text}</Text>
+                { mess.isImage == false ? <Text className="text-white">{mess.text}</Text>: 
+                <Pressable onPress={() => {setImageClicked(true); setSelectedImageUri(mess.text)}}> 
+                  <Image
+                    source={{
+                      uri: mess.text
+                    }}
+                    style={{
+                      width: 140,
+                      height: 140,
+                      borderRadius: 2
+                    }}
+                  />
+                </Pressable>
+                  }
               </View>
               <View>
                 <Image
@@ -246,7 +337,7 @@ export default function ChatInterface({
           style={{ elevation: 5 }}
         >
           {/* Plus button */}
-          <TouchableOpacity onPress={onAddPhoto} className="mr-3">
+          <TouchableOpacity onPress={pickImage} className="mr-3">
             <Ionicons name="add-circle-outline" size={30} color="#2D3B75" />
           </TouchableOpacity>
 

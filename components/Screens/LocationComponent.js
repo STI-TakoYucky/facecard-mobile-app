@@ -134,10 +134,15 @@ export default function LocationComponent() {
   }, []);
 
   useEffect(() => {
-    if (userData?.location?.coordinates) {
+    try {
+      if (userData?.location?.coordinates) {
       setInitialLocation(userData.location.coordinates);
     }
-  }, [userData.location.coordinates]);
+    } catch (error) {
+      
+    }
+
+  }, [userData.location?.coordinates]);
 
   useEffect(() => {
     if (!initialLocation) return;

@@ -2,7 +2,7 @@ import { View, Text, Pressable, Modal } from 'react-native'
 import React, {useReducer, useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addDate } from '../../state/markedDatesSlice/markedDatesSlice';
-import { updateMainMarkedDates } from '../../state/userDataSlice/userDataSlice';
+import { setStreak, updateMainMarkedDates } from '../../state/userDataSlice/userDataSlice';
 import Moisturizer from '../../assets/Moisturizer_bottle.svg';
 import Cleanser from '../../assets/Cleanser_bottle.svg';
 import Exfoliate from '../../assets/Exfoliator_bottle.svg';
