@@ -94,7 +94,7 @@ const handleFavorite = (id) => {
       <View
         className="bg-primary-100 px-5 py-4 max-h-[80px] gap-5 flex-row justify-start items-center" style={{ elevation: 5 }}>
         <TouchableOpacity onPress={() => setAllSavedProducts(false)}>
-          <Ionicons name="caret-back" size={20} color="#2D3B75" />
+          <Ionicons name="arrow-back-sharp" size={22} color="#2D3B75" />
         </TouchableOpacity>
       </View>
 

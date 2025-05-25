@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 
 import SearchBar from '../SkincareListView/SearchBar';
 import ProductCard from '../SkincareListView/ProductCard';
-import SkincareAds from '../SkincareListView/SkincareAds';
+import SkincareAds from '../SkincareAds';
 
 import { db } from '../../firebase/firebase';
 import { collection, getDocs } from "firebase/firestore";
@@ -62,7 +62,7 @@ export default function SkincareListView() {
     };
 
   return (
-    <ScrollView className="p-5">
+    <ScrollView className="p-5" showsVerticalScrollIndicator={false}>
         <SearchBar 
           search={searchText}
           setSearch={setSearchText}

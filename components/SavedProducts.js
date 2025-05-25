@@ -126,8 +126,8 @@ export default function SavedProducts() {
                     >
                       <AntDesign
                         name={favorites.includes(item.id) ? "heart" : "hearto"}
-                        size={20}
-                        color={favorites.includes(item.id) ? "red" : "gray"}
+                        size={22}
+                        color={favorites.includes(item.id) ? "#f87171" : "gray"}
                       />
                     </TouchableOpacity>
                     <Image

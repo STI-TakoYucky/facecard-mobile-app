@@ -11,6 +11,7 @@ import { fonts } from "../../utils/fonts";
 import { setStreak } from "../../state/userDataSlice/userDataSlice";
 import StartingAd from "../StartingAd";
 import SavedProducts from "../SavedProducts";
+import SkincareAds from "../SkincareAds";
 
 export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFired }) {
 
@@ -21,11 +22,15 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
   const [isChecklistActive, setChecklistActive] = useState(false);
   const [isEditChecklistActive, setEditChecklist] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
+  const [isStartingAdActive, setStartingAdActive] = useState(false)
 
   useEffect(() => {
     //initialize dates from the database
     dispatch(initDates(userData.markedDates))
     dispatch(initRoutineSchedules(userData.routineSchedules))
+    setTimeout(() => {
+      setStartingAdActive(true)
+    }, 6000);
 
   }, [])
 
@@ -87,7 +92,7 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
 
   return (
     <>
-    {!isStartingAdAlreadyFired && <StartingAd setStartingAdAlreadyFired={setStartingAdAlreadyFired}></StartingAd>}
+    {!isStartingAdAlreadyFired && isStartingAdActive && <StartingAd setStartingAdAlreadyFired={setStartingAdAlreadyFired}></StartingAd>}
     <ScrollView className={`p-5 text-dark-900`} showsVerticalScrollIndicator={false}>
       <View className="pb-[8rem]">
       <SkincareChecklist 
@@ -187,6 +192,8 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
             })
           }
       </View>
+
+      <SkincareAds></SkincareAds>
 
       <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
 

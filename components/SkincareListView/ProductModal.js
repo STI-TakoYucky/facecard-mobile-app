@@ -21,7 +21,7 @@ export default function ProductModal(props) {
               <Ionicons 
                 name="arrow-back-sharp" 
                 size={22} 
-                color="black"
+                color="#2D3B75"
                 style={{margin: 13}} />
             </TouchableOpacity>
           </View>

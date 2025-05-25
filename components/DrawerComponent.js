@@ -55,16 +55,19 @@ const renderDermaChat = () => {
     }
 }
 
-  const handleDermaChatOnPress = () => {
-    if( !userData.isPremiumAcc && isUserUser) {
-      setPremiumSubProcess(true)
-    } else if(userData.isPremiumAcc == true && isUserUser) {
-      setActiveTab("Chat")
-    } else if(isUserDerma) {
-      setActiveTab("Chat")
-    }
-    slideOut()
+const handleDermaChatOnPress = () => {
+  if (!userData.isPremiumAcc && isUserUser) {
+    // Just open the SubscriptionProcess and keep the drawer open
+    setPremiumSubProcess(true);
+  } else if (userData.isPremiumAcc === true && isUserUser) {
+    setActiveTab("Chat");
+    slideOut();
+  } else if (isUserDerma) {
+    setActiveTab("Chat");
+    slideOut();
   }
+};
+
 
 
   return (
