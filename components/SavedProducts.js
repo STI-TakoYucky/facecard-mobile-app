@@ -131,7 +131,7 @@ export default function SavedProducts() {
                       />
                     </TouchableOpacity>
                     <Image
-                      source={require('../assets/skincare-aquaflask.png')}
+                      source={{uri: item.image}}
                       style={styles.image}
                       resizeMode="cover"
                     />

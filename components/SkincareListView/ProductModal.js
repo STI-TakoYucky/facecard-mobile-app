@@ -1,12 +1,24 @@
-import React, { useState } from "react";
-import { StyleSheet, Modal, View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React from "react";
+import { StyleSheet, Modal, View, Text, Image, TouchableOpacity, ScrollView, Pressable } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
-
-import ProductCard from "./ProductCard";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { fonts } from "../../utils/fonts";
 
 export default function ProductModal(props) {
+
+  const recommendedProducts = props.products
+  ? props.products.filter(
+      p =>
+        p.brand === props.brand &&
+        p.id &&
+        props.product?.id &&
+        p.id !== props.product?.id
+    )
+  : [];
+
 
   return (
       <Modal 
@@ -30,7 +42,7 @@ export default function ProductModal(props) {
           <ScrollView>
             <View>
               <Image 
-                source={require('../../assets/skincare-aquaflask.png')}
+                source={props.productImage ? { uri: props.productImage } : require('../../assets/skincare-aquaflask.png')} 
                 style={{width: 250, height: 300, alignSelf: 'center'}}
               />
             </View>
@@ -40,62 +52,72 @@ export default function ProductModal(props) {
                 <View style={styles.productInfo}>
                   
                   {/* PRODUCT CATEGORY */}
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={[styles.category, props.color]}>{props.category}</Text>
-                    
+                    {props.approve === true && (
+                      <MaterialIcons name="verified" size={24} color="#2D3B75" />
+                    )}
                   </View>
                 
                   {/* PRODUCT NAME */}
-                  <Text className="my-6 text-2xl font-bold">{props.name}</Text>
+                  <Text className="my-6 text-2xl text-dark-800" style={[fonts.HeaderFont]}>{props.name}</Text>
 
                   {/* PRODUCT BRANDS, GRAM, SKINTYPE */}
-                  <Text style={{fontSize: 18}}>{props.brand}</Text>
+                  <Text className="text-dark-800 text-lg" style={[fonts.HeaderFont]}>{props.brand}</Text>
                   <View style={{flexDirection: 'row', marginTop: 15}}>
-                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>
-                      {props.size}ml
+                    <Text className="text-dark-800" style={{width: 'auto', marginRight: 15, fontSize: 15}}>
+                      {props.size}
                     </Text>
                     <Feather 
                     name="droplet" 
                     size={24} 
-                    color="black" 
+                    color="#2D3B75" 
                     />  
                   </View>
                   <View style={{flexDirection: 'row', marginTop: 5}}>
-                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>{props.skinType}</Text>
+                    <Text className="text-dark-800" style={[fonts.BodyFont, {width: 'auto', marginRight: 15, fontSize: 15}]}>{props.skinType}</Text>
                     <Feather 
                     name="smile" 
                     size={24} 
-                    color="black" 
+                    color="#2D3B75" 
                     />  
                   </View>
                 
                   {/* RECOMMENDATION */}
-                  <Text style={{marginVertical: 30, fontSize: 20, fontWeight: 'bold'}}>
+                  <Text className="text-dark-800" style={[fonts.HeaderFont, {marginVertical: 30, fontSize: 20}]}>
                     More From {props.brand}
                   </Text>
 
-                <ScrollView horizontal={true} showsVerticalScrollIndicator ={false}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator ={false} style={{paddingBottom: 50}}>
+                  {recommendedProducts.map((item) => (
+                    <Pressable key={item.id} onPress={() => handleOpenModal(item)}>
                   <View style={styles.card}>
-                    <View style={styles.imageContainer}>
-                      <Image 
-                      source={require('../../assets/skincare-aquaflask.png')}
-                      style={{width: 100, height: 100, marginBottom: 10}}
+                    <TouchableOpacity
+                      style={styles.heartIcon}
+                      onPress={() => handleFavorite(item.id)}
+                    >
+                      <AntDesign
+                        name={props.favorites?.includes(item.id) ? "heart" : "hearto"}
+                        size={22}
+                        color={props.favorites?.includes(item.id) ? "#f87171" : "gray"}
                       />
-                    </View>
-                    <View style={styles.infoContainer}>
-                      <Text style={{fontSize: 16, fontWeight: 'bold', padding: 1, marginVertical: 2}}>{props.name}</Text>
-                      <Text style={{fontSize: 12, padding: 1}}>{props.brand}</Text>
-                      <Text style={{fontSize: 12, padding: 1}}>{props.size}ml</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.card}>
-                    <Image 
-                      source={require('../../assets/celeteque_sunscreen.png')}
-                      style={{width: 100, height: 100, marginBottom: 10}}
+                    </TouchableOpacity>
+                    <Image
+                      source={{uri: item.image}}
+                      style={styles.image}
+                      resizeMode="cover"
                     />
-                    <Text>Hello</Text>
+                    <View style={styles.infoContainer}>
+                      <Text className="text-dark-800" style={[styles.name, fonts.HeaderFont]}>
+                        {item.productName}
+                      </Text>
+                      <Text style={[styles.brand, fonts.BodyFont]}>{item.brand}</Text>
+                      <Text style={[styles.size, fonts.BodyFont]}>{item.size}ml</Text>
+                      <Text style={[styles.skinType, fonts.BodyFont]}>{item.skinType}</Text>
+                    </View>
                   </View>
+                </Pressable>
+                  ))}
                 </ScrollView>
               </View>
             </View>
@@ -121,8 +143,8 @@ const styles = StyleSheet.create({
   },
   productInfoView:{
     flex: 1,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     backgroundColor: '#fff',
     minHeight: 500,
 
@@ -140,29 +162,66 @@ const styles = StyleSheet.create({
   category:{
     fontSize: 14,
     fontWeight: 'bold',
-    width: '30%', 
-    borderRadius: 12,
+    color: "#2D3B75",
+    paddingBlock: 10,
+    borderRadius: 5,
     textAlign: 'center',
     paddingVertical: 8,
     paddingHorizontal: 7,
   },
-  card:{
-    backgroundColor: '#eee',
+  card: {
+    position: 'relative',
     flexDirection: 'row',
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
     width: 300,
-    height: 'auto',
-    marginHorizontal: 17,
-    borderRadius: 10,
+    height: 120,
+    padding: 10,
+    marginHorizontal: 10,
+    marginVertical: 6,
+    alignItems: 'center',
 
-    elevation: 13,
-
+    // Shadows
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
-    shadowRadius: 6,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  infoContainer:{
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginRight: 12,
+  },
+  infoContainer: {
     flex: 1,
-    justifyContent: 'center'
-  }
+    justifyContent: 'space-evenly',
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  brand: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 2,
+  },
+  size: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 8,
+  },
+  skinType: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 8,
+  },
+  heartIcon: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    zIndex: 1,
+  },
 });

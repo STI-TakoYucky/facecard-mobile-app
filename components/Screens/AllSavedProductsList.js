@@ -124,7 +124,7 @@ const handleFavorite = (id) => {
                         />
                         </TouchableOpacity>
                         <Image 
-                        source={require('../../assets/skincare-aquaflask.png')} 
+                        source={{uri: item.image}}
                         style={styles.image} 
                         resizeMode="cover" 
                         />

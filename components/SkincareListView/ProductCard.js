@@ -5,9 +5,9 @@ import ProductModal from "./ProductModal";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch, useSelector } from "react-redux";
 import { setSavedProducts } from "../../state/userDataSlice/userDataSlice";
-import { fonts } from "../../utils/fonts"; // <-- import your custom fonts
+import { fonts } from "../../utils/fonts"; 
 
-export default function ProductCard({ products }) {
+export default function ProductCard({ products, onProductPress }) {
 
   const [modalVisible, isModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -37,13 +37,22 @@ export default function ProductCard({ products }) {
 
   const colorPicker = (category) => {
     switch (category) {
-      case "Sunscreen": return { backgroundColor: "#FCF079" };
-      case "Moisturizer": return { backgroundColor: "#CFF2FA" };
-      case "Eye Cream": return { backgroundColor: "#D5CFFF" };
-      case "Toner": return { backgroundColor: "#CFFEAE" };
-      case "Facial Cleanser": return { backgroundColor: "#FCD7F6" };
-      case "Retinol": return { backgroundColor: "#FFC9BA" };
-      default: return { backgroundColor: "#fff" };
+      case "Sunscreen": 
+        return {backgroundColor: "#FCF079"};
+      case "Moisturizer":
+        return {backgroundColor: "#CFF2FA"};
+      case "Eye Cream":
+        return {backgroundColor: "#D5CFFF"};
+      case "Toner": 
+        return {backgroundColor: "#CFFEAE"};
+      case "Facial Cleanser":
+        return {backgroundColor: "#FCD7F6"};
+      case "Retinol":
+        return {backgroundColor: "#FFC9BA"};
+      case "Serum":
+        return {backgroundColor: "#FC53C1"};
+      default: 
+        return { backgroundColor: "#fff" };
     }
   };
 
@@ -83,7 +92,7 @@ export default function ProductCard({ products }) {
                   />
                 </TouchableOpacity>
                 <Image
-                  source={require('../../assets/skincare-aquaflask.png')}
+                  source={{uri: item.image}}
                   style={{ width: 100, height: 100, borderRadius: 10, marginRight: 12 }}
                   resizeMode="cover"
                 />
@@ -111,13 +120,18 @@ export default function ProductCard({ products }) {
         visible={modalVisible}
         onClose={() => isModalVisible(false)}
         product={selectedProduct}
+        products={products}
         name={selectedProduct?.productName}
         category={selectedProduct?.category}
         color={colorPicker(selectedProduct?.category)}
         brand={selectedProduct?.brand}
         size={selectedProduct?.size}
         skinType={selectedProduct?.skinType}
-        productImage={selectedProduct?.productImage}
+        productImage={selectedProduct?.image}
+        approve={selectedProduct?.approve}
+        favorites={favorites}
+        handleOpenModal={handleOpenModal}
+        handleFavorite={handleFavorite}
       />
     </View>
   );

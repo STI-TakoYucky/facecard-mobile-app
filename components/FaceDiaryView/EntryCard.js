@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
+import { fonts } from "../../utils/fonts";
 
-export default function EntryCard({ entry }) {
+export default function EntryCard({ entry, index, onEdit, onDelete }) {
 
   const [editEntry, setEdit] = useState(false);
 
   return (
     <View style={styles.wrapper}>
-      <Text className="mt-5 text-xl font-bold">{entry.date}</Text>
+      <Text className="mt-5 text-xl text-dark-800" style={[fonts.HeaderFont]}>{entry.date}</Text>
       <View style={styles.card}>
         {entry.imageUri && (
           <Image 
@@ -19,8 +20,8 @@ export default function EntryCard({ entry }) {
         )}
 
         <View style={styles.textContainer}>
-          <Text style={styles.mainText}>{entry.title}</Text>
-          <Text style={styles.subText}>{entry.mainText}</Text>
+          <Text className="text-dark-800" style={[fonts.HeaderFont, styles.mainText]}>{entry.title}</Text>
+          <Text className="text-dark-800" style={[fonts.BodyFont, styles.subText]}>{entry.mainText}</Text>
         </View>
 
         <TouchableOpacity style={styles.iconButton}>
@@ -34,16 +35,21 @@ export default function EntryCard({ entry }) {
         {editEntry && (
           <Animated.View>
             <View style={styles.popupMenu}>
-              <TouchableOpacity>
-                <Text style={styles.popupText}>Edit</Text>
+              <TouchableOpacity onPress={() => {
+                setEdit(false); // hide the menu
+                onEdit(entry, index); // call edit
+              }}>
+                <Text className="text-dark-800" style={styles.popupText}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.popupText}>Delete</Text>
+              <TouchableOpacity onPress={() => {
+                setEdit(false); // hide the menu
+                onDelete(index); // call delete
+              }}>
+                <Text className="text-dark-800" style={styles.popupText}>Delete</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
         )}
-
       </View>
     </View>
   );
@@ -76,12 +82,10 @@ const styles = StyleSheet.create({
     paddingRight: 30 // space for the icon
   },
   mainText: {
-    fontWeight: 'bold',
     fontSize: 16
   },
   subText: {
     fontSize: 14,
-    color: '#333'
   },
   iconButton: {
     position: 'absolute',
@@ -92,8 +96,8 @@ const styles = StyleSheet.create({
   },
   popupMenu: {
     position: 'absolute',
-    top: 35,
-    right: 10,
+    top: 15,
+    right: 15,
     backgroundColor: '#fff',
     borderRadius: 6,
     padding: 6,
