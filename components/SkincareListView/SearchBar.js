@@ -12,6 +12,10 @@ export default function SearchBar({ search, onSearch, onFilterSelect, selectedFi
   const handleMenu = (filter) => {
     isMenuVisible(false);
     onFilterSelect?.(filter); // optional callback to parent
+
+    if (filter === "Approved") {
+    onSearch?.(); // trigger search callback immediately
+  }
   };
 
   return (
