@@ -10,6 +10,7 @@ import { updateProfilePicture } from '../../state/userDataSlice/userDataSlice';
 import Entypo from '@expo/vector-icons/Entypo';
 import { fonts } from '../../utils/fonts';
 import SavedProducts from '../SavedProducts';
+import SkincareAds from '../SkincareAds';
 
 export default function Profile() {
 
@@ -104,7 +105,8 @@ const uploadToImgBB = async (base64) => {
       </View>
 
       <SavedProducts></SavedProducts>
-
+      <SkincareAds></SkincareAds>
+      <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
     </ScrollView>
   )
 }

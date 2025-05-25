@@ -5,7 +5,8 @@ import { fonts } from '../utils/fonts'
 export default function StreaksComponent({userDataStreak}) {
   return (
     <View className="items-center justify-center" style={{
-      marginBlock: 70
+      marginBottom: 30,
+      marginTop: 60
     }}>
         <View className=" w-[7rem] h-[7rem] rounded-full bg-dark-800 flex items-center justify-center">
             <Text className=" text-white text-[3rem] mt-2" style={[fonts.HeaderFont]}>{userDataStreak}</Text>    

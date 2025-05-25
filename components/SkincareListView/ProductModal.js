@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { fonts } from "../../utils/fonts";
 
 export default function ProductModal(props) {
 
@@ -32,7 +33,7 @@ export default function ProductModal(props) {
               <Ionicons 
                 name="arrow-back-sharp" 
                 size={22} 
-                color="black"
+                color="#2D3B75"
                 style={{margin: 13}} />
             </TouchableOpacity>
           </View>
@@ -54,69 +55,68 @@ export default function ProductModal(props) {
                   <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={[styles.category, props.color]}>{props.category}</Text>
                     {props.approve === true && (
-                      <MaterialIcons name="verified" size={24} color="lightpink" />
+                      <MaterialIcons name="verified" size={24} color="#2D3B75" />
                     )}
                   </View>
                 
                   {/* PRODUCT NAME */}
-                  <Text className="my-6 text-2xl font-bold">{props.name}</Text>
+                  <Text className="my-6 text-2xl text-dark-800" style={[fonts.HeaderFont]}>{props.name}</Text>
 
                   {/* PRODUCT BRANDS, GRAM, SKINTYPE */}
-                  <Text style={{fontSize: 18}}>{props.brand}</Text>
+                  <Text className="text-dark-800 text-lg" style={[fonts.HeaderFont]}>{props.brand}</Text>
                   <View style={{flexDirection: 'row', marginTop: 15}}>
-                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>
+                    <Text className="text-dark-800" style={{width: 'auto', marginRight: 15, fontSize: 15}}>
                       {props.size}
                     </Text>
                     <Feather 
                     name="droplet" 
                     size={24} 
-                    color="black" 
+                    color="#2D3B75" 
                     />  
                   </View>
                   <View style={{flexDirection: 'row', marginTop: 5}}>
-                    <Text style={{width: 'auto', marginRight: 15, fontSize: 15}}>{props.skinType}</Text>
+                    <Text className="text-dark-800" style={[fonts.BodyFont, {width: 'auto', marginRight: 15, fontSize: 15}]}>{props.skinType}</Text>
                     <Feather 
                     name="smile" 
                     size={24} 
-                    color="black" 
+                    color="#2D3B75" 
                     />  
                   </View>
                 
                   {/* RECOMMENDATION */}
-                  <Text style={{marginVertical: 30, fontSize: 20, fontWeight: 'bold'}}>
+                  <Text className="text-dark-800" style={[fonts.HeaderFont, {marginVertical: 30, fontSize: 20}]}>
                     More From {props.brand}
                   </Text>
 
-                <ScrollView horizontal={true} showsVerticalScrollIndicator ={false}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator ={false} style={{paddingBottom: 50}}>
                   {recommendedProducts.map((item) => (
-                    <Pressable key={item.id} onPress={() => props.handleOpenModal(item)}>
-                      <View style={styles.card}>
-                        <TouchableOpacity
-                          style={styles.heartIcon}
-                          onPress={(e) => {
-                            e.stopPropagation();
-                            props.handleFavorite(item.id);
-                          }}
-                        > 
-                        <AntDesign 
-                          name={props.favorites?.includes(item.id) ? "heart" : "hearto"} 
-                          size={15} 
-                          color={props.favorites?.includes(item.id) ? "red" : "gray"} 
-                        />
-                        </TouchableOpacity>
-                        <Image
-                          source={item.productImage ? { uri: item.productImage } : require('../../assets/skincare-aquaflask.png')}
-                          style={styles.image}
-                          resizeMode="contain"
-                        />
-                        <View style={styles.infoContainer}>
-                          <Text style={styles.name}>{item.productName}</Text>
-                          <Text style={styles.brand}>{item.brand}</Text>
-                          <Text style={styles.size}>{item.size}</Text>
-                          <Text style={styles.skinType}>{item.skinType}</Text>
-                        </View>
-                      </View>
-                    </Pressable>
+                    <Pressable key={item.id} onPress={() => handleOpenModal(item)}>
+                  <View style={styles.card}>
+                    <TouchableOpacity
+                      style={styles.heartIcon}
+                      onPress={() => handleFavorite(item.id)}
+                    >
+                      <AntDesign
+                        name={props.favorites?.includes(item.id) ? "heart" : "hearto"}
+                        size={22}
+                        color={props.favorites?.includes(item.id) ? "#f87171" : "gray"}
+                      />
+                    </TouchableOpacity>
+                    <Image
+                      source={{uri: item.image}}
+                      style={styles.image}
+                      resizeMode="cover"
+                    />
+                    <View style={styles.infoContainer}>
+                      <Text className="text-dark-800" style={[styles.name, fonts.HeaderFont]}>
+                        {item.productName}
+                      </Text>
+                      <Text style={[styles.brand, fonts.BodyFont]}>{item.brand}</Text>
+                      <Text style={[styles.size, fonts.BodyFont]}>{item.size}ml</Text>
+                      <Text style={[styles.skinType, fonts.BodyFont]}>{item.skinType}</Text>
+                    </View>
+                  </View>
+                </Pressable>
                   ))}
                 </ScrollView>
               </View>
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
   },
   productInfoView:{
     flex: 1,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     backgroundColor: '#fff',
     minHeight: 500,
 
@@ -162,8 +162,9 @@ const styles = StyleSheet.create({
   category:{
     fontSize: 14,
     fontWeight: 'bold',
-    width: '30%', 
-    borderRadius: 12,
+    color: "#2D3B75",
+    paddingBlock: 10,
+    borderRadius: 5,
     textAlign: 'center',
     paddingVertical: 8,
     paddingHorizontal: 7,

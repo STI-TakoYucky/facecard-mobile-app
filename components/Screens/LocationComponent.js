@@ -44,7 +44,7 @@ export default function LocationComponent() {
       });
     };
 
-  const LOCATION_RADIUS_METERS = 2;
+  const LOCATION_RADIUS_METERS = 10;
 
   const getDistanceInMeters = (coord1, coord2) => {
     const toRad = (value) => (value * Math.PI) / 180;

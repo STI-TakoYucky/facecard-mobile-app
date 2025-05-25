@@ -11,6 +11,7 @@ import { fonts } from "../../utils/fonts";
 import { setStreak } from "../../state/userDataSlice/userDataSlice";
 import StartingAd from "../StartingAd";
 import SavedProducts from "../SavedProducts";
+import SkincareAds from "../SkincareAds";
 
 export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFired }) {
 
@@ -21,11 +22,15 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
   const [isChecklistActive, setChecklistActive] = useState(false);
   const [isEditChecklistActive, setEditChecklist] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
+  const [isStartingAdActive, setStartingAdActive] = useState(false)
 
   useEffect(() => {
     //initialize dates from the database
     dispatch(initDates(userData.markedDates))
     dispatch(initRoutineSchedules(userData.routineSchedules))
+    setTimeout(() => {
+      setStartingAdActive(true)
+    }, 6000);
 
   }, [])
 
@@ -87,7 +92,7 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
 
   return (
     <>
-    {!isStartingAdAlreadyFired && <StartingAd setStartingAdAlreadyFired={setStartingAdAlreadyFired}></StartingAd>}
+    {!isStartingAdAlreadyFired && isStartingAdActive && <StartingAd setStartingAdAlreadyFired={setStartingAdAlreadyFired}></StartingAd>}
     <ScrollView className={`p-5 text-dark-900`} showsVerticalScrollIndicator={false}>
       <View className="pb-[8rem]">
       <SkincareChecklist 
@@ -188,9 +193,33 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
           }
       </View>
 
+      <SkincareAds></SkincareAds>
+
       <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
 
       <SavedProducts></SavedProducts>
+
+      <View className="mt-10">
+        <Text className="text-3xl text-dark-800  mb-5" style={fonts.HeaderFont}>
+          Skincare Routine Guide
+        </Text>
+
+        <Text className="text-base text-dark-800 mb-6" style={fonts.BodyFont}>
+          1. Cleanse your face with a gentle cleanser to remove dirt and oil.
+        </Text>
+        <Text className="text-base text-dark-800 mb-6" style={fonts.BodyFont}>
+          2. Apply toner to refresh and balance your skin.
+        </Text>
+        <Text className="text-base text-dark-800 mb-6" style={fonts.BodyFont}>
+          3. Use a serum that targets your specific skin concerns.
+        </Text>
+        <Text className="text-base text-dark-800 mb-6" style={fonts.BodyFont}>
+          4. Moisturize to keep your skin hydrated and smooth.
+        </Text>
+        <Text className="text-base text-dark-800 mb-6" style={fonts.BodyFont}>
+          5. Finish with sunscreen to protect your skin from UV damage.
+        </Text>
+        </View>
       </View>
     </ScrollView>
   </>

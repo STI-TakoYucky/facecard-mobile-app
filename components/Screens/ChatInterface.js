@@ -192,7 +192,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
         style={{ elevation: 5 }}
       >
         <TouchableOpacity onPress={() => setChatActive(false)}>
-          <Ionicons name="caret-back" size={20} color="#2D3B75" />
+          <Ionicons name="arrow-back-sharp" size={22} color="#2D3B75" />
         </TouchableOpacity>
         <View className="flex flex-row items-center justify-center gap-4">
           <Image

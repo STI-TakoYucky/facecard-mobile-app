@@ -1,12 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { StyleSheet, View, Text } from 'react-native';
 
 export default function FaceDiaryHeader() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>FaceDiary</Text>
-          
+      <Text style={styles.title}>FaceDiary</Text> 
     </View>
   );
 }

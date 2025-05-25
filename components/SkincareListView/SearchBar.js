@@ -26,7 +26,7 @@ export default function SearchBar({ search, onSearch, onFilterSelect, selectedFi
           style={styles.searchIcon}
           name="search"
           size={15}
-          color="black"
+          color="#2D3B75"
         /> 
       </TouchableOpacity>
 
@@ -43,7 +43,7 @@ export default function SearchBar({ search, onSearch, onFilterSelect, selectedFi
         <Entypo 
           name="menu"
           size={20}
-          color="black"
+          color="#2D3B75"
         />
       </TouchableOpacity>
 
@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1.5,
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 10,
-    borderColor: 'black',
-    backgroundColor: '#eee',
+    borderColor: '#2D3B75',
+    color:'#2D3B75',
     maxWidth: 250,
     maxHeight: 40,
     padding: 8,
