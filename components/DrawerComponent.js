@@ -51,8 +51,8 @@ export default function DrawerComponent({ setDrawerActive, setLoggedIn, setActiv
 
 const renderDermaChat = () => {
     if( isPremiumSubProcess && !userData.isPremiumAcc && isUserUser ) {
-      return <SubscriptionProcess isPremiumSubProcess={isPremiumSubProcess} setPremiumSubProcess={setPremiumSubProcess}></SubscriptionProcess>
-     }
+      return <SubscriptionProcess setDrawerActive={setDrawerActive} isPremiumSubProcess={isPremiumSubProcess} setPremiumSubProcess={setPremiumSubProcess}></SubscriptionProcess>
+    }
 }
 
   const handleDermaChatOnPress = () => {
@@ -63,6 +63,7 @@ const renderDermaChat = () => {
     } else if(isUserDerma) {
       setActiveTab("Chat")
     }
+    slideOut()
   }
 
 
@@ -91,7 +92,7 @@ const renderDermaChat = () => {
         </View>
 
         <View className="flex gap-8 mt-10">
-          <TouchableOpacity className="flex flex-row gap-2 justify-start" onPress={() => setActiveTab("Profile")}>
+          <TouchableOpacity className="flex flex-row gap-2 justify-start" onPress={() => {setActiveTab("Profile"); slideOut()}}>
             <MaterialIcons name="person" size={24} color="#2D3B75" className="min-w-8"/>
             <Text className="text-dark-800 text-lg" style={[fonts.BodyFont]}>Profile</Text>
           </TouchableOpacity>
