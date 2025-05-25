@@ -62,9 +62,12 @@ const userDataSlice = createSlice({
        },
        setSavedProducts: (state, action) => {
         state.savedProducts = action.payload
+       },
+       saveDiaryEntries: (state, action) => {
+        state.savedDiaryEntries = action.payload
        }
     }
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, setStreak, setSavedProducts } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, setStreak, setSavedProducts, saveDiaryEntries } = userDataSlice.actions;
 export default userDataSlice.reducer;

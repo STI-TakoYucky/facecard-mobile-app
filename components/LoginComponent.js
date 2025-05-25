@@ -36,7 +36,7 @@ export default function LoginComponent({ setLoggedIn }) {
           errorMessage = "Invalid email or password.";
           break;
         default:
-          errorMessage = result.message || "Something went wrong. Please try again.";
+          errorMessage = "Something went wrong. Please try again.";
       }
       Toast.show({
         type: 'error',

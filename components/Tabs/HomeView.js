@@ -193,7 +193,7 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
           }
       </View>
 
-      <SkincareAds></SkincareAds>
+      <SkincareAds disableGestures={isChecklistActive || isEditChecklistActive} />
 
       <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
 

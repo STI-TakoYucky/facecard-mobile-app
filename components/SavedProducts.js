@@ -161,7 +161,7 @@ export default function SavedProducts() {
         brand={selectedProduct?.brand}
         size={selectedProduct?.size}
         skinType={selectedProduct?.skinType}
-        productImage={selectedProduct?.productImage}
+        productImage={selectedProduct?.image}
       />
     </View>
   );
