@@ -75,7 +75,20 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
     <View className="mb-8 relative">
       <Controller
         control={control}
-        rules={{ required: "Birthday is required" }}
+        rules={{
+          required: "Birthday is required",
+          validate: (value) => {
+            const [month, day, year] = value.split("/");
+            const birthDate = new Date(`${year}-${month}-${day}`);
+            const today = new Date();
+            const age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            const is18 =
+              age > 18 || (age === 18 && m >= 0 && today.getDate() >= birthDate.getDate());
+
+            return is18 || "You must be at least 18 years old";
+          },
+        }}
         render={({ field: { onChange, value } }) => (
           <>
           <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
@@ -108,7 +121,7 @@ export default function RegisterComponentSecondPhase({control, errors, handleSub
       </Controller>
 
       {errors.birthdate && (
-        <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-white left-4">
+        <Text className="text-red-500 absolute bottom-[2.93rem] px-2 bg-slate-100 left-4">
           {errors.birthdate.message}
         </Text>
       )}

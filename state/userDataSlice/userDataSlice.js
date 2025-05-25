@@ -59,9 +59,12 @@ const userDataSlice = createSlice({
        },
        setStreak: (state, action) => {
         state.streak = action.payload;
+       },
+       setSavedProducts: (state, action) => {
+        state.savedProducts = action.payload
        }
     }
 })
 
-export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, setStreak } = userDataSlice.actions;
+export const { storeUser, updateMainMarkedDates, updateUserSchedules, updateUserInfo, updateProfilePicture, setUserLocation, setUserPremiumAcc, setStreak, setSavedProducts } = userDataSlice.actions;
 export default userDataSlice.reducer;

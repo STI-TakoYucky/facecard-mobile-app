@@ -1,15 +1,15 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import { useDispatch, useSelector } from 'react-redux'
-import UserProductContainer from '../UserProductContainer';
 import StreaksComponent from '../StreaksComponent';
 import EditProfile from './EditProfile';
 import * as ImagePicker from 'expo-image-picker';
 import { updateProfilePicture } from '../../state/userDataSlice/userDataSlice';
 import Entypo from '@expo/vector-icons/Entypo';
 import { fonts } from '../../utils/fonts';
+import SavedProducts from '../SavedProducts';
 
 export default function Profile() {
 
@@ -98,12 +98,12 @@ const uploadToImgBB = async (base64) => {
           </View>
          </View>
           <TouchableOpacity onPress={() => setEditProfile(true)}>
-            <Text className="bg-dark-800 text-white text-base max-w-[8rem] py-3 px-[1rem] rounded-md text-center" style={[fonts.BodyFont]}>Edit Profile</Text>
+            <Text className="bg-dark-800 text-white text-base max-w-[8rem] py-3 px-[1rem] rounded-md text-center" style={[fonts.BodyFont]}>Settings</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <UserProductContainer></UserProductContainer>
+      <SavedProducts></SavedProducts>
 
     </ScrollView>
   )

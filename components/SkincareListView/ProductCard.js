@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, Pressable } from 'react-native';
 
 import ProductModal from "./ProductModal";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useDispatch, useSelector } from "react-redux";
+import { setSavedProducts } from "../../state/userDataSlice/userDataSlice";
 
 export default function ProductCard({ products }) {
 
   const [modalVisible, isModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [favorites, setFavorites] = useState({});
+  const [favorites, setFavorites] = useState([]);
+  const dispatch = useDispatch()
+  const userData = useSelector(state => state.userData)
+
+
+
+  useEffect(() => {
+    if (favorites.length == 0 ) {
+      setFavorites(userData.savedProducts)
+    }
+  }, [])
   
-  const handleFavorite = (id) => {
-    setFavorites((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
+const handleFavorite = (id) => {
+  const updatedFavorites = favorites.includes(id)
+    ? favorites.filter(item => item !== id)
+    : [...favorites, id];
+
+  setFavorites(updatedFavorites);              // update local state
+  dispatch(setSavedProducts(updatedFavorites)); // dispatch correct data
+};
+
 
   const handleOpenModal = (item) => {
     setSelectedProduct(item);
@@ -55,9 +70,9 @@ export default function ProductCard({ products }) {
                   onPress={() => handleFavorite(item.id)}
                 >
                   <AntDesign 
-                    name={favorites[item.id] ? "heart" : "hearto"} 
+                    name={favorites.includes(item.id) ? "heart" : "hearto"} 
                     size={15} 
-                    color={favorites[item.id] ? "red" : "gray"} 
+                    color={favorites.includes(item.id) ? "red" : "gray"} 
                   />
                 </TouchableOpacity>
                 <Image 

@@ -1,8 +1,7 @@
-import { View, Text, ScrollView, Pressable, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Pressable, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import StreaksComponent from "../StreaksComponent";
-import UserProductContainer from "../UserProductContainer";
 import SkincareChecklist from "../Screens/SkincareChecklist";
 import EditChecklist from "../Screens/EditChecklist";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +10,7 @@ import { initRoutineSchedules } from "../../state/routineSchedulesSlice/routineS
 import { fonts } from "../../utils/fonts";
 import { setStreak } from "../../state/userDataSlice/userDataSlice";
 import StartingAd from "../StartingAd";
+import SavedProducts from "../SavedProducts";
 
 export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFired }) {
 
@@ -189,6 +189,8 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
       </View>
 
       <StreaksComponent userDataStreak={userData.streak}></StreaksComponent>
+
+      <SavedProducts></SavedProducts>
       </View>
     </ScrollView>
   </>
