@@ -11,7 +11,7 @@ export default function CreateEntry({ onPress }) {
         <Feather 
         name="plus" 
         size={25} 
-        color="#162041" />
+        color="#2D3B75" />
       </TouchableOpacity>
     </View>
   );

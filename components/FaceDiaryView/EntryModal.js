@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal, TextInput, Image, Pressable  } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { fonts } from "../../utils/fonts";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -97,7 +97,7 @@ const openGallery = async () => {
           <Ionicons 
             name="arrow-back-sharp" 
             size={22} 
-            color='#162041' />
+            color='#2D3B75' />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
           if (!title && !mainText && !imageUri) {
@@ -122,12 +122,12 @@ const openGallery = async () => {
           <MaterialIcons 
           name="done" 
           size={22} 
-          color="#162041" />
+          color="#2D3B75" />
         </TouchableOpacity>
       </View>
 
       {/* DATE */}
-      <Text style={styles.date}>{currentDate}</Text>
+      <Text className="text-dark-800" style={[fonts.HeaderFont,styles.date]}>{currentDate}</Text>
 
       {/* IMAGE VIEW */}
       <View style={styles.imageView}>
@@ -162,8 +162,9 @@ const openGallery = async () => {
 
         {/* DESCRIPTION */}
         <View style={styles.description} className="mt-6">
-          <View className="p-2">
+          <View className="px-3 py-5">
             <TextInput
+            className="text-dark-800"
             style={styles.texts}
             multiline={true}
             numberOfLines={5}
@@ -174,12 +175,13 @@ const openGallery = async () => {
           </View>
         </View>
         <View style={styles.description} className="mt-3">
-          <View className="p-2 h-72">
+          <View className="px-3 py-5 h-72">
             <TextInput 
             multiline={true}
             placeholder="Write your thoughts..."
             value={mainText}
             onChangeText={setText}
+            className="text-dark-800"
           />
           </View>
         </View>
@@ -227,7 +229,6 @@ const styles = StyleSheet.create({
   date:{
     alignSelf: 'center',
     fontSize: 16,
-    fontWeight: 'bold'
   },
   imageActions: {
     flexDirection: 'row',

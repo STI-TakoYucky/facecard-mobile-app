@@ -45,16 +45,17 @@ export default function LoginComponent({ setLoggedIn }) {
       });
       } else {  
         Keyboard.dismiss()
-        dispatch(togglePreloader({message: "Login Successful!"}))
+
         const docRef = doc(db, "users", result.userID);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
+          dispatch(togglePreloader({message: "Login Successful!"}))
           dispatch(storeUser(docSnap.data()))
-          setLoggedIn(true);
         } else {
-          // docSnap.data() will be undefined in this case
           console.log("No such document!");
+          return
         }
+        setLoggedIn(true);
       }
     }
 

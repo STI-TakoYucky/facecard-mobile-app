@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 import SearchBar from '../SkincareListView/SearchBar';
 import ProductCard from '../SkincareListView/ProductCard';
-import SkincareAds from '../SkincareListView/SkincareAds';
+import SkincareAds from '../SkincareAds';
 import ProductModal from '../SkincareListView/ProductModal';
 
 import { db } from '../../firebase/firebase';

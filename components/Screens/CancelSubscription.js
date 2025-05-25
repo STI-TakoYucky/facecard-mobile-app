@@ -24,7 +24,7 @@ export default function CancelSubscription({ setEditProfile, isCancelSubscriptio
    
         <View className="bg-primary-100 px-5 py-4 max-h-[50px] flex-row justify-start items-center">
             <TouchableOpacity onPress={() => setCancelSubscription(false)}>
-                <Ionicons name="caret-back" size={20} color="#2D3B75" />
+                <Ionicons name="arrow-back-sharp" size={22} color="#2D3B75" />
             </TouchableOpacity>
         </View>
         <View className="p-5 flex justify-between flex-1">

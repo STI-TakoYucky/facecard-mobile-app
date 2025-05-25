@@ -1,26 +1,23 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { fonts } from "../../utils/fonts";
 
 export default function FaceDiaryHeader() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>FaceDiary</Text>
-          
+      <Text className="text-dark-800" style={[styles.title, fonts.HeaderFont]}>FaceDiary</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
-  title:{
+  title: {
     fontSize: 30,
-    fontFamily: 'sans-serif-light',
-    fontWeight: 'bold',
-    color: '#162041'
-  }
+  },
 });
