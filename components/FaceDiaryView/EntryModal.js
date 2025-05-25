@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal, TextInput, Image, Pressable  } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -8,6 +8,20 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function EntryModal(props) {
+
+  // Camera or Gallery
+  const handleImagePicking = () => {
+    Alert.alert(
+      "Upload Image",
+      "Method to upload an image:",
+      [
+        {text: "Close", style: "cancel"},
+        {text: "Camera", onPress: openCamera},
+        {text: "Gallery", onPress: openGallery},
+      ],
+      { cancelable: true }
+    );
+  };
 
   // OPENS CAMERA
   const openCamera = async () => {
@@ -58,6 +72,20 @@ const openGallery = async () => {
     setImageUri(null);
   }
 
+  // WHEN PRESSED EDIT, PRE-FILLS THE MODAL
+  useEffect(() => {
+    if (props.initialData) {
+      setTitle(props.initialData.title || '');
+      setText(props.initialData.mainText || '');
+      setImageUri(props.initialData.imageUri || null);
+    } else {
+      setTitle('');
+      setText('');
+      setImageUri(null);
+    }
+  }, [props.initialData, props.visible]);
+
+
   return (
     <Modal
     visible={props.visible}
@@ -103,7 +131,7 @@ const openGallery = async () => {
 
       {/* IMAGE VIEW */}
       <View style={styles.imageView}>
-        <Pressable onPress={openGallery}>
+        <Pressable onPress={handleImagePicking}>
           <View style={styles.imageContainer}>
             {!imageUri ? 
             (
@@ -122,7 +150,7 @@ const openGallery = async () => {
           {/* HAS AN IMAGE, SHOWS REPLACE AND REMOVE BUTTON */}
             {imageUri && (
             <View style={styles.imageActions}>
-              <TouchableOpacity onPress={openCamera}>
+              <TouchableOpacity onPress={handleImagePicking}>
                 <MaterialCommunityIcons name="camera-retake" size={24} color="black" />
               </TouchableOpacity>
               <TouchableOpacity onPress={removeImage}>

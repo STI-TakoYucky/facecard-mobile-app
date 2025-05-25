@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 
-export default function EntryCard({ entry }) {
+export default function EntryCard({ entry, index, onEdit, onDelete }) {
 
   const [editEntry, setEdit] = useState(false);
 
@@ -34,16 +34,21 @@ export default function EntryCard({ entry }) {
         {editEntry && (
           <Animated.View>
             <View style={styles.popupMenu}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                setEdit(false); // hide the menu
+                onEdit(entry, index); // call edit
+              }}>
                 <Text style={styles.popupText}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                setEdit(false); // hide the menu
+                onDelete(index); // call delete
+              }}>
                 <Text style={styles.popupText}>Delete</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
         )}
-
       </View>
     </View>
   );
@@ -92,8 +97,8 @@ const styles = StyleSheet.create({
   },
   popupMenu: {
     position: 'absolute',
-    top: 35,
-    right: 10,
+    top: 15,
+    right: 15,
     backgroundColor: '#fff',
     borderRadius: 6,
     padding: 6,

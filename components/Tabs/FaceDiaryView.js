@@ -2,28 +2,54 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import FaceDiaryHeader from '../FaceDiaryView/FaceDiaryHeader';
 import CreateEntry from '../FaceDiaryView/CreateEntry';
-import EntryTracker from '../FaceDiaryView/EntryTracker';
 import EntryCard from '../FaceDiaryView/EntryCard';
 import EntryModal from '../FaceDiaryView/EntryModal';
 
 export default function FaceDiaryView() {
   const [entries, setEntries] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
 
-  const addEntry = (newEntry) => {
+  // EDITING ENTRY
+  const handleSaveEntry = (newEntry) => {
+  if (selectedEntryIndex !== null) {
+    // If there is an entry
+    const updatedEntries = [...entries];
+    updatedEntries[selectedEntryIndex] = newEntry;
+    setEntries(updatedEntries);
+  } else {
+    // Add new entry
     setEntries((prev) => [newEntry, ...prev]);
-    setModalVisible(false);
+  }
+  setModalVisible(false);
+  setSelectedEntryIndex(null);
+  };
+
+  // DELETING ENTRY
+  const handleDeleteEntry = (indexToDelete) => {
+  setEntries((prev) => prev.filter((_, index) => index !== indexToDelete));
+  };
+
+  // HANDLE EDIT
+  const handleEditEntry = (index) => {
+  setSelectedEntryIndex(index);
+  setModalVisible(true);
   };
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <FaceDiaryHeader />
-        <EntryTracker />
-
         {entries.map((entry, index) => (
-          <EntryCard key={index} entry={entry} />
+          <EntryCard
+            key={index}
+            index={index}
+            entry={entry}
+            onEdit={() => handleEditEntry(index)}
+            onDelete={() => handleDeleteEntry(index)}
+          />
         ))}
+
       </ScrollView>
 
       {/* Fixed Create Button */}
@@ -33,9 +59,14 @@ export default function FaceDiaryView() {
 
       <EntryModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSubmit={addEntry}
+        onClose={() => {
+          setModalVisible(false);
+          setSelectedEntryIndex(null);
+        }}
+        onSubmit={handleSaveEntry}
+        initialData={selectedEntryIndex !== null ? entries[selectedEntryIndex] : null}
       />
+
     </View>
   );
 }
