@@ -6,15 +6,13 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch, useSelector } from "react-redux";
 import { setSavedProducts } from "../../state/userDataSlice/userDataSlice";
 
-export default function ProductCard({ products }) {
+export default function ProductCard({ products, onProductPress }) {
 
   const [modalVisible, isModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const dispatch = useDispatch()
   const userData = useSelector(state => state.userData)
-
-
 
   useEffect(() => {
     if (favorites.length == 0 ) {
@@ -51,6 +49,8 @@ const handleFavorite = (id) => {
         return {backgroundColor: "#FCD7F6"};
       case "Retinol":
         return {backgroundColor: "#FFC9BA"};
+      case "Serum":
+        return {backgroundColor: "#FC53C1"};
       default: 
         return { backgroundColor: "#fff" };
     }
@@ -83,7 +83,7 @@ const handleFavorite = (id) => {
                 <View style={styles.infoContainer}>
                   <Text style={styles.name}>{item.productName}</Text>
                   <Text style={styles.brand}>{item.brand}</Text>
-                  <Text style={styles.size}>{item.size}ml</Text>
+                  <Text style={styles.size}>{item.size}</Text>
                   <Text style={styles.skinType}>{item.skinType}</Text>
                 </View>
               </View>
@@ -96,13 +96,18 @@ const handleFavorite = (id) => {
         visible={modalVisible}
         onClose={() => isModalVisible(false)}
         product={selectedProduct}
+        products={products}
         name={selectedProduct?.productName}
         category={selectedProduct?.category}
         color={colorPicker(selectedProduct?.category)}
         brand={selectedProduct?.brand}
         size={selectedProduct?.size}
         skinType={selectedProduct?.skinType}
-        productImage={selectedProduct?.productImage}
+        productImage={selectedProduct?.image}
+        approve={selectedProduct?.approve}
+        favorites={favorites}
+        handleOpenModal={handleOpenModal}
+        handleFavorite={handleFavorite}
       />
     </View>
   );

@@ -6,13 +6,7 @@ export default function FaceDiaryHeader() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>FaceDiary</Text>
-        <TouchableOpacity>
-          <FontAwesome
-          className="relative right-5 top-2" 
-          name="search" 
-          size={20} 
-          color="#162041" />
-        </TouchableOpacity>  
+          
     </View>
   );
 }

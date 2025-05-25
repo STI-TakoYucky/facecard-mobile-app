@@ -7,7 +7,7 @@ export default function SearchBar({ search, onSearch, onFilterSelect, selectedFi
   
   const [menuVisible, isMenuVisible] = useState(false);
   
-  const filters = ["All", "Category", "Brand", "Skin Type"];
+  const filters = ["All", "Category", "Brand", "Skin Type", "Approved"];
 
   const handleMenu = (filter) => {
     isMenuVisible(false);
