@@ -120,7 +120,7 @@ const handleFavorite = (id) => {
                         <AntDesign 
                             name={favorites.includes(item.id) ? "heart" : "hearto"} 
                             size={20} 
-                            color={favorites.includes(item.id) ? "red" : "gray"} 
+                            color={favorites.includes(item.id) ? "#f87171" : "gray"} 
                         />
                         </TouchableOpacity>
                         <Image 
@@ -154,7 +154,7 @@ const handleFavorite = (id) => {
         brand={selectedProduct?.brand}
         size={selectedProduct?.size}
         skinType={selectedProduct?.skinType}
-        productImage={selectedProduct?.productImage}
+        productImage={selectedProduct?.image}
         />
         </View>
     </Modal>

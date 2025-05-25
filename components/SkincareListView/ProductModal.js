@@ -90,11 +90,11 @@ export default function ProductModal(props) {
 
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator ={false} style={{paddingBottom: 50}}>
                   {recommendedProducts.map((item) => (
-                    <Pressable key={item.id} onPress={() => handleOpenModal(item)}>
+                    <Pressable key={item.id} onPress={() => props.handleOpenModal(item)}>
                   <View style={styles.card}>
                     <TouchableOpacity
                       style={styles.heartIcon}
-                      onPress={() => handleFavorite(item.id)}
+                      onPress={() => props.handleFavorite(item.id)}
                     >
                       <AntDesign
                         name={props.favorites?.includes(item.id) ? "heart" : "hearto"}

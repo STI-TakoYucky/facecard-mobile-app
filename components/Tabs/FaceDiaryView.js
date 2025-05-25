@@ -1,39 +1,51 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import FaceDiaryHeader from '../FaceDiaryView/FaceDiaryHeader';
 import CreateEntry from '../FaceDiaryView/CreateEntry';
 import EntryCard from '../FaceDiaryView/EntryCard';
 import EntryModal from '../FaceDiaryView/EntryModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveDiaryEntries } from '../../state/userDataSlice/userDataSlice';
 
 export default function FaceDiaryView() {
-  const [entries, setEntries] = useState([]);
+  const userData = useSelector(state => state.userData);
+  const dispatch = useDispatch();
+
+  // Initialize entries from Redux store on mount or when userData.diaryEntries changes
+  const [entries, setEntries] = useState(userData.savedDiaryEntries || []);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
 
-  // EDITING ENTRY
+  // Sync local entries to Redux whenever entries change
+  useEffect(() => {
+    dispatch(saveDiaryEntries(entries));
+  }, [entries, dispatch]);
+
+  // SAVE or EDIT entry
   const handleSaveEntry = (newEntry) => {
-  if (selectedEntryIndex !== null) {
-    // If there is an entry
-    const updatedEntries = [...entries];
-    updatedEntries[selectedEntryIndex] = newEntry;
-    setEntries(updatedEntries);
-  } else {
-    // Add new entry
-    setEntries((prev) => [newEntry, ...prev]);
-  }
-  setModalVisible(false);
-  setSelectedEntryIndex(null);
+    if (selectedEntryIndex !== null) {
+      // Update existing entry
+      const updatedEntries = [...entries];
+      updatedEntries[selectedEntryIndex] = newEntry;
+      setEntries(updatedEntries);
+    } else {
+      // Add new entry at the beginning
+      setEntries((prev) => [newEntry, ...prev]);
+    }
+    setModalVisible(false);
+    setSelectedEntryIndex(null);
   };
 
-  // DELETING ENTRY
+  // DELETE entry
   const handleDeleteEntry = (indexToDelete) => {
-  setEntries((prev) => prev.filter((_, index) => index !== indexToDelete));
+    setEntries((prev) => prev.filter((_, index) => index !== indexToDelete));
   };
 
-  // HANDLE EDIT
+  // OPEN modal for editing
   const handleEditEntry = (index) => {
-  setSelectedEntryIndex(index);
-  setModalVisible(true);
+    setSelectedEntryIndex(index);
+    setModalVisible(true);
   };
 
   return (
@@ -49,7 +61,6 @@ export default function FaceDiaryView() {
             onDelete={() => handleDeleteEntry(index)}
           />
         ))}
-
       </ScrollView>
 
       {/* Fixed Create Button */}
@@ -66,7 +77,6 @@ export default function FaceDiaryView() {
         onSubmit={handleSaveEntry}
         initialData={selectedEntryIndex !== null ? entries[selectedEntryIndex] : null}
       />
-
     </View>
   );
 }

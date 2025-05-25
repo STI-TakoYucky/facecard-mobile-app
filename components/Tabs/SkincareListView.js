@@ -40,6 +40,15 @@ export default function SkincareListView() {
     fetchProducts();
   }, []);
 
+    const handleFavorite = (id) => {
+      const updatedFavorites = favorites.includes(id)
+        ? favorites.filter(item => item !== id)
+        : [...favorites, id];
+  
+      setFavorites(updatedFavorites);
+      dispatch(setSavedProducts(updatedFavorites));
+    };
+
   const handleSearch = () => {
       const keyword = searchText.toLowerCase();
 
@@ -98,6 +107,7 @@ export default function SkincareListView() {
         <ProductCard 
           products={filteredProducts}
           onProductPress={handleProductPress}
+          handleFavorite={handleFavorite}
         />
       </ScrollView>
 
