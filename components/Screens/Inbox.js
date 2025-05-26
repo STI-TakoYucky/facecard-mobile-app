@@ -94,6 +94,11 @@ export default function Inbox() {
       : `${person.firstName} ${person.lastName}`;
   };
 
+    const truncateText = (text, maxLength = 20) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength - 3) + "..." : text;
+  };
+
   return (
     <ScrollView className="p-5">
       {isChatActive && (
@@ -131,7 +136,7 @@ export default function Inbox() {
                 {!latestMsg?.isImage ? 
                   <Text className="text-gray-400" numberOfLines={1} style={[fonts.BodyFont]}>
                   {latestMsg
-                    ? `${latestMsg.senderId === userData.uid ? "You:" : doc.firstName + ":"} ${latestMsg.text}`
+                    ? `${latestMsg.senderId === userData.uid ? "You:" : doc.firstName + ":"} ${truncateText(latestMsg.text)}`
                     : "No messages yet"}
                 </Text> :
                   <Text className="text-gray-400" numberOfLines={1} style={[fonts.BodyFont]}>

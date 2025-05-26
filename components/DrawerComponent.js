@@ -91,7 +91,7 @@ const handleDermaChatOnPress = () => {
             objectFit: "cover"
           }}
           ></Image>
-          <Text className="text-dark-800 text-2xl" style={[fonts.HeaderFont]}>{userData.firstName + " " + userData.lastName}</Text>
+          <Text className="text-dark-800 text-xl break-words" style={[fonts.HeaderFont]}>{userData.firstName + " " + userData.lastName}</Text>
         </View>
 
         <View className="flex gap-8 mt-10">
