@@ -212,7 +212,7 @@ export default function ChatInterface({ selectedPerson, isChatActive, setChatAct
             className="text-dark-800 text-lg"
             style={[fonts.HeaderFont]}
           >
-            Dr. {data.firstName + " " + data.lastName}
+            { userData.role === "Dermatologist" && "Dr." }{data.firstName + " " + data.lastName}
           </Text>
         </View>
       </View>
