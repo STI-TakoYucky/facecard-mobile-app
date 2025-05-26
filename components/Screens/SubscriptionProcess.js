@@ -51,14 +51,14 @@ export default function SubscriptionProcess({setDrawerActive, isPremiumSubProces
                                 <Text className=" text-lg text-dark-800" style={[fonts.HeaderFont]}>Monthly</Text>
                                 <Text className="text-base text-dark-800 bg-markers-moisturizer rounded-full px-3 py-1" style={[fonts.BodyFont]}>Best Seller</Text>
                             </View>
-                            <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>₱198.00/Month</Text>
+                            <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>₱205.00/Month</Text>
                         </View>
                     </Pressable>
 
                     <Pressable onPress={() => {setYearlySub(true); setMonthlySub(false)}}>
                         <View className={`${yearlySub ? 'border-dark-800 border-[1.5px]'  : 'bg-slate-100'} rounded-lg  px-5 py-3 flex flex-col justify-between gap-2 w-full`}>
                             <Text className=" text-lg text-dark-800" style={[fonts.HeaderFont]}>Yearly</Text>
-                            <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>₱950.00/Year</Text>
+                            <Text className="text-dark-800 text-base" style={[fonts.BodyFont]}>₱985.00/Year</Text>
                         </View>
                     </Pressable>
                 </View>
