@@ -120,12 +120,11 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
         }}
         dayComponent={({ date, state }) => {
           const isMarked = !!markedDates[date?.dateString];
-          const jsDate = new Date(date.dateString);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // Normalize today's date to midnight
-          const isFutureDate = jsDate > today;
+          const jsDateString = date.dateString;
+          const todayString = new Date().toISOString().split("T")[0];
+          const isFutureDate = jsDateString > todayString;
 
-          const day = jsDate.getDay();
+          const day = new Date(jsDateString).getDay();
 
           // Disable if already disabled or if date is after today
           const isDisabled = state === "disabled" || isFutureDate;
@@ -145,7 +144,7 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
                   className={`text-base font-bold ${
                     isDisabled ? "text-slate-300" : "text-dark-800"
                   } ${isMarked ? "text-white" : ""}`}
-                   style={[fonts.BodyFont]}
+                  style={[fonts.BodyFont]}
                 >
                   {date?.day}
                 </Text>
@@ -154,7 +153,7 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
               <View className="flex items-center justify-center min-h-2 mt-2 flex-row gap-1">
                 {routineSchedules.map((routine, index) => {
                   const startDate = routine.startDate;
-                  const currentDate = date?.dateString.split("T")[0];
+                  const currentDate = jsDateString;
                   const isStartDateBefore = new Date(startDate) <= new Date(currentDate);
 
                   return routine.schedules.map((sched, idx) => {
@@ -176,6 +175,7 @@ export default function Home({ isStartingAdAlreadyFired, setStartingAdAlreadyFir
             </TouchableOpacity>
           );
         }}
+
       />
 
 

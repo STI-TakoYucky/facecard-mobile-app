@@ -47,23 +47,23 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
       onRequestClose={() => setEditProfile(false)}
     >
 
-      <View className="flex-1 bg-black/40 justify-center items-center">
+      <View className="items-center justify-center flex-1 bg-black/40">
         <View className="w-[24rem] bg-white rounded-2xl py-6 px-[2rem] shadow-xl justify-between">
           <View className="flex gap-2">
-            <Text className="text-2xl font-semibold mb-6 text-dark-800" style={[fonts.HeaderFont]}>
+            <Text className="mb-6 text-2xl font-semibold text-dark-800" style={[fonts.HeaderFont]}>
               Edit Profile
             </Text>
 
             {/* firstName*/}
-            <View className="mb-4 relative">
+            <View className="relative mb-4">
               <Controller
                 control={control}
                 rules={{ required: "First Name is required" }}
                 render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text className="text-dark-800 mb-4" style={[fonts.BodyFont]}>First Name</Text>
+                    <Text className="mb-4 text-dark-800" style={[fonts.BodyFont]}>First Name</Text>
                   <TextInput
-                    className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
+                    className="px-3 py-4 text-base border rounded-lg border-dark-800 text-dark-800"
                     placeholder="First Name"
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -82,15 +82,15 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
             </View>
 
              {/* lastName*/}
-            <View className="mb-4 relative">
+            <View className="relative mb-4">
               <Controller
                 control={control}
                 rules={{ required: "Last Name is required" }}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <>
-                    <Text className="text-dark-800 mb-4" style={[fonts.BodyFont]}>Last Name</Text>
+                    <Text className="mb-4 text-dark-800" style={[fonts.BodyFont]}>Last Name</Text>
                     <TextInput
-                        className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
+                        className="px-3 py-4 text-base border rounded-lg border-dark-800 text-dark-800"
                         placeholder="Last Name"
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -109,16 +109,29 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
               )}
             </View>
 
-              <View className="mb-4 relative">
+              <View className="relative mb-4">
                 <Controller
                     control={control}
-                    rules={{ required: "Birthday is required" }}
+                    rules={{
+                      required: "Birthday is required",
+                      validate: (value) => {
+                        const [month, day, year] = value.split("/");
+                        const birthDate = new Date(`${year}-${month}-${day}`);
+                        const today = new Date();
+                        const age = today.getFullYear() - birthDate.getFullYear();
+                        const m = today.getMonth() - birthDate.getMonth();
+                        const is18 =
+                          age > 18 || (age === 18 && m >= 0 && today.getDate() >= birthDate.getDate());
+
+                        return is18 || "You must be at least 18 years old";
+                      },
+                    }}
                     render={({ field: { onChange, value } }) => (
                     <>
-                    <Text className="text-dark-800 mb-4" style={[fonts.BodyFont]}>Birthdate</Text>
+                    <Text className="mb-4 text-dark-800" style={[fonts.BodyFont]}>Birthdate</Text>
                     <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
                     <TextInput
-                        className="border border-dark-800 text-dark-800 rounded-lg px-3 py-4 text-base"
+                        className="px-3 py-4 text-base border rounded-lg border-dark-800 text-dark-800"
                         placeholder="Birthdate"
                         editable={false}
                         value={value}
@@ -158,12 +171,12 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
 
                 <CancelSubscription setEditProfile={setEditProfile} isCancelSubscription={isCancelSubscription} setCancelSubscription={setCancelSubscription}></CancelSubscription>
 
-                <Text className="text-2xl font-semibold mb-6 text-dark-800" style={[fonts.HeaderFont]}>
+                <Text className="mb-6 text-2xl font-semibold text-dark-800" style={[fonts.HeaderFont]}>
                   Subscription
                 </Text>
                 <TouchableOpacity onPress={() => setCancelSubscription(true)} style={[fonts.BodyFont, { alignSelf: "flex-start" }]}>
-                  <View className="bg-dark-800 rounded-md px-4 py-2">
-                    <Text className="text-white text-base" style={[fonts.BodyFont]}>
+                  <View className="px-4 py-2 rounded-md bg-dark-800">
+                    <Text className="text-base text-white" style={[fonts.BodyFont]}>
                       Cancel Subscription
                     </Text>
                   </View>
@@ -180,7 +193,7 @@ export default function EditProfile({ isEditProfile, setEditProfile, userData })
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSubmit(onSubmit)} style={[fonts.BodyFont]}>
-              <Text className="bg-dark-800 text-white text-base py-2 px-4 rounded-md">
+              <Text className="px-4 py-2 text-base text-white rounded-md bg-dark-800">
                 Save
               </Text>
             </TouchableOpacity>
