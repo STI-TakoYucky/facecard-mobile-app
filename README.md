@@ -17,6 +17,16 @@ Facecard is a skincare tracker app that provides a seamless and efficient skinca
 
 # Screenshots 📷
 
+<img src="./project-screenshots/ss_1.jpg" alt="Screenshot 1" width="200" />
+<img src="./project-screenshots/ss_2.jpg" alt="Screenshot 2" width="200" />
+<img src="./project-screenshots/ss_3.jpg" alt="Screenshot 3" width="200" />
+<img src="./project-screenshots/ss_5.jpg" alt="Screenshot 5" width="200" />
+<img src="./project-screenshots/ss_6.jpg" alt="Screenshot 6" width="200" />
+<img src="./project-screenshots/ss_7.jpg" alt="Screenshot 7" width="200" />
+<img src="./project-screenshots/ss_8.jpg" alt="Screenshot 8" width="200" />
+<img src="./project-screenshots/ss_9.jpg" alt="Screenshot 9" width="200" />
+<img src="./project-screenshots/ss_10.jpg" alt="Screenshot 10" width="200" />
+<img src="./project-screenshots/ss_11.jpg" alt="Screenshot 11" width="200" />
 
 
 
