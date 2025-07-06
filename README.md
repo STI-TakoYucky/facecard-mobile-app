@@ -37,9 +37,7 @@ Facecard is a skincare tracker app that provides a seamless and efficient skinca
 [![Tech Stack](https://skillicons.dev/icons?i=vscode,figma,expo)](https://skillicons.dev)
 
 
-# Areas For Improvement 🔧
-- **Admin Interface**
-- **Custom API for skincare products**
+# Known Issues 🔧
 - **Limited skincare products**
 - **Offline to Online Syncing**
 - **UI Design Improvements**
@@ -47,6 +45,8 @@ Facecard is a skincare tracker app that provides a seamless and efficient skinca
 
 # Future Features 👨‍🏭
 - **Offline mode**
+- **Admin Interface**
+- **Custom API for skincare products**
 
 # Collaborators 👥
 - **<a href="https://github.com/ManingasA">ManingasA</a>**
